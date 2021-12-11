@@ -10,4 +10,4 @@ Created on Sat Dec 11 23:49:44 2021
 
 from __future__ import absolute_import, division, print_function
 from .version import __version__  
-from .DeterministicParticleFlow import *  
+from .DeterministicParticleFlowControl import *  
