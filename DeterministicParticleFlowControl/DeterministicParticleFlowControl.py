@@ -82,8 +82,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
        ### for different lengthscales for each dimension 
        K_xz = K(X,Z,l,multil=True) 
        Ks = K(Z,Z,l,multil=True)    
-       multil = True ##just a boolean to keep track if l is scalar or vector
-       
+       multil = True ##just a boolean to keep track if l is scalar or vector       
        Ksinv = np.linalg.inv(Ks+ 1e-3 * np.eye(Z.shape[0]))
        A = K_xz.T @ K_xz           
        gradx_K = -grdx_K(X,Z,l,which_dim=which_dim,multil=True)        
@@ -112,3 +111,4 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
 
     
     return res1
+#%%
