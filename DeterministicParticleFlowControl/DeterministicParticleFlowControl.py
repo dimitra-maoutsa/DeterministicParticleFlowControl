@@ -8,10 +8,11 @@ Created on Sun Dec 12 00:02:39 2021
 
 import numpy as np
 from matplotlib import pyplot as plt
-
+from functools import reduce
 from scipy.spatial.distance import cdist
 #
-
+import ot
+import numba
 ### calculate score function from empirical distribution
 ### uses RBF kernel
 
@@ -38,8 +39,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                  that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1
     
     """
-    if kern=='RBF':
-        
+    if kern=='RBF':       
         
         def K(x,y,l,multil=False):
             if multil:                
@@ -48,8 +48,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                     res = np.multiply(res,np.exp(-cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),'sqeuclidean')/(2*l[ii]*l[ii])))
                 return res
             else:
-                return np.exp(-cdist(x, y,'sqeuclidean')/(2*l*l))
-            
+                return np.exp(-cdist(x, y,'sqeuclidean')/(2*l*l))            
         
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
             N,dim = x.shape            
@@ -60,8 +59,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l,True))/(l[ii]*l[ii])   
             else:
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)            
-            return redifs
-            
+            return redifs            
      
         def grdy_K(x,y): # gradient with respect to the second argument
             N,dim = x.shape
@@ -69,8 +67,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
             redifs = np.zeros((N,N))
             ii = which_dim -1              
             redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)         
-            return -redifs
-            
+            return -redifs            
                 
         def ggrdxy_K(x,y):
             N,dim = Z.shape
@@ -79,8 +76,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
             for ii in range(which_dim-1,which_dim):  
                 for jj in range(which_dim-1,which_dim):
                     redifs[ii, jj ] = np.multiply(np.multiply(diffs[:,:,ii],diffs[:,:,jj])+(l*l)*(ii==jj),K(x,y))/(l**4) 
-            return -redifs
-            
+            return -redifs            
      
     if isinstance(l, (list, tuple, np.ndarray)):
        ### for different lengthscales for each dimension 
@@ -90,29 +86,27 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
        
        Ksinv = np.linalg.inv(Ks+ 1e-3 * np.eye(Z.shape[0]))
        A = K_xz.T @ K_xz           
-       gradx_K = -grdx_K(X,Z,l,which_dim=which_dim,multil=True) 
-       
+       gradx_K = -grdx_K(X,Z,l,which_dim=which_dim,multil=True)        
         
     else:
         multil = False
         K_xz = K(X,Z,l,multil=False) 
-        Ks = K(Z,Z,l,multil=False)    
-        
+        Ks = K(Z,Z,l,multil=False)            
         Ksinv = np.linalg.inv(Ks+ 1e-3 * np.eye(Z.shape[0]))
         A = K_xz.T @ K_xz    
         gradx_K = -grdx_K(X,Z,l,which_dim=which_dim,multil=False)
     sumgradx_K = np.sum(gradx_K ,axis=0)
-    if func_out==False: #if output wanted is evaluation at data points
+    if func_out==False: #For evaluation at data points!!!
         ### evaluatiion at data points
         res1 = -K_xz @ np.linalg.inv( C*np.eye(Z.shape[0], Z.shape[0]) + Ksinv @ A + 1e-3 * np.eye(Z.shape[0]))@ Ksinv@sumgradx_K
     else:           
-        #### for function output 
+        #### For functional output!!!! 
         if multil:                            
-            K_sz = lambda x: np.multiply(np.exp(-cdist(x[:,0].reshape(-1,1), Z[:,0].reshape(-1,1),'sqeuclidean')/(2*l[0]*l[0])),np.exp(-cdist(x[:,1].reshape(-1,1), Z[:,1].reshape(-1,1),'sqeuclidean')/(2*l[1]*l[1])))
-            
+            if kern=='RBF':      
+                K_sz = lambda x: reduce(np.multiply, [ np.exp(-cdist(x[:,iii].reshape(-1,1), Z[:,iii].reshape(-1,1),'sqeuclidean')/(2*l[iii]*l[iii])) for iii in range(x.shape[1]) ])
+        
         else:
-            K_sz = lambda x: np.exp(-cdist(x, Z,'sqeuclidean')/(2*l*l))
-            
+            K_sz = lambda x: np.exp(-cdist(x, Z,'sqeuclidean')/(2*l*l))           
 
         res1 = lambda x: K_sz(x) @ ( -np.linalg.inv( C*np.eye(Z.shape[0], Z.shape[0]) + Ksinv @ A + 1e-3 * np.eye(Z.shape[0])) ) @ Ksinv@sumgradx_K
 
