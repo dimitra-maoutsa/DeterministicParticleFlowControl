@@ -11,3 +11,4 @@ Created on Sun Dec 12 00:02:39 2021
 import ot
 import numba
 from . import score_function_estimators
+from . import optimal_transport_reweighting
