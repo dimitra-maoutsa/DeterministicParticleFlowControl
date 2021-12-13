@@ -37,5 +37,5 @@ where
 - `kern`     : the kernel that will be employed for the nonparametric logarithmic gradient estimation of the sampled densities. Currently supported:
    - `RBF` : radial basis function kernel with lengthscale estimated at every time step from the samples,
 
-- `f_true`   : function handler of system drift function when  the reweighted Brownian bridge functionality for forward sampling is used. In that case, `f` should be supplied with the drift function of the brownian bridge, `U` should be set to the necessary path constraint (see paper), and `reweight` and `brown_bridge` should be turned to True,
+- `f_true`   : function handler of system drift function when  the reweighted Brownian bridge functionality for forward sampling is used. In that case, `f` should be supplied with the drift function of the brownian bridge, `U` should be set to the necessary path constraint (see paper(http://arxiv.org/abs/2112.05735)), and `reweight` and `brown_bridge` should be turned to True,
 - `brown_bridge`: boolean variable indicating whether the sampling of the forward flow will happen with reweighted Brownian bridge dynamics.
