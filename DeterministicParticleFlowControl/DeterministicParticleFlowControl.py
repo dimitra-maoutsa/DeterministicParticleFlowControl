@@ -391,7 +391,7 @@ class DPFC:
                 
         if ti<=5 or (ti>= self.k-5):
             if self.reweight==False or self.brown_bridge==False:
-                ##for the first 5 timesteps, to avoid numerical singularities just assume gaussian densities
+                ##for the first and last 5 timesteps, to avoid numerical singularities just assume gaussian densities
                 for di in range(self.dim):
                     mutb = np.mean(self.B[di,:,ti])
                     stdtb = np.std(self.B[di,:,ti])
@@ -406,6 +406,9 @@ class DPFC:
                     stdtz = np.std(self.Ztr[di,:,ti])                
                     u_t[di] =  -(grid_x[:,di]- mutb)/stdtb**2 - (  -(grid_x[:,di]- mutz)/stdtz**2 )
         elif ti>5:
+            ### clipping not used at the end but provided here for cases when number of particles is small 
+            ### and trajectories fall out of simulated flows
+            ### TO DO: add clipping as an option to be selected when initialising the function
             ###if point for evaluating control falls out of the region where we have points, clip the points to 
             ###fall within the calculated region - we do not change the position of the point, only the control value will be
             ###calculated with clipped positions 
@@ -415,6 +418,7 @@ class DPFC:
                 bndsb[di] = [np.min(self.B[di,:,ti]), np.max(self.B[di,:,ti])]
                 bndsz[di] = [np.min(self.Z[di,:,ti]), np.max(self.Z[di,:,ti])]            
             
+            ## clipping not used at the end!
             ###cliping the values of points when evaluating the grad log p
             grid_b = grid_x#np.clip(grid_x, bndsb[0], bndsb[1]) 
             grid_z = grid_x#np.clip(grid_x, bndsz[0], bndsz[1])        
@@ -444,13 +448,14 @@ class DPFC:
     def check_if_covered(self, X, ti):
         """
         Checks if test point X falls within forward and backward densities at timepoint timegrid[ti]
+        
 
         Parameters
         ----------
-        X : TYPE
-            DESCRIPTION.
-        ti : TYPE
-            DESCRIPTION.
+        X : array 1x dim or Kxdim
+            Point in state space where control is evaluated.
+        ti : int
+            Index in timegrid array indicating the time within the time interval [t1,t2] .
 
         Returns
         -------
