@@ -174,7 +174,9 @@ class DPFC:
     ### effective forward drift - estimated seperatelly for each dimension
     def f_seperate(self,x,t):#plain GP prior
         
-        dimi, N = x.shape        
+        dimi, N = x.shape  
+        ### detect min and max of forward flow for each dimension
+        ### we want to know the state space volume of the forward flow
         bnds = np.zeros((dimi,2))
         for ii in range(dimi):
             bnds[ii] = [np.min(x[ii,:]),np.max(x[ii,:])]
@@ -184,6 +186,8 @@ class DPFC:
           plt.figure(figsize=(6,4)),plt.plot(self.Z[0].T,self.Z[1].T,alpha=0.3);
           plt.show()
 
+        ##these are the inducing points
+        ## here we select them from a uniform distribution within the state space volume spanned from the forward flow
         Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )        
         gpsi = np.zeros((dimi, N))
         lnthsc = 2*np.std(x,axis=1)    
