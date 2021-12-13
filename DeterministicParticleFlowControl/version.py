@@ -26,7 +26,7 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
                "Topic :: Scientific/Engineering"]
 
 # Description should be a one-liner:
-description = "DeterministicParticleFlowControl: deterministic particle based stochastic control"
+description = "DeterministicParticleFlowControl: deterministic particle based stochastic optimal control framework"
 # Long description will go up on the pypi page
 long_description = """
 Deterministic Particle Flow Control
