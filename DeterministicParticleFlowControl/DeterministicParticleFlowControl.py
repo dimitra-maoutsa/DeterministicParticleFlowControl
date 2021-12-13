@@ -41,7 +41,7 @@ class DPFC:
                   > 'hermit2' : parametic density estimation empoying hermite polynomials (probabilists's)
                   > 'poly' : parametic density estimation empoying simple polynomials
                   > 'RBF' : parametric density estimation employing radial basis functions
-        kern: type of kernel: 'RBF' or 'periodic'
+        kern: type of kernel: 'RBF' or 'periodic' (only the 'RBF' was used and gives robust results. Do not use 'periodic' yet)
         reject: boolean parameter indicating whether non valid backward trajectories will be rejected
         plotting: boolean parameter indicating whether bridge statistics will be plotted
         f_true: in case of Brownian bridge reweighting this is the true forward drift for simulating the forward dynaics
