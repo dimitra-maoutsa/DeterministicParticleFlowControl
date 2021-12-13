@@ -12,7 +12,7 @@ from setuptools import setup, find_packages
 PACKAGES = find_packages()
 
 # Get version and release info, which is all stored in DeterministicParticleFlowControl/version.py
-ver_file = os.path.join('DeterministicParticleFlowConstrol', 'version.py')
+ver_file = os.path.join('DeterministicParticleFlowControl', 'version.py')
 with open(ver_file) as f:
     exec(f.read())
 
