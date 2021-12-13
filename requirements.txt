@@ -1,3 +1,4 @@
 sphinx
 numpy
 pot
+numpydoc
