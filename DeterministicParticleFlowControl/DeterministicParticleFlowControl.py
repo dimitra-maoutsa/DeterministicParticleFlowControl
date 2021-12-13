@@ -180,7 +180,8 @@ class DPFC:
         bnds = np.zeros((dimi,2))
         for ii in range(dimi):
             bnds[ii] = [np.min(x[ii,:]),np.max(x[ii,:])]
-        sum_bnds = np.sum(bnds)
+            
+        sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
           ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
           plt.figure(figsize=(6,4)),plt.plot(self.Z[0].T,self.Z[1].T,alpha=0.3);
