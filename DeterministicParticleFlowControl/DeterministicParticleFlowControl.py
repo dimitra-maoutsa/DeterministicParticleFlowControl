@@ -64,7 +64,7 @@ class DPFC:
         self.f = f
         self.g = g #scalar or array
         
-        ### PARTICLES DISCRETISATION
+        ### PARTICLE DISCRETISATION
         self.N = N        
         
         self.N_sparse = M
