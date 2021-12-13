@@ -41,7 +41,7 @@ def my_cdist(r,y, output,dist='euclidean'):
 
     Returns
     -------
-    None. (The result is stored in place in the input array output).
+    None. (The result is stored in place in the provided array "output").
 
     """
     N, M = r.shape
