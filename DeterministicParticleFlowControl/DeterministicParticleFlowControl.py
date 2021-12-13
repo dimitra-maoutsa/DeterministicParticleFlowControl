@@ -110,7 +110,7 @@ class DPFC:
             self.forward_sampling_Otto_true()
 
            
-        self.density_estimation()
+        
         self.backward_simulation()
         self.reject_trajectories() 
         #self.calculate_true_statistics() ##this is only for Ornstein-Uhlenbeck processes
@@ -242,11 +242,11 @@ class DPFC:
                                  (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
             else:                
                 self.Z[:,:,ti] = ( self.Z[:,:,ti-1] + self.dt* self.f_seperate(self.Z[:,:,ti-1],tt-self.dt) )
-                ###WEIGHT
+                ###REWEIGHT
             if self.reweight == True:
               if ti>0:
-                  #print(self.U(self.Z[:,:,ti]))
-                  W[:,0] = np.exp(self.U(self.Z[:,:,ti]) ) #-1                   
+                  
+                  W[:,0] = np.exp(self.U(self.Z[:,:,ti])*self.dt ) #-1                   
                   W = W/np.sum(W)       
                   
                   ###REWEIGHT    
@@ -261,7 +261,7 @@ class DPFC:
         return 0
     
     def density_estimation(self, ti,rev_ti):
-        rev_t = rev_ti-1#########################################################-1
+        rev_t = rev_ti-1
         grad_ln_ro = np.zeros((self.dim,self.N))
         lnthsc = 2*np.std(self.Z[:,:,rev_t],axis=1)
         
@@ -309,7 +309,7 @@ class DPFC:
     def backward_simulation(self):   
         
         for ti,tt in enumerate(self.timegrid[:-1]): 
-            W = np.ones((N,1))/N           
+               
             if ti==0:
                 for di in range(self.dim):
                     self.B[di,:,-1] = self.y2[di]                
