@@ -41,7 +41,7 @@ class DPFC:
                   > 'hermit2' : parametic density estimation empoying hermite polynomials (probabilists's)
                   > 'poly' : parametic density estimation empoying simple polynomials
                   > 'RBF' : parametric density estimation employing radial basis functions
-        kern: type of kernel: 'RBF' or 'periodic' (only the 'RBF' was used and gives robust results. Do not use 'periodic' yet)
+        kern: type of kernel: 'RBF' or 'periodic' (only the 'RBF' was used and gives robust results. Do not use 'periodic' yet!)
         reject: boolean parameter indicating whether non valid backward trajectories will be rejected
         plotting: boolean parameter indicating whether bridge statistics will be plotted
         f_true: in case of Brownian bridge reweighting this is the true forward drift for simulating the forward dynaics
@@ -56,6 +56,10 @@ class DPFC:
         
         ##density estimation stuff
         self.kern = kern
+        if kern=='periodic':
+            kern= 'RBF'
+            print('Please do not use periodic kernel yet! For all the numerical experiments RBF was used')
+            print('We changed your choice to RBF')
         # DRIFT /DIFFUSION
         self.f = f
         self.g = g #scalar or array
