@@ -31,12 +31,15 @@ description = "DeterministicParticleFlowControl: deterministic particle based st
 long_description = """
 Deterministic Particle Flow Control
 ====================================
+
 ``DeterministicParticleFlowControl`` is a python package that allows for efficient 
 and one shot computation of interventions for optimal stochastic control problems.
+
+Details
+=======
 Contains code for control computations on systems whose dynamics are described by stochastic differential equations.
 To get started, please go to the
-repository README_.
-.. _README: https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md
+repository README file: https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md
 License
 =======
 ``DeterministicParticleFlowControl`` is licensed under the terms of the MIT license. See the file
