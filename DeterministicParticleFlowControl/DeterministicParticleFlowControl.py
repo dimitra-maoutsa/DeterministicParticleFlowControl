@@ -15,7 +15,7 @@ from . import optimal_transport_reweighting
 
 
 
-
+import time
 import numpy as np
 
 
@@ -35,13 +35,14 @@ class DPFC:
         reweight: boolean - determines if reweighting will follow
         U: function, reweighting function to be employed during reweighting: dim_y1 \to 1
         dens_est: density estimation function
-                  > 'nonparametric' : non parametric density estimation
+                  > 'nonparametric' : non parametric density estimation (this was used in the paper)
+                  TO BE ADDED:
                   > 'hermit1' : parametic density estimation empoying hermite polynomials (physiscist's)
                   > 'hermit2' : parametic density estimation empoying hermite polynomials (probabilists's)
                   > 'poly' : parametic density estimation empoying simple polynomials
-                  > 'rbf' : parametric density estimation employing radial basis functions
+                  > 'RBF' : parametric density estimation employing radial basis functions
         kern: type of kernel: 'RBF' or 'periodic'
-        reject: boolean parameter indicating whether non valid bridge trajectories will be rejected
+        reject: boolean parameter indicating whether non valid backward trajectories will be rejected
         plotting: boolean parameter indicating whether bridge statistics will be plotted
         f_true: in case of Brownian bridge reweighting this is the true forward drift for simulating the forward dynaics
         brown_bridge: boolean,determines if the reweighting concearns contstraint or reweighting with respect to brownian bridge
@@ -223,7 +224,7 @@ class DPFC:
                         self.Z[di,:,-1] = self.y2[di]   
                     #self.Z[di,:,0] = np.random.normal(self.y1[di], 0.05, self.N)
             elif ti==1: #propagate one step with stochastic to avoid the delta function
-                #for i in range(self.N):                            #substract dt because I want the time at t-1
+                                           #substract dt because I want the time at t-1
                 self.Z[:,:,ti] = (self.Z[:,:,ti-1] + self.dt*self.f(self.Z[:,:,ti-1],tt-self.dt)+\
                                  (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
             else:                
