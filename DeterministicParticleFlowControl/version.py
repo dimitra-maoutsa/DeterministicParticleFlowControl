@@ -28,8 +28,7 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
 # Description should be a one-liner:
 description = "DeterministicParticleFlowControl: deterministic particle based stochastic optimal control framework"
 # Long description will go up on the pypi page
-long_description = "text/markdown"
-"""
+long_description = """
 Deterministic Particle Flow Control
 ====================================
 DeterministicParticleFlowControl is a python package that allows for efficient 
@@ -52,6 +51,7 @@ NAME = "DeterministicParticleFlowControl"
 MAINTAINER = "Dimitra Maoutsa"
 MAINTAINER_EMAIL = "dimitra.maoutsa@gmail.com"
 DESCRIPTION = description
+LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 LONG_DESCRIPTION = long_description
 URL = "https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl"
 DOWNLOAD_URL = "https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/archive/refs/tags/v0.1.1.tar.gz"
