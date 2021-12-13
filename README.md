@@ -39,3 +39,9 @@ where
 
 - `f_true`   : function handler of system drift function when  the reweighted Brownian bridge functionality for forward sampling is used. In that case, `f` should be supplied with the drift function of the brownian bridge, `U` should be set to the necessary path constraint (see [paper](http://arxiv.org/abs/2112.05735)), and `reweight` and `brown_bridge` should be turned to True,
 - `brown_bridge`: boolean variable indicating whether the sampling of the forward flow will happen with reweighted Brownian bridge dynamics.
+
+
+This returns an object that contains the sampled flows and control functions. To compute the controls for the timestep `ti` when the system is at state `x` call
+```python
+u = control_flows.calculate_u(x,ti)
+```
