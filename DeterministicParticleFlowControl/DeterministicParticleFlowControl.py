@@ -14,7 +14,7 @@ from . import score_function_estimators
 from . import optimal_transport_reweighting
 
 
-
+from matplotlib import pyplot as plt
 import time
 import numpy as np
 
@@ -152,14 +152,14 @@ class DPFC:
     
     
     
-    ### effective forward drift - estimated seperatelly for each dimension
+    ### relevant only when forward trajectories follow brownian brifge - this simulates forward trajectories with true f 
     def f_seperate_true(self,x,t):#plain GP prior
         
         dimi, N = x.shape        
         bnds = np.zeros((dimi,2))
         for ii in range(dimi):
             bnds[ii] = [np.min(x[ii,:]),np.max(x[ii,:])]
-        sum_bnds = np.sum(bnds)        
+        #sum_bnds = np.sum(bnds)        
 
         Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )        
         gpsi = np.zeros((dimi, N))
@@ -180,6 +180,7 @@ class DPFC:
             bnds[ii] = [np.min(x[ii,:]),np.max(x[ii,:])]
         sum_bnds = np.sum(bnds)
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
+          ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
           plt.figure(figsize=(6,4)),plt.plot(self.Z[0].T,self.Z[1].T,alpha=0.3);
           plt.show()
 
