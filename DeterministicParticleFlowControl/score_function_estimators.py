@@ -257,7 +257,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
 
 
 
-def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,which=1):
+def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='RBF',l=1):
     """
     Sparse kernel based estimation of multidimensional logarithmic gradient of empirical density represented 
     by samples X for all dimensions simultaneously. 
@@ -269,9 +269,10 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
            Z: inducing points points (M x dim)
            func_out : Boolean, True returns function, if False return grad-log-p on data points                    
            l: lengthscale of rbf kernel (scalar or vector of size dim)
-           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)          
-           which: return 1: grad log p(x) 
-           which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension)
+           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)
+           kern: options: 'RBF'  ('periodic' will become also available in the future)
+           
+           
     Output: res1: array with logarithmic gradient of the density  N_s x dim or function 
                  that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1
     
@@ -342,6 +343,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
         
             #############################################################################
     elif kern=='periodic': ###############################################################################################
+        ### DO NOT USE "periodic" yet!!!!!!!
       ###periodic kernel
         ## K(x,y) = exp(  -2 * sin^2( pi*| x-y  |/ (2*pi)  )   /l^2)
         
@@ -361,7 +363,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
               res = np.multiply(res, np.exp(- 2* (np.sin(cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),'minkowski', p=1)/ 2 )**2) /(l[ii]*l[ii])) )
           return -res
         else:
-            tempi = np.zeros((x.shape[0], y.shape[0] ))
+            #tempi = np.zeros((x.shape[0], y.shape[0] ))
             ##puts into tempi the cdist result
             #my_cdist(x, y, tempi,'l1')
             #res = np.exp(-2* ( np.sin( tempi / 2 )**2 ) /(l*l) )
