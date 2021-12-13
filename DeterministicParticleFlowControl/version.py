@@ -64,5 +64,5 @@ MINOR = _version_minor
 MICRO = _version_micro
 VERSION = __version__
 PACKAGE_DATA = {'DeterministicParticleFlowControl': [pjoin('data', '*')]}
-REQUIRES = ["numpy"]    
+REQUIRES = ["numpy","POT","numba","time","matplotlib","pyemd","scipy","math"]    
 PYTHON_REQUIRES = ">= 3.5"
