@@ -25,10 +25,10 @@ class DPFC:
         Deterministic particle flow control - class initialising function
         t1: starting time point
         t2: end time point
-        y1: initial observation/position
-        y2: end observation/position
-        f: drift function handler
-        g: diffusion coefficient or function handler 
+        y1: initial position
+        y2: terminal position
+        f: drift function handle
+        g: diffusion coefficient or function handle 
         N: number of particles/trajectories
         k: discretisation steps within bridge 
         M: number of sparse points for grad log density estimation
