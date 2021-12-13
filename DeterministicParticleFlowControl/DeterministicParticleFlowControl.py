@@ -204,14 +204,14 @@ class DPFC:
         print('Sampling forward with deterministic particles and true drift...')
         #W = np.ones((self.N,1))/self.N
         for ti,tt in enumerate(self.timegrid):  
-            #print(ti)          
+                    
             if ti == 0:
                 for di in range(self.dim):
                     self.Ztr[di,:,0] = self.y1[di]
-                    #self.Z[di,:,-1] = self.y2[di]   
-                    #self.Z[di,:,0] = np.random.normal(self.y1[di], 0.05, self.N)
+                    
+                    
             elif ti==1: #propagate one step with stochastic to avoid the delta function
-                #for i in range(self.N):                            #substract dt because I want the time at t-1
+                                          #substract dt because I want the time at t-1
                 self.Ztr[:,:,ti] = (self.Ztr[:,:,ti-1] + self.dt*self.f_true(self.Ztr[:,:,ti-1],tt-self.dt)+\
                                  (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
             else:                
@@ -231,7 +231,10 @@ class DPFC:
                 for di in range(self.dim):
                     self.Z[di,:,0] = self.y1[di]
                     if self.brown_bridge:
-                        self.Z[di,:,-1] = self.y2[di]   
+                        self.Z[di,:,-1] = self.y2[di] 
+                    ## we start forward trajectories for a delta function.
+                    ##in principle we could start from an arbitrary distribution
+                    ##if you want to start from a normal uncomen the following and comment the above initialisation for y1
                     #self.Z[di,:,0] = np.random.normal(self.y1[di], 0.05, self.N)
             elif ti==1: #propagate one step with stochastic to avoid the delta function
                                            #substract dt because I want the time at t-1
