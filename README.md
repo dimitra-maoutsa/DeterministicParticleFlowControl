@@ -1,5 +1,5 @@
 # Deterministic Particle Flow Control
-Repository for the Deterministic Particle Flow Control framework
+Repository for the **Deterministic Particle Flow Control framework**
 
 
 Link to extended preprint: [http://arxiv.org/abs/2112.05735](http://arxiv.org/abs/2112.05735)
