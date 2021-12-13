@@ -26,7 +26,7 @@ where
 -  `N`       : the number of particles that will be employed for sampling the flows,
 -  `M`       : inducing point number for the sparse kernel estimation of the logarithmic gradients,
 -  `reweight`: boolean indicating whether reweighting of forward trajectories is necessary, i.e. when:
-   - path constraints are relevant for the problem
-   - the target is a non typical system state and the forward flow will be sampled as a reweighted Brownian bridge
+   - path constraints are relevant for the problem,
+   - the target is a non typical system state and the forward flow will be sampled as a reweighted Brownian bridge,
 
--                
+- `U`        : function handle representing the path constraints, i.e. U(x,t) = ( x - sin(t) )^2      <img src="https://latex.codecogs.com/svg.latex?\Large&space;U(x,t) = ( x - sin(t) )^2" title="path" />         
