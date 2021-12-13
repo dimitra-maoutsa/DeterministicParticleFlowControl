@@ -9,6 +9,7 @@ Link to extended preprint: [http://arxiv.org/abs/2112.05735](http://arxiv.org/ab
 
 <p align="center">
 <img src="https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/waterfall_plot_cmap25b.png" width=50% height=50%>
+<img src="https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/Poster_Maoutsa_Deterministic_Particle_Flows_Neurips_3scaled.png" width=20% height=20%>
 </p>
 
 ## Description:
