@@ -29,6 +29,7 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
 description = "DeterministicParticleFlowControl: deterministic particle based stochastic optimal control framework"
 # Long description will go up on the pypi page
 long_description = "text/markdown"
+"""
 Deterministic Particle Flow Control
 ====================================
 DeterministicParticleFlowControl is a python package that allows for efficient 
@@ -44,8 +45,7 @@ License
 "LICENSE" for information on the history of this software, terms & conditions
 for usage, and a DISCLAIMER OF ALL WARRANTIES.
 All trademarks referenced herein are property of their respective holders.
-Copyright (c) 2015--, Ariel Rokem, The University of Washington
-eScience Institute.
+Copyright (c) 2021--, Dimitra Maoutsa, Technical University of Berlin.
 """
 
 NAME = "DeterministicParticleFlowControl"
