@@ -10,6 +10,10 @@ Link to extended preprint: [http://arxiv.org/abs/2112.05735](http://arxiv.org/ab
 <img src="https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/waterfall_plot_cmap25b.png" width=50% height=50%>
 </p>
 
+## Description:
+
+Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive an *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
+
 
 ## Main functionality: `DPFC`
 
