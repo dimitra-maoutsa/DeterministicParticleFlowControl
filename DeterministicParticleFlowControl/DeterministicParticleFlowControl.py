@@ -19,10 +19,10 @@ from . import optimal_transport_reweighting
 import numpy as np
 
 
-class BRIDGE_ND_reweight:
+class DPFC:
     def __init__(self,t1,t2,y1,y2,f,g,N,k,M,reweight=False, U=None,dens_est='nonparametric',reject=True,plotting=True,kern='RBF',f_true=None,brown_bridge=False):
         """
-        Bridge initialising function
+        Deterministic particle flow control - class initialising function
         t1: starting time point
         t2: end time point
         y1: initial observation/position
@@ -87,6 +87,8 @@ class BRIDGE_ND_reweight:
         self.Z = np.zeros((self.dim,self.N,self.k)) #storage for forward trajectories
         self.B = np.zeros((self.dim,self.N,self.k)) #storage for backward trajectories
         self.ln_roD = [] ## storing the estimated forward logarithmic gradients
+        
+        ##this is 
         self.BPWE = np.zeros((self.dim,self.N,self.timegrid.size))
         self.BPWEmean = np.zeros((self.dim,self.k*self.finer))
         self.BPWEstd = np.zeros((self.dim,self.k*self.finer))
@@ -96,6 +98,7 @@ class BRIDGE_ND_reweight:
         
         #self.forward_sampling() ## we do not really use it but this employs stochastic path sampling
         # TO DO: add option to select between stochastic and deterministic path sampling
+        
         self.forward_sampling_Otto()
         ### if a Brownian bridge is used for forward sampling
         if self.reweight and self.brown_bridge:
