@@ -45,3 +45,16 @@ This returns an object that contains the sampled flows and control functions. To
 ```python
 u = control_flows.calculate_u(x,ti)
 ```
+
+
+
+
+
+
+# References
+
+\[1\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining nonlinear stochastic systems". 2021. [[arXiv]](http://arxiv.org/abs/2112.05735)
+
+\[2\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining SDEs". 2021. [[Machine Learning and the Physical Sciences, Workshop at the 35th Conference on Neural Information Processing Systems (NeurIPS)]](https://arxiv.org/pdf/2110.13020)
+
+\[3\] Dimitra Maoutsa, Sebastian Reich, Manfred Opper. "Interacting particle solutions of Fokker–Planck equations through gradient–log–density estimation". 2021. [[Entropy]](https://www.mdpi.com/1099-4300/22/8/802/htm)
