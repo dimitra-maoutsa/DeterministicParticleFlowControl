@@ -20,7 +20,7 @@ import numpy as np
 
 
 class DPFC:
-    def __init__(self,t1,t2,y1,y2,f,g,N,k,M,reweight=False, U=None,dens_est='nonparametric',reject=True,plotting=True,kern='RBF',f_true=None,brown_bridge=False):
+    def __init__(self,t1,t2,y1,y2,f,g,N,M,reweight=False, U=None,dens_est='nonparametric',reject=True,plotting=True,kern='RBF',f_true=None,brown_bridge=False):
         """
         Deterministic particle flow control - class initialising function
         t1: starting time point
@@ -29,8 +29,7 @@ class DPFC:
         y2: terminal position
         f: drift function handle
         g: diffusion coefficient or function handle 
-        N: number of particles/trajectories
-        k: discretisation steps within bridge 
+        N: number of particles/trajectories        
         M: number of sparse points for grad log density estimation
         reweight: boolean - determines if reweighting will follow
         U: function, reweighting function to be employed during reweighting: dim_y1 \to 1
