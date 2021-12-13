@@ -53,7 +53,7 @@ u = control_flows.calculate_u(x,ti)
 
 # References
 
-\[1\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining nonlinear stochastic systems". 2021. [[arXiv]](http://arxiv.org/abs/2112.05735)
+\[1\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining stochastic nonlinear systems". 2021. [[arXiv]](http://arxiv.org/abs/2112.05735)
 
 \[2\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining SDEs". 2021. [[Machine Learning and the Physical Sciences, Workshop at the 35th Conference on Neural Information Processing Systems (NeurIPS)]](https://arxiv.org/pdf/2110.13020)
 
