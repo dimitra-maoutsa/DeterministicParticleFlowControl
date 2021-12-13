@@ -94,17 +94,18 @@ class BRIDGE_ND_reweight:
         self.BPWEkurt = np.zeros((self.dim,self.k*self.finer))
         
         
-        #self.forward_sampling() ##
+        #self.forward_sampling() ## we do not really use it but this employs stochastic path sampling
+        # TO DO: add option to select between stochastic and deterministic path sampling
         self.forward_sampling_Otto()
         ### if a Brownian bridge is used for forward sampling
         if self.reweight and self.brown_bridge:
             self.forward_sampling_Otto_true()
 
            
-        #self.density_estimation()
+        self.density_estimation()
         self.backward_simulation()
         self.reject_trajectories() 
-        #self.calculate_true_statistics()
+        #self.calculate_true_statistics() ##this is only for Ornstein-Uhlenbeck processes
         #if plotting:
         #    self.plot_statistics()
         
