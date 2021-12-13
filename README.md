@@ -16,7 +16,7 @@ Link to extended preprint: [http://arxiv.org/abs/2112.05735](http://arxiv.org/ab
 To obtain the time dependent control functions create an instance of `DPFC`
 ```python
 from DeterministicParticleFlowControl import DPFC
-control_flows = DPFC(t1,t2,y1,y2,f,g,N,M,reweight, U,dens_est='nonparametric',reject=True,plotting=True,kern='RBF',f_true=None,brown_bridge=False)
+control_flows = DPFC(t1,t2,y1,y2,f,g,N,M,reweight, U,dens_est,reject,kern='RBF',f_true=None,brown_bridge=False)
 ```
 where
 - `t1`, `t2` : are define the timeinterval [t1,t2] within which the constraints are imposed onto the system,
@@ -28,5 +28,10 @@ where
 -  `reweight`: boolean indicating whether reweighting of forward trajectories is necessary, i.e. when:
    - path constraints are relevant for the problem,
    - the target is a non typical system state and the forward flow will be sampled as a reweighted Brownian bridge,
-
-- `U`        : function handle representing the path constraints, i.e. U(x,t) = ( x - sin(t) )^2      <img src="https://latex.codecogs.com/svg.latex?\Large&space;U(x,t) = ( x - sin(t) )^2" title="path" />         
+- `U`        : function handle representing the path constraints, i.e. <img src="https://render.githubusercontent.com/render/math?math=U(x,t) = ( x - sin(t) )^2"> ,
+- `dens_est` : idicator determining the method to be employed for the logarithmic gradient (score) estimation. Currently supported:
+  - `nonparametric` : for nonparametric sparse kernel estimation, 
+- `reject`   : boolean variable determining whether rejection of backward trajectories failing to reach the initial condition will take place 
+               (this is mostly used as an indicator of numerical instabilities - if everything runs smoothly 1 or 2 trajectories need to be deleted, but often none of them
+               if more trajectories get deleted, then rerun the computation with more particles N)
+- 
