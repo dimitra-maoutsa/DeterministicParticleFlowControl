@@ -6,5 +6,4 @@ matplotlib
 python-math
 pyemd
 numba
-time
 scipy
