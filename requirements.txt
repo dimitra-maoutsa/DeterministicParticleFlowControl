@@ -3,7 +3,7 @@ numpy
 POT
 numpydoc
 matplotlib
-math
+python-math
 pyemd
 numba
 time
