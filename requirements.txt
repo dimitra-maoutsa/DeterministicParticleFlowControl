@@ -1,9 +1,9 @@
-sphinx
 numpy
-POT
-numpydoc
+scipy
 matplotlib
 python-math
-pyemd
+numpydoc
 numba
-scipy
+POT
+pyemd
+sphinx
