@@ -7,3 +7,4 @@ numba
 POT
 pyemd
 sphinx
+sphinx-gallery
