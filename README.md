@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/DeterministicParticleFlowControl.svg)](https://badge.fury.io/py/DeterministicParticleFlowControl)
+
 # Deterministic Particle Flow Control
 
 Repository for the **Deterministic Particle Flow Control framework**
