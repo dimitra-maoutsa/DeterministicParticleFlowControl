@@ -8,3 +8,4 @@ POT
 pyemd
 sphinx
 sphinx-gallery
+sphinx-readable-theme
