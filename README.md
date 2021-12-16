@@ -40,9 +40,9 @@ We implement the constraints in terms a time- and state-dependent perturbation o
 
 <img src="https://render.githubusercontent.com/render/math?math=dX_t = f(X_t,t) dt %2B u(x,t) dt %2B \sigma(x,t) dW_t">.
 
-Following the assumptions of the Path Integral control formalism, i.e. assuming that control costs are inversely proportional of noise variance (see [paper](http://arxiv.org/abs/2112.05735) for more details), we can show that the interventions `u(x,t)` can be obtained from the logarithmic gradient of the solution of a backward partial differential equation rescaled by the noise variance. 
+Following the assumptions of the Path Integral control formalism, i.e. assuming that control costs are inversely proportional of noise variance (see [paper](http://arxiv.org/abs/2112.05735) for more details), we can show that the interventions `u(x,t)` can be obtained from the **logarithmic gradient of the solution of a backward partial differential equation** rescaled by the noise variance. 
 
-Here, instead of solving the backward PDE to obtain the optimal drift adjustment that implements the constraints, we express the optimal interventions as the difference of the logarithmic gradient of two probability flows, <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> and <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)">. The probability flow or density <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> satisfies the forward filtering equation, a forward PDE that in the absence of path constraints is the Fokker--Planck equation of the uncontrolled dynamics
+Here, instead of solving the backward PDE to obtain the optimal drift adjustment that implements the constraints, we express the optimal interventions as the **difference of the logarithmic gradient of two probability flows**, <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> and <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)">. The probability flow or density <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> satisfies the forward filtering equation, a forward PDE that in the absence of path constraints is the Fokker--Planck equation of the uncontrolled dynamics
 
 
 ## Main functionality: `DPFC`
