@@ -24,6 +24,26 @@ Link to poster: [poster](https://github.com/dimitra-maoutsa/DeterministicParticl
 
 Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive an *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
 
+## Setting:
+
+We consider a stochastic system described by a stochastic differential equation (SDE) 
+
+<img src="https://render.githubusercontent.com/render/math?math=dX_t = f(X_t,t) dt %2B \sigma(x,t) dW_t">
+
+with drift `f(x,t)` and diffusion `σ(x,t)`.
+
+We want to constrain the dynamics of this system for a time interval <img src="https://render.githubusercontent.com/render/math?math=[0,\,T]"> 
+- either to reach some target state <img src="https://render.githubusercontent.com/render/math?math=x^*"> at time T   (_**terminal** constraint_), 
+- and/or to visit/avoid specific regions of the state space (_**path** constraints_).  
+
+We implement the constraints in terms a time- and state-dependent perturbation of the deterministic part of the dynamics, i.e. we apply interventions `u(x,t)` and the controlled system dynamcis become
+
+<img src="https://render.githubusercontent.com/render/math?math=dX_t = f(X_t,t) dt %2B u(x,t) dt %2B \sigma(x,t) dW_t">.
+
+Following the assumptions of the Path Integral control formalism, i.e. assuming that control costs are inversely proportional of noise variance (see [paper](http://arxiv.org/abs/2112.05735) for more details), we can show that the interventions `u(x,t)` can be obtained from the logarithmic gradient of the solution of a backward partial differential equation rescaled by the noise variance. 
+
+Here, instead of solving the backward PDE to obtain the optimal drift adjustment that implements the constraints, we express the optimal interventions as the difference of the logarithmic gradient of two probability flows, <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> and <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)">. The probability flow or density <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> satisfies the forward filtering equation, a forward PDE that in the absence of path constraints is the Fokker--Planck equation of the uncontrolled dynamics
+
 
 ## Main functionality: `DPFC`
 
