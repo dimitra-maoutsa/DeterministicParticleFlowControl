@@ -3,7 +3,7 @@
 Welcome to DeterministicParticleFlowControl's documentation!
 ====================================
 
-`DeterministicParticleFlowControl` is a DeterministicParticleFlowControl: deterministic particle based stochastic optimal control Python framework. 
+`DeterministicParticleFlowControl` is a deterministic particle based stochastic optimal control framework implemented in Python. 
 
 To see how to use it, please refer to the `README file 
 <https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md>`_ in the Github repository.
