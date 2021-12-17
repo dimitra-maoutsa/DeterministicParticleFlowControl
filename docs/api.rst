@@ -11,7 +11,7 @@ Classes
    :template: class.rst
    :toctree: gen_api
 
-   Model
+   DPFC
 
 
 Functions
@@ -21,6 +21,9 @@ Functions
    :template: function.rst
    :toctree: gen_api
 
-   transform_data
-   cumgauss
-   opt_err_func
+   reweight_optimal_transport_multidim
+   score_function_multid_seperate
+   score_function_multid_seperate_all_dims
+   score_function_multid_seperate_old
+   my_cdist
+   
