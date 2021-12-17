@@ -40,6 +40,10 @@ class DPFC:
     def __init__(self,t1,t2,y1,y2,f,g,N,M,reweight=False, U=None,dens_est='nonparametric',reject=True,kern='RBF',f_true=None,brown_bridge=False):
         """
         Deterministic particle flow control - class initialising function
+        
+        Parameters:
+        -----------
+        
         t1: starting time point
         t2: end time point
         y1: initial position
