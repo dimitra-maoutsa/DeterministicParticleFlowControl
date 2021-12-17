@@ -15,11 +15,11 @@ To see how to use it, please refer to the `README file
 Contents:
 
 .. toctree::
-   :maxdepth: 2   
-   
-    DeterministicParticleFlowControl/DPFC
-    DeterministicParticleFlowControl/optimal_transport_reweighting   
-    DeterministicParticleFlowControl/score_function_estimators
+   :maxdepth: 2
+
+   DeterministicParticleFlowControl/__init__
+   DeterministicParticleFlowControl/optimal_transport_reweighting   
+   DeterministicParticleFlowControl/score_function_estimators
    
    
    
