@@ -22,7 +22,7 @@ Link to poster: [poster](https://github.com/dimitra-maoutsa/DeterministicParticl
 
 ## Description:
 
-Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive an *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
+Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive a *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
 
 ## Setting:
 
@@ -36,7 +36,7 @@ We want to constrain the dynamics of this system for a time interval <img src="h
 - either to reach some target state <img src="https://render.githubusercontent.com/render/math?math=x^*"> at time T   (_**terminal** constraint_), 
 - and/or to visit/avoid specific regions of the state space (_**path** constraints_).  
 
-We implement the constraints in terms a time- and state-dependent perturbation of the deterministic part of the dynamics, i.e. we apply interventions `u(x,t)` and the controlled system dynamcis become
+We implement the constraints in terms a time- and state-dependent perturbation of the deterministic part of the dynamics, i.e. we apply interventions `u(x,t)` and the controlled system dynamics become
 
 <img src="https://render.githubusercontent.com/render/math?math=dX_t = f(X_t,t) dt %2B u(x,t) dt %2B \sigma(x,t) dW_t">.
 
