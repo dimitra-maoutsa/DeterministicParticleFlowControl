@@ -5,7 +5,9 @@ API
 Classes
 -------
 
+.. autoclass:: DPFC
 .. currentmodule:: DeterministicParticleFlowControl
+
 
 .. autosummary::
    :template: class.rst
