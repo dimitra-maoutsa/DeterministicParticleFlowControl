@@ -65,7 +65,13 @@ extensions = ['sphinx.ext.autodoc',
               'math_dollar',  # has to go before numpydoc
               'numpydoc',
               'github',
-              'sphinx_gallery.gen_gallery']
+              'sphinx_gallery.gen_gallery',
+             'sphinx.ext.mathjax',
+             'sphinx.ext.viewcode',    
+             'IPython.sphinxext.ipython_directive',
+             'IPython.sphinxext.ipython_console_highlighting',
+             'matplotlib.sphinxext.plot_directive',    
+             'sphinx_copybutton']
 
 # For napoleon parsing parameters of functions
 napoleon_google_docstring = False
