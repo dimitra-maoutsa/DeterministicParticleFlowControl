@@ -35,7 +35,7 @@ with open(ver_file) as f:
 source_version = __version__
 
 currentdir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(currentdir, 'tools'))
+sys.path.append(os.path.join(currentdir, 'notebooks'))
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
