@@ -115,7 +115,7 @@ def setup(app):
 # built documents.
 #
 # The short X.Y version.
-version = '0.1'
+version = '0.2'
 # The full version, including alpha/beta/rc tags.
 release = '0.1'
 
@@ -143,6 +143,7 @@ exclude_patterns = ['_build']
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
 #add_module_names = True
+autoclass_content = 'both'
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
