@@ -99,6 +99,16 @@ sphinx_gallery_conf = {
 # Automatically generate stub pages for API
 autosummary_generate = True
 autodoc_default_flags = ['members', 'inherited-members']
+# Sort members by type
+autodoc_member_order = 'groupwise'
+# Ensure that the __init__ method gets documented.
+def skip(app, what, name, obj, skip, options):
+    if name == "__init__":
+        return False
+    return skip
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
