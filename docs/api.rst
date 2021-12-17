@@ -5,7 +5,7 @@ API
 Classes
 -------
 
-.. currentmodule:: shablona
+.. currentmodule:: DeterministicParticleFlowControl
 
 .. autosummary::
    :template: class.rst
