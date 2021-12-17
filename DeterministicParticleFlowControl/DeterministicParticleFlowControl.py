@@ -12,11 +12,26 @@ import ot
 import numba
 from . import score_function_estimators
 from . import optimal_transport_reweighting
-
+from .due import due, Doi
 
 from matplotlib import pyplot as plt
 import time
 import numpy as np
+
+# Use duecredit (duecredit.org) to provide a citation to relevant work to
+# be cited. This does nothing, unless the user has duecredit installed,
+# And calls this with duecredit (as in `python -m duecredit script.py`):
+due.cite(BibTeX("""
+    @article{maoutsa2021deterministic,
+  title={Deterministic particle flows for constraining stochastic nonlinear systems},
+  author={Maoutsa, Dimitra and Opper, Manfred},
+  journal={arXiv preprint arXiv:2112.05735},
+  year={2021}
+}
+    """),
+         description="A deterministic barticle-based method for stochastic optimal control",
+         tags=["reference-implementation"],
+         path='DeterministicParticleFlowControl')
 
 
 class DPFC:
