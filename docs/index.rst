@@ -9,9 +9,7 @@ is a deterministic particle-based stochastic optimal control framework implement
 To see how to use it, please refer to the `README file 
 <https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md>`_ in the Github repository.
 
-This is an example of documentation of the software, using sphinx_. 
 
-.. _sphinx: http://sphinx-doc.org/
 
 
 Contents:
@@ -20,7 +18,13 @@ Contents:
    :maxdepth: 2
 
    
-   
-   DeterministicParticleFlowControl/optimal_transport_reweighting
    DeterministicParticleFlowControl/DPFC
+   DeterministicParticleFlowControl/optimal_transport_reweighting   
    DeterministicParticleFlowControl/score_function_estimators
+   
+   
+   
+   
+   This is a documentation of the software, using sphinx_. 
+
+.. _sphinx: http://sphinx-doc.org/
