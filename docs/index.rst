@@ -19,8 +19,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   theory
-   auto_examples/index
+   
+   
    DeterministicParticleFlowControl/optimal_transport_reweighting
    DeterministicParticleFlowControl/DPFC
    DeterministicParticleFlowControl/score_function_estimators
