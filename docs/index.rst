@@ -16,7 +16,10 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-
+   
+   theory
+   auto_examples/index
+   api
    DeterministicParticleFlowControl/__init__
    DeterministicParticleFlowControl/optimal_transport_reweighting   
    DeterministicParticleFlowControl/score_function_estimators
@@ -24,6 +27,6 @@ Contents:
    
    
    
-   This is a documentation of the software, using sphinx_. 
+   This is a documentation of the software using sphinx_. 
 
 .. _sphinx: http://sphinx-doc.org/
