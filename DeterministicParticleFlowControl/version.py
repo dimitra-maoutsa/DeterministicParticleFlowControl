@@ -32,7 +32,7 @@ long_description = """
 Deterministic Particle Flow Control
 ====================================
 
-``DeterministicParticleFlowControl`` is a python package that allows for efficient 
+``Deterministic Particle Flow Control`` is a python package that allows for efficient 
 and one shot computation of interventions for optimal stochastic control problems.
 
 Details
