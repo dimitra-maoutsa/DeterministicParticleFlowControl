@@ -13,8 +13,8 @@ is a deterministic particle-based stochastic optimal control framework implement
   :alt: Schematic depicting the proposed framework. A probability flow ρ is propagated forward in time until time T. Then employing the logarithmic gradients of the forward probability flow, a time reversed flow is propagated from T to 0. The time- and space dependent optimal controls are extracted at every time step as the difference of the logarithmic gradients of the two sampled flows rescaled by the noise variance of the process.
   
 
-To see how to use it, please refer to the `README file 
-<https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md>`_ in the Github repository.
+For a fast introduction on how to use it, please refer to the `README file 
+<https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md>`_ in the Github repository. Here you will find more detailed descriptions of the components. (this documentation is getting updated.)
 
 
 
