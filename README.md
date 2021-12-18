@@ -46,6 +46,21 @@ Following the assumptions of the Path Integral control formalism, i.e. assuming 
 Here, instead of solving the backward PDE to obtain the optimal drift adjustment that implements the constraints, we express the optimal interventions as the **difference of the logarithmic gradient of two probability flows**, <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> and <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)">. The probability flow or density <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> satisfies the forward filtering equation, a forward PDE that in the absence of path constraints is the Fokker--Planck equation of the uncontrolled dynamics, while <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)"> is the marginal constrained density that in turn satisfies the Fokker--Planck equation of the optimally  controlled dynamics.
 
 
+## Instalation
+
+To install the install the software run the following commands
+
+```python
+
+# Create and activate a new virtualenvironment
+python -m venv venv
+source venv/bin/activate
+# install the depndencies
+pip install -r requirements.txt
+pip install -e ./
+```
+
+
 ## Main functionality: `DPFC`
 
 To obtain the time dependent control functions create an instance of `DPFC`
