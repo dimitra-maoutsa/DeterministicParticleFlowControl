@@ -11,7 +11,7 @@ We consider a stochastic system described by a stochastic differential equation 
 
 with drift :math:`f(x,t)` and diffusion :math:`\sigma(x,t)`.
 
-We want to constrain the dynamics of this system for a time interval [0,T] 
+We want to constrain the dynamics of this system for a time interval :math:`[0,\,T]` 
 
 - either to reach some target state :math:`x^*1` at time T   (**terminal constraint**), 
 - and/or to visit/avoid specific regions of the state space (**path constraints**).  
