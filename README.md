@@ -9,11 +9,9 @@
 Repository for the **Deterministic Particle Flow Control framework**
 
 
-Link to extended preprint: [http://arxiv.org/abs/2112.05735](http://arxiv.org/abs/2112.05735)
-
-Link to poster: [poster](https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/Poster_Maoutsa_Deterministic_Particle_Flows_Neurips_3scaled.png)
-
-Link to documendation: [readthedocs](http://deterministicparticleflowcontrol.readthedocs.io/)
+- Link to **extended preprint**: [http://arxiv.org/abs/2112.05735](http://arxiv.org/abs/2112.05735)
+- Link to **poster**: [poster](https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/Poster_Maoutsa_Deterministic_Particle_Flows_Neurips_3scaled.png)
+- Link to **documendation**: [readthedocs](http://deterministicparticleflowcontrol.readthedocs.io/)
 
 [ This is work together with Manfred Opper funded by the [SFB 1294](https://www.sfb1294.de/) ]
 
