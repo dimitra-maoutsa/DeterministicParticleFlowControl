@@ -18,6 +18,7 @@ We want to constrain the dynamics of this system for a time interval :math:`[0,\
 
 .. image:: _figs/Constraints.png
   :width: 500
+  :align: center
   :alt: Schematic depicting an path constrained SDE left, and an SDE with terminal constraint right.
 
 We implement the constraints in terms a time- and state-dependent perturbation of the deterministic part of the dynamics, i.e. we apply interventions :math:`u(x,t)` and the controlled system dynamics become
