@@ -16,6 +16,10 @@ We want to constrain the dynamics of this system for a time interval :math:`[0,\
 - either to reach some target state :math:`x^*` at time T   (**terminal constraint**), 
 - and/or to visit/avoid specific regions of the state space (**path constraints**).  
 
+.. image:: figs/Constraints.png
+  :width: 400
+  :alt: Schematic depicting an path constrained SDE left, and an SDE with terminal constraint right.
+
 We implement the constraints in terms a time- and state-dependent perturbation of the deterministic part of the dynamics, i.e. we apply interventions :math:`u(x,t)` and the controlled system dynamics become
 
 .. math::
