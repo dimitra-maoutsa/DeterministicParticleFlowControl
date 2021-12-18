@@ -27,7 +27,7 @@ Here, instead of solving the backward PDE to obtain the optimal drift adjustment
 
 
 
- [Maoutsa2021]_.
+ 
 
 
 .. [Maoutsa2021] Maoutsa Dimitra, Opper Manfred. (2021). Deterministic Particle flows for constraining SDEs. 
