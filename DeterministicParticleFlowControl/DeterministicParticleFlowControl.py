@@ -313,7 +313,7 @@ class DPFC:
         #print(ti, rev_ti, rev_ti-1)
         bnds = np.zeros((self.dim,2))
         for ii in range(self.dim):
-            bnds[ii] = [max(np.min(self.Z[ii,:,rev_ti-1]),np.min(self.B[ii,:,rev_ti])),min(np.max(self.Z[ii,:,rev_ti-1]),np.max(self.B[ii,:,rev_ti]))]
+            bnds[ii] = [max(np.min(self.Z[ii,:,rev_ti]),np.min(self.B[ii,:,rev_ti])),min(np.max(self.Z[ii,:,rev_ti]),np.max(self.B[ii,:,rev_ti]))]
         #sparse points
         #print(bnds)
         sum_bnds = np.sum(bnds)
@@ -321,7 +321,7 @@ class DPFC:
         Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )
         
         for di in range(self.dim):            
-            grad_ln_b[di,:] = score_function_multid_seperate(self.B[:,:,rev_ti].T,Sxx.T,func_out= False,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)#(self.B[:,:,-ti].T)
+            grad_ln_b[di,:] = score_function_multid_seperate(self.B[:,:,rev_ti].T,Sxx.T,func_out= False,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)
         
         return grad_ln_b # this should be function
     
