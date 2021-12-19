@@ -22,7 +22,7 @@ For a fast introduction on how to use it, please refer to the `README file
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    
    theory
    auto_examples/index
@@ -32,14 +32,7 @@ Contents:
    DeterministicParticleFlowControl/score_function_estimators
    
    
-.. toctree::
-   :hidden:
-   :maxdepth: 3
-    
-   theory
-   api
-
-    
+   
    
    This is a documentation of the software using sphinx_. 
 
