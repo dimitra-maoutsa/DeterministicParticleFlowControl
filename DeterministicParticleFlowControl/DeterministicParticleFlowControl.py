@@ -12,7 +12,7 @@ import ot
 import numba
 from . import score_function_estimators
 from . import optimal_transport_reweighting
-from .due import due, Doi
+from .due import due, BibTex
 
 from matplotlib import pyplot as plt
 import time
@@ -113,13 +113,7 @@ class DPFC:
         self.B = np.zeros((self.dim,self.N,self.k)) #storage for backward trajectories
         self.ln_roD = [] ## storing the estimated forward logarithmic gradients
         
-        ##this is 
-        self.BPWE = np.zeros((self.dim,self.N,self.timegrid.size))
-        self.BPWEmean = np.zeros((self.dim,self.k*self.finer))
-        self.BPWEstd = np.zeros((self.dim,self.k*self.finer))
-        self.BPWEskew = np.zeros((self.dim,self.k*self.finer))
-        self.BPWEkurt = np.zeros((self.dim,self.k*self.finer))
-        
+                
         
         #self.forward_sampling() ## we do not really use it but this employs stochastic path sampling
         # TO DO: add option to select between stochastic and deterministic path sampling
