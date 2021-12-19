@@ -155,10 +155,10 @@ class DPFC(object):
         self.brown_bridge = brown_bridge
         self.reweight = reweight
         if self.reweight:
-          self.U = U
-          if self.brown_bridge:
-              self.Ztr = np.zeros((self.dim,self.N,self.k)) #storage for forward trajectories with true drift
-              self.f_true = f_true
+            self.U = U
+            if self.brown_bridge:
+                self.Ztr = np.zeros((self.dim,self.N,self.k)) #storage for forward trajectories with true drift
+                self.f_true = f_true
 
         
         
@@ -201,19 +201,19 @@ class DPFC(object):
         
                 ###WEIGHT
                 if self.reweight == True:
-                  if ti>0:
-                      W[:,0] = np.exp(self.U(self.Z[:,:,ti]))                    
-                      W = W/np.sum(W)
+                    if ti>0:
+                        W[:,0] = np.exp(self.U(self.Z[:,:,ti]))                    
+                        W = W/np.sum(W)
                       
-                      ###REWEIGHT                    
-                      Tstar = reweight_optimal_transport_multidim(self.Z[:,:,ti].T,W)
-                      #P = Tstar *N
-                      # print(Tstar.shape)
-                      # print(X.shape)
-                      self.Z[:,:,ti] = (  (self.Z[:,:,ti])@Tstar  )
+                        ###REWEIGHT                    
+                        Tstar = reweight_optimal_transport_multidim(self.Z[:,:,ti].T,W)
+                        #P = Tstar *N
+                        # print(Tstar.shape)
+                        # print(X.shape)
+                        self.Z[:,:,ti] = (  (self.Z[:,:,ti])@Tstar  )
                 
         for di in range(self.dim):
-          self.Z[di,:,-1] = self.y2[di]
+            self.Z[di,:,-1] = self.y2[di]
         print('Forward sampling done!')
         return 0
     
@@ -251,9 +251,9 @@ class DPFC(object):
             
         sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
-          ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
-          plt.figure(figsize=(6,4)),plt.plot(self.Z[0].T,self.Z[1].T,alpha=0.3);
-          plt.show()
+            ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
+            plt.figure(figsize=(6,4)),plt.plot(self.Z[0].T,self.Z[1].T,alpha=0.3)
+            plt.show()
 
         ##these are the inducing points
         ## here we select them from a uniform distribution within the state space volume spanned from the forward flow
@@ -312,19 +312,19 @@ class DPFC(object):
                 self.Z[:,:,ti] = ( self.Z[:,:,ti-1] + self.dt* self.f_seperate(self.Z[:,:,ti-1],tt-self.dt) )
                 ###REWEIGHT
             if self.reweight == True:
-              if ti>0:
+                if ti>0:
                   
-                  W[:,0] = np.exp(self.U(self.Z[:,:,ti],tt)*self.dt ) #-1                   
-                  W = W/np.sum(W)       
+                    W[:,0] = np.exp(self.U(self.Z[:,:,ti],tt)*self.dt ) #-1                   
+                    W = W/np.sum(W)       
                   
-                  ###REWEIGHT    
-                  start = time.time()
-                  Tstar = reweight_optimal_transport_multidim(self.Z[:,:,ti].T,W)
-                  #print(Tstar)
-                  if ti ==3:
-                      stop = time.time()
-                      print('Timepoint: %d needed '%ti, stop-start)                  
-                  self.Z[:,:,ti] = ((self.Z[:,:,ti])@Tstar ) #####         
+                    ###REWEIGHT    
+                    start = time.time()
+                    Tstar = reweight_optimal_transport_multidim(self.Z[:,:,ti].T,W)
+                    #print(Tstar)
+                    if ti ==3:
+                        stop = time.time()
+                        print('Timepoint: %d needed '%ti, stop-start)                  
+                    self.Z[:,:,ti] = ((self.Z[:,:,ti])@Tstar ) #####         
         print('Forward sampling with Otto is ready!')        
         return 0
     
@@ -340,10 +340,10 @@ class DPFC(object):
         
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
           
-          plt.figure(figsize=(6,4)),plt.plot(self.B[0].T,self.B[1].T,alpha=0.3);
-          plt.plot(self.y1[0],self.y1[1],'go')
+            plt.figure(figsize=(6,4)),plt.plot(self.B[0].T,self.B[1].T,alpha=0.3)
+            plt.plot(self.y1[0],self.y1[1],'go')
           
-          plt.show()
+            plt.show()
         #sparse points
         Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )
         
@@ -389,13 +389,13 @@ class DPFC(object):
                 grad_ln_ro = self.density_estimation(ti,rev_ti) #density estimation of forward particles  
                 
                 if ti==1: 
-                  print(rev_ti,rev_ti-1)
-                  self.B[:,:,rev_ti-1] = (self.B[:,:,rev_ti] - self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])*self.dt + self.dt*self.g**2*grad_ln_ro \
-                                         + (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
+                    print(rev_ti,rev_ti-1)
+                    self.B[:,:,rev_ti-1] = (self.B[:,:,rev_ti] - self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])*self.dt + self.dt*self.g**2*grad_ln_ro \
+                                           + (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
                 else:
-                  grad_ln_b = self.bw_density_estimation(ti,rev_ti)
-                  self.B[:,:,rev_ti-1] = (self.B[:,:,rev_ti] -\
-                                        ( self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2 * grad_ln_b )*self.dt)
+                    grad_ln_b = self.bw_density_estimation(ti,rev_ti)
+                    self.B[:,:,rev_ti-1] = (self.B[:,:,rev_ti] -\
+                                          ( self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2 * grad_ln_b )*self.dt)
                 
         for di in range(self.dim):
             self.B[di,:,0] = self.y1[di]
@@ -405,25 +405,25 @@ class DPFC(object):
 
 
     def reject_trajectories(self):
-      fplus = self.y1+self.f(self.y1,self.t1)*self.dt+4*self.g**2 *np.sqrt(self.dt)
-      fminus = self.y1+self.f(self.y1,self.t1) *self.dt-4*self.g**2 *np.sqrt(self.dt)
-      for iii in range(2):
-        if fplus[iii] < fminus[iii]:
-          temp = fminus[iii]
-          fminus[iii] = fplus[iii]
-          fplus[iii] = temp
+        fplus = self.y1+self.f(self.y1,self.t1)*self.dt+4*self.g**2 *np.sqrt(self.dt)
+        fminus = self.y1+self.f(self.y1,self.t1) *self.dt-4*self.g**2 *np.sqrt(self.dt)
+        for iii in range(2):
+            if fplus[iii] < fminus[iii]:
+                temp = fminus[iii]
+                fminus[iii] = fplus[iii]
+                fplus[iii] = temp
 
-      sinx = np.where( np.logical_or(np.logical_not(np.logical_and( self.B[0,:,1]<fplus[0],self.B[0,:,1]>fminus[0])) , np.logical_not( np.logical_and(self.B[0,:,1]<fplus[0],self.B[0,:,1]>fminus[0])) ) )[0]
+        sinx = np.where( np.logical_or(np.logical_not(np.logical_and( self.B[0,:,1]<fplus[0],self.B[0,:,1]>fminus[0])) , np.logical_not( np.logical_and(self.B[0,:,1]<fplus[0],self.B[0,:,1]>fminus[0])) ) )[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
-      print(sinx)
-      temp = len(sinx)
-      print("Identified %d invalid bridge trajectories "%len(sinx))
-      if self.reject:
-          print("Deleting invalid trajectories...")
-          sinx = sinx[::-1]
-          for element in sinx:
-              self.B = np.delete(self.B, element, axis=1)
-      return 0
+        print(sinx)
+        temp = len(sinx)
+        print("Identified %d invalid bridge trajectories "%len(sinx))
+        if self.reject:
+            print("Deleting invalid trajectories...")
+            sinx = sinx[::-1]
+            for element in sinx:
+                self.B = np.delete(self.B, element, axis=1)
+        return 0
 
     def calculate_u(self,grid_x,ti):
         """
