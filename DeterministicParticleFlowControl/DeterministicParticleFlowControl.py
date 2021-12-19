@@ -326,12 +326,12 @@ class DPFC(object):
                     ##in principle we could start from an arbitrary distribution
                     ##if you want to start from a normal uncomen the following and comment the above initialisation for y1
                     #self.Z[di,:,0] = np.random.normal(self.y1[di], 0.05, self.N)
-            elif ti==1: #propagate one step with stochastic to avoid the delta function
+            elif ti == 1: #propagate one step with stochastic to avoid the delta function
                                            #substract dt because I want the time at t-1
-                self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt*self.f(self.Z[:,:,ti-1],tt-self.dt)+\
+                self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt*self.f(self.Z[:, :, ti-1], tt-self.dt)+\
                                  (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
             else:
-                self.Z[:, :, ti] = ( self.Z[:, :, ti-1] + self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt))
+                self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt))
                 ###REWEIGHT
             if self.reweight == True:
                 if ti > 0:
@@ -343,31 +343,31 @@ class DPFC(object):
                     start = time.time()
                     Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
                     #print(Tstar)
-                    if ti ==3:
+                    if ti == 3:
                         stop = time.time()
                         print('Timepoint: %d needed '%ti, stop-start)
-                    self.Z[:,:,ti] = ((self.Z[:, :, ti])@Tstar ) #####
+                    self.Z[:, :, ti] = ((self.Z[:, :, ti])@Tstar) #####
         print('Forward sampling with Otto is ready!')
         return 0
 
-    def density_estimation(self, ti,rev_ti):
+    def density_estimation(self, ti, rev_ti):
         rev_t = rev_ti-1
         grad_ln_ro = np.zeros((self.dim, self.N))
-        lnthsc = 2*np.std(self.Z[:, :, rev_t],axis=1)
+        lnthsc = 2*np.std(self.Z[:, :, rev_t], axis=1)
 
-        bnds = np.zeros((self.dim,2))
+        bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_t]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_t]), np.max(self.B[ii, :, rev_ti]))]
         sum_bnds = np.sum(bnds)
 
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
 
-            plt.figure(figsize=(6,4)), plt.plot(self.B[0].T, self.B[1].T, alpha=0.3)
-            plt.plot(self.y1[0], self.y1[1],'go')
+            plt.figure(figsize=(6, 4)), plt.plot(self.B[0].T, self.B[1].T, alpha=0.3)
+            plt.plot(self.y1[0], self.y1[1], 'go')
 
             plt.show()
         #sparse points
-        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds ] )
+        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
 
         for di in range(self.dim):
             #estimate density from forward (Z) and evaluate at current postitions of backward particles (B)
@@ -379,19 +379,19 @@ class DPFC(object):
 
     def bw_density_estimation(self, ti, rev_ti):
         grad_ln_b = np.zeros((self.dim, self.N))
-        lnthsc = 2*np.std(self.B[:,:,rev_ti],axis=1)
+        lnthsc = 2*np.std(self.B[:, :, rev_ti], axis=1)
         #print(ti, rev_ti, rev_ti-1)
         bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
-            bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]),np.min(self.B[ii,:,rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
+            bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
         #sparse points
         #print(bnds)
         sum_bnds = np.sum(bnds)
 
-        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds ] )
+        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
 
         for di in range(self.dim):
-            grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T,func_out= False,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)
+            grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
 
         return grad_ln_b # this should be function
 
@@ -402,16 +402,16 @@ class DPFC(object):
 
             if ti == 0:
                 for di in range(self.dim):
-                    self.B[di,:,-1] = self.y2[di]
+                    self.B[di, :, -1] = self.y2[di]
             else:
 
                 Ti = self.timegrid.size
                 rev_ti = Ti- ti
 
-                grad_ln_ro = self.density_estimation(ti,rev_ti) #density estimation of forward particles
+                grad_ln_ro = self.density_estimation(ti, rev_ti) #density estimation of forward particles
 
-                if ti==1:
-                    print(rev_ti,rev_ti-1)
+                if ti == 1:
+                    print(rev_ti, rev_ti-1)
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
                                             self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
@@ -475,9 +475,9 @@ class DPFC(object):
         lnthsc2 = 2*np.std(self.Z[:, :, ti], axis=1)
 
 
-        bnds = np.zeros((self.dim,2))
+        bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
-            if self.reweight==False or self.brown_bridge==False:
+            if self.reweight == False or self.brown_bridge == False:
                 bnds[ii] = [max(np.min(self.Z[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Z[ii, :, ti]), np.max(self.B[ii, :, ti]))]
             else:
                 bnds[ii] = [max(np.min(self.Ztr[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Ztr[ii, :, ti]), np.max(self.B[ii, :, ti]))]
@@ -490,14 +490,14 @@ class DPFC(object):
                     stdtb = np.std(self.B[di, :, ti])
                     mutz = np.mean(self.Z[di, :, ti])
                     stdtz = np.std(self.Z[di, :, ti])
-                    u_t[di] =  -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
+                    u_t[di] = -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
             elif self.reweight == True and self.brown_bridge == True:
                 for di in range(self.dim):
                     mutb = np.mean(self.B[di, :, ti])
                     stdtb = np.std(self.B[di, :, ti])
                     mutz = np.mean(self.Ztr[di, :, ti])
                     stdtz = np.std(self.Ztr[di, :, ti])
-                    u_t[di] =  -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
+                    u_t[di] = -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
         elif ti > 5:
             ### clipping not used at the end but provided here for cases when number of particles is small
             ### and trajectories fall out of simulated flows
@@ -516,17 +516,17 @@ class DPFC(object):
             grid_b = grid_x#np.clip(grid_x, bndsb[0], bndsb[1])
             grid_z = grid_x#np.clip(grid_x, bndsz[0], bndsz[1])
 
-            Sxx = np.array([ np.random.uniform(low=bnd[0], high=bnd[1],size=(self.N_sparse)) for bnd in bnds ])
+            Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
             for di in range(self.dim):
                 score_Bw = score_function_multid_seperate(self.B[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc1, which_dim=di+1, kern=self.kern)(grid_b)
                 if self.reweight == False or self.brown_bridge == False:
                     score_Fw = score_function_multid_seperate(self.Z[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc2, which_dim=di+1, kern=self.kern)(grid_z)
                 else:
-                    bndsztr = np.zeros((self.dim,2))
+                    bndsztr = np.zeros((self.dim, 2))
                     for ii in range(self.dim):
-                        bndsztr[di] = [np.min(self.Ztr[di, :, ti]), np.max(self.Ztr[di,:,ti])]
+                        bndsztr[di] = [np.min(self.Ztr[di, :, ti]), np.max(self.Ztr[di, :, ti])]
                     grid_ztr = np.clip(grid_x, bndsztr[0], bndsztr[1])
-                    lnthsc3 = 2*np.std(self.Ztr[:, :, ti],axis=1)
+                    lnthsc3 = 2*np.std(self.Ztr[:, :, ti], axis=1)
                     score_Fw = score_function_multid_seperate(self.Ztr[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc3, which_dim=di+1, kern=self.kern)(grid_ztr)
 
                 u_t[di] = score_Bw - score_Fw
