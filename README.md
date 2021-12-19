@@ -118,7 +118,7 @@ The method is introduced in this paper
 
 
 
-# Further references:<a id="references"></a>
+## Further references:<a id="references"></a>
 
 \[1\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining stochastic nonlinear systems". 2021. [[arXiv]](http://arxiv.org/abs/2112.05735)
 
