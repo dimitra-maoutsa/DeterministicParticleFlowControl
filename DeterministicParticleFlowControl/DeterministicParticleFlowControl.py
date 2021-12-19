@@ -40,7 +40,7 @@ due.cite(BibTeX("""
 
 class DPFC(object):
     """
-    Deterministic particle flow control object.
+    Deterministic particle flow control top-level functionality.
 
     Contains all the necessary functionality to sample the required probability
     flows and estimate the controls.
