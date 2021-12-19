@@ -240,7 +240,7 @@ class DPFC(object):
 
 
 
-    ### relevant only when forward trajectories follow brownian brifge - 
+    ### relevant only when forward trajectories follow brownian brifge -
     ###this simulates forward trajectories with true f
     def f_seperate_true(self, x, t):#plain GP prior
 
@@ -335,71 +335,71 @@ class DPFC(object):
             if self.reweight == True:
                 if ti > 0:
 
-                    W[:,0] = np.exp(self.U(self.Z[:, :, ti], tt)*self.dt) #-1
+                    W[:, 0] = np.exp(self.U(self.Z[:, :, ti], tt)*self.dt) #-1
                     W = W/np.sum(W)
 
                     ###REWEIGHT
                     start = time.time()
-                    Tstar = reweight_optimal_transport_multidim(self.Z[:,:,ti].T,W)
+                    Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
                     #print(Tstar)
                     if ti ==3:
                         stop = time.time()
                         print('Timepoint: %d needed '%ti, stop-start)
-                    self.Z[:,:,ti] = ((self.Z[:,:,ti])@Tstar ) #####
+                    self.Z[:,:,ti] = ((self.Z[:, :, ti])@Tstar ) #####
         print('Forward sampling with Otto is ready!')
         return 0
 
     def density_estimation(self, ti,rev_ti):
         rev_t = rev_ti-1
-        grad_ln_ro = np.zeros((self.dim,self.N))
-        lnthsc = 2*np.std(self.Z[:,:,rev_t],axis=1)
+        grad_ln_ro = np.zeros((self.dim, self.N))
+        lnthsc = 2*np.std(self.Z[:, :, rev_t],axis=1)
 
         bnds = np.zeros((self.dim,2))
         for ii in range(self.dim):
-            bnds[ii] = [max(np.min(self.Z[ii,:,rev_t]),np.min(self.B[ii,:,rev_ti])),min(np.max(self.Z[ii,:,rev_t]),np.max(self.B[ii,:,rev_ti]))]
+            bnds[ii] = [max(np.min(self.Z[ii, :, rev_t]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_t]), np.max(self.B[ii, :, rev_ti]))]
         sum_bnds = np.sum(bnds)
 
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
 
-            plt.figure(figsize=(6,4)),plt.plot(self.B[0].T,self.B[1].T,alpha=0.3)
-            plt.plot(self.y1[0],self.y1[1],'go')
+            plt.figure(figsize=(6,4)), plt.plot(self.B[0].T, self.B[1].T, alpha=0.3)
+            plt.plot(self.y1[0], self.y1[1],'go')
 
             plt.show()
         #sparse points
-        Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )
+        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds ] )
 
         for di in range(self.dim):
             #estimate density from forward (Z) and evaluate at current postitions of backward particles (B)
-            grad_ln_ro[di,:] = score_function_multid_seperate(self.Z[:,:,rev_t].T,Sxx.T,func_out= True,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)(self.B[:,:,rev_ti].T)
+            grad_ln_ro[di, :] = score_function_multid_seperate(self.Z[:, :, rev_t].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)(self.B[:, :, rev_ti].T)
 
 
         return grad_ln_ro
 
 
     def bw_density_estimation(self, ti, rev_ti):
-        grad_ln_b = np.zeros((self.dim,self.N))
+        grad_ln_b = np.zeros((self.dim, self.N))
         lnthsc = 2*np.std(self.B[:,:,rev_ti],axis=1)
         #print(ti, rev_ti, rev_ti-1)
-        bnds = np.zeros((self.dim,2))
+        bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
-            bnds[ii] = [max(np.min(self.Z[ii,:,rev_ti]),np.min(self.B[ii,:,rev_ti])),min(np.max(self.Z[ii,:,rev_ti]),np.max(self.B[ii,:,rev_ti]))]
+            bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]),np.min(self.B[ii,:,rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
         #sparse points
         #print(bnds)
         sum_bnds = np.sum(bnds)
 
-        Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )
+        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds ] )
 
         for di in range(self.dim):
-            grad_ln_b[di,:] = score_function_multid_seperate(self.B[:,:,rev_ti].T,Sxx.T,func_out= False,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)
+            grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T,func_out= False,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)
 
         return grad_ln_b # this should be function
 
 
     def backward_simulation(self):
 
-        for ti,tt in enumerate(self.timegrid[:-1]):
+        for ti, tt in enumerate(self.timegrid[:-1]):
 
-            if ti==0:
+            if ti == 0:
                 for di in range(self.dim):
                     self.B[di,:,-1] = self.y2[di]
             else:
@@ -411,15 +411,17 @@ class DPFC(object):
 
                 if ti==1:
                     print(rev_ti,rev_ti-1)
-                    self.B[:,:,rev_ti-1] = (self.B[:,:,rev_ti] - self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])*self.dt + self.dt*self.g**2*grad_ln_ro \
-                                           + (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
+                    self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
+                                            self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])*self.dt + \
+                                                self.dt*self.g**2*grad_ln_ro +\
+                                                    (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
                 else:
-                    grad_ln_b = self.bw_density_estimation(ti,rev_ti)
-                    self.B[:,:,rev_ti-1] = (self.B[:,:,rev_ti] -\
-                                          ( self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2 * grad_ln_b )*self.dt)
+                    grad_ln_b = self.bw_density_estimation(ti, rev_ti)
+                    self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
+                                          (self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2 * grad_ln_b)*self.dt)
 
         for di in range(self.dim):
-            self.B[di,:,0] = self.y1[di]
+            self.B[di, :, 0] = self.y1[di]
 
         return 0
 
@@ -434,7 +436,7 @@ class DPFC(object):
                 fminus[iii] = fplus[iii]
                 fplus[iii] = temp
 
-        sinx = np.where( np.logical_or(np.logical_not(np.logical_and( self.B[0,:,1]<fplus[0],self.B[0,:,1]>fminus[0])) , np.logical_not( np.logical_and(self.B[0,:,1]<fplus[0],self.B[0,:,1]>fminus[0])) ) )[0]
+        sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])) , np.logical_not( np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
         print(sinx)
         temp = len(sinx)
@@ -446,7 +448,7 @@ class DPFC(object):
                 self.B = np.delete(self.B, element, axis=1)
         return 0
 
-    def calculate_u(self,grid_x,ti):
+    def calculate_u(self, grid_x, ti):
         """
 
 
