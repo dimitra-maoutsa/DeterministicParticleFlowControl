@@ -1,10 +1,10 @@
 API
 ===
 
-DeterministicParticleFlowControl.py
+DeterministicParticleFlowControl
 ---------
 
-.. automodule:: DeterministicParticleFlowControl.py
+.. automodule:: DeterministicParticleFlowControl
     :members:
     :special_members:
 
