@@ -6,6 +6,7 @@ Classes
 -------
 
 .. autoclass:: DPFC
+   :module: DeterministicParticleFlowControl.py
 
 
 
