@@ -1,6 +1,12 @@
 API
 ===
 
+Modules
+--------
+
+.. automodule:: DPFC
+   :members:
+
 
 Classes
 -------
