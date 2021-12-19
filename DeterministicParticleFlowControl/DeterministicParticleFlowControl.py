@@ -40,7 +40,7 @@ due.cite(BibTeX("""
 
 class DPFC(object):
     """
-    Deterministic particle flow control top-level functionality.
+    Deterministic particle flow control top-level class.
 
     Provides the necessary functions to sample the required probability
     flows and estimate the controls.
@@ -93,54 +93,27 @@ class DPFC(object):
 
     Methods
     -------
-    forward_sampling_Otto
+    forward_sampling_Otto:
         Creates samples of the forward flow.
-    f_seperate(x,t)
+    forward sampling():
+        Samples the forward flow with stochatic particle trajectories.
+    f_seperate(x,t):
         Drift for the deterministic propagation of partcles that are at time t in position x.
+    backward_simulation():
+        Sampling the backward density with stochastic particles.
+    reject_trajectories():
+        Rejects backward trajectories that do not end up in the vicinity of the initial point. 
+        Run only if the instance is attribute "reject" is set to True.
+        Gives logging.warning messages  
+        
+    forward_sampling_Otto_true():
+        Relevant only when forward sampling happens with Brownian bridge. 
 
     """
 
 
     def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None, dens_est='nonparametric', reject=True, kern='RBF', f_true=None, brown_bridge=False):
-        """Deterministic particle flow control - class initialising function
-
-        Parameters:
-        -----------
-
-        t1: starting time point
-        t2: end time point
-        y1: initial position
-        y2: terminal position
-        f: drift function handle
-        g: diffusion coefficient or function handle
-        N: number of particles/trajectories
-        M: number of sparse points for grad log density estimation
-        reweight: boolean - determines if reweighting will follow
-        U: function, reweighting function to be employed during reweighting:
-            dim_y1 \to 1
-        dens_est: density estimation function
-                  > 'nonparametric' : non parametric density estimation
-                                      (this was used in the paper)
-                  TO BE ADDED:
-                  > 'hermit1' : parametic density estimation empoying hermite
-                                polynomials (physiscist's)
-                  > 'hermit2' : parametic density estimation empoying hermite
-                                polynomials (probabilists's)
-                  > 'poly' : parametic density estimation empoying simple
-                             polynomials
-                  > 'RBF' : parametric density estimation employing
-                            radial basis functions
-        kern: type of kernel: 'RBF' or 'periodic' (only the 'RBF' was used and
-                               gives robust results. Do not use 'periodic' yet!)
-        reject: boolean parameter indicating whether non valid backward
-                trajectories will be rejected
-        plotting: boolean parameter indicating whether bridge statistics will
-                  be plotted
-        f_true: in case of Brownian bridge reweighting this is the true forward
-                drift for simulating the forward dynaics
-        brown_bridge: boolean,determines if the reweighting concearns
-                      contstraint or reweighting with respect to brownian bridge
-        """
+                
         self.dim = y1.size # dimensionality of the system
         self.t1 = t1
         self.t2 = t2
@@ -438,7 +411,7 @@ class DPFC(object):
 
         sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])), np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
-        print(sinx)
+        #print(sinx)
         temp = len(sinx)
         logging.warning("Identified %d invalid bridge trajectories "%len(sinx))
         if self.reject:
@@ -450,18 +423,20 @@ class DPFC(object):
 
     def calculate_u(self, grid_x, ti):
         """
-
+        Computes the control at position(s) grid_x at timestep ti (i.e. at time self.timegrid[ti]).
 
         Parameters
         ----------
-        grid_x : array of size d x number of points on the grid
-        ti     : time index in timegrid for the computation of u
-            Computes the control u on the grid or on a the point .
+        grid_x : ndarray,
+                 size d x number of points to be evaluated.
+        ti     : int,
+                  time index in timegrid for the computation of u.           
 
 
         Returns
         -------
-        The control u(grid_x, t), where t=timegrid[ti].
+        u_t: ndarray,
+             same size as grid_x. These are the controls u(grid_x, t), where t=self.timegrid[ti].
 
         """
         #a = 0.001
