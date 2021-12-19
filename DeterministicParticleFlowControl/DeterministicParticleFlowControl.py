@@ -301,10 +301,10 @@ class DPFC(object):
 
             elif ti == 1: #propagate one step with stochastic to avoid the delta function
                                           #substract dt because I want the time at t-1
-                self.Ztr[:, :, ti] = (self.Ztr[: ,: ,ti-1] + self.dt*self.f_true(self.Ztr[: ,: ,ti-1],tt-self.dt)+\
-                                 (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim,self.N)) )
+                self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt*self.f_true(self.Ztr[:, :, ti-1], tt-self.dt)+\
+                                 (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
             else:
-                self.Ztr[: ,: ,ti] = ( self.Ztr[: ,: ,ti-1] + self.dt* self.f_seperate_true(self.Ztr[: ,: ,ti-1], tt-self.dt) )
+                self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt))
 
         print('Forward sampling with Otto true is ready!')
         return 0
@@ -313,29 +313,29 @@ class DPFC(object):
 
     def forward_sampling_Otto(self):
         print('Sampling forward with deterministic particles...')
-        W = np.ones((self.N,1))/self.N
+        W = np.ones((self.N, 1))/self.N
         for ti,tt in enumerate(self.timegrid):
             print(ti)
             if ti == 0:
                 for di in range(self.dim):
                     self.Z[di,:,0] = self.y1[di]
                     if self.brown_bridge:
-                        self.Z[di,:,-1] = self.y2[di]
+                        self.Z[di, :, -1] = self.y2[di]
                     ## we start forward trajectories for a delta function.
                     ##in principle we could start from an arbitrary distribution
                     ##if you want to start from a normal uncomen the following and comment the above initialisation for y1
                     #self.Z[di,:,0] = np.random.normal(self.y1[di], 0.05, self.N)
             elif ti==1: #propagate one step with stochastic to avoid the delta function
                                            #substract dt because I want the time at t-1
-                self.Z[:,:,ti] = (self.Z[:,:,ti-1] + self.dt*self.f(self.Z[:,:,ti-1],tt-self.dt)+\
-                                 (self.g)*np.random.normal(loc = 0.0, scale = np.sqrt(self.dt),size=(self.dim,self.N)) )
+                self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt*self.f(self.Z[:,:,ti-1],tt-self.dt)+\
+                                 (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
             else:
-                self.Z[:,:,ti] = ( self.Z[:,:,ti-1] + self.dt* self.f_seperate(self.Z[:,:,ti-1],tt-self.dt) )
+                self.Z[:, :, ti] = ( self.Z[:, :, ti-1] + self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt))
                 ###REWEIGHT
             if self.reweight == True:
-                if ti>0:
+                if ti > 0:
 
-                    W[:,0] = np.exp(self.U(self.Z[:,:,ti],tt)*self.dt ) #-1
+                    W[:,0] = np.exp(self.U(self.Z[:, :, ti], tt)*self.dt) #-1
                     W = W/np.sum(W)
 
                     ###REWEIGHT
