@@ -8,12 +8,13 @@ Created on Sun Dec 12 00:02:39 2021
 
 
 #
-from matplotlib import pyplot as plt
+
 import time
+import logging
 import numpy as np
 import ot
 import numba
-import logging
+from matplotlib import pyplot as plt
 from score_function_estimators import  score_function_multid_seperate
 from optimal_transport_reweighting import reweight_optimal_transport_multidim
 from due import due, BibTeX
@@ -66,7 +67,8 @@ class DPFC(object):
     reweight: boolean
         determines if reweighting will follow.
     U: function, callable
-        reweighting function to be employed during reweighting: dim_y1 \to 1.
+        reweighting function to be employed during reweighting,
+        dimensions :math:`dim_y1,t \to 1`.
     dens_est: str
               > 'nonparametric' : non parametric density estimation (this was
                                   used in the paper)
@@ -98,20 +100,22 @@ class DPFC(object):
     forward sampling():
         Samples the forward flow with stochatic particle trajectories.
     f_seperate(x,t):
-        Drift for the deterministic propagation of partcles that are at time t in position x.
+        Drift for the deterministic propagation of partcles that are at time t
+        in position x.
     backward_simulation():
         Sampling the backward density with stochastic particles.
     reject_trajectories():
-        Rejects backward trajectories that do not end up in the vicinity of the initial point. 
+        Rejects backward trajectories that do not end up in the vicinity of the
+        initial point.
         Run only if the instance is attribute "reject" is set to True.
-        Gives logging.warning messages.        
+        Gives logging.warning messages.
     forward_sampling_Otto_true():
-        Relevant only when forward sampling happens with Brownian bridge. 
+        Relevant only when forward sampling happens with Brownian bridge.
     """
 
 
     def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None, dens_est='nonparametric', reject=True, kern='RBF', f_true=None, brown_bridge=False):
-                
+
         self.dim = y1.size # dimensionality of the system
         self.t1 = t1
         self.t2 = t2
@@ -178,6 +182,18 @@ class DPFC(object):
         #    self.plot_statistics()
 
     def forward_sampling(self):
+        """
+        Sampling forward probability flow with stochastic particle dynamics.
+        If reweighting is required at every time step the particles are
+        appropriatelly reweighted accordint to function :math:`U(x,t)`
+
+        Returns
+        -------
+        int
+            Returns 0 to make sure everything runs correctly.
+            The sampled density is stored in place in the array `self.Z`.
+
+        """
         logging.info('Sampling forward...')
         W = np.ones((self.N, 1))/self.N
         for ti, tt in enumerate(self.timegrid):
@@ -200,7 +216,7 @@ class DPFC(object):
 
                         ###REWEIGHT
                         Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
-                        
+
                         self.Z[:, :, ti] = (self.Z[:, :, ti])@Tstar
 
         for di in range(self.dim):
@@ -213,7 +229,32 @@ class DPFC(object):
 
     ### relevant only when forward trajectories follow brownian brifge -
     ###this simulates forward trajectories with true f
-    def f_seperate_true(self, x, t):#plain GP prior
+    def f_seperate_true(self, x, t):
+        """
+        (Relevant only when forward sampling happens with Brownian bridge
+        reweighting)
+        Wrapper for the drift function of the deterministic particles with the
+        actual f (system drift) minus the logarithmic gradient term computed
+        on current particles positions.
+        Provided for easy integration, and can be passed to ode integrators.
+
+        Parameters
+        ----------
+        x : 2d-array,
+            Particle positions (dimension x number of particles).
+        t : float,
+            Time t within the [t1,t2] interval.
+
+        Returns
+        -------
+        2d-array
+            Returns the deterministic forces required to ntegrate the particle
+            positions for one time step,
+            i.e. return :math:`f(x,t)-\frac{1}{2}\sigma^2\nabla \rho_t(x)`,
+            evaluated at the current positions x and t.
+
+        """
+
 
         dimi, N = x.shape
         bnds = np.zeros((dimi, 2))
@@ -232,7 +273,32 @@ class DPFC(object):
 
 
     ### effective forward drift - estimated seperatelly for each dimension
-    def f_seperate(self, x, t):#plain GP prior
+    #plain GP prior
+    def f_seperate(self, x, t):
+        """
+        Computes the deterministic forces for the evolution of the deterministic
+        particles for the current particle positions,
+        ie. drift minus the logarithmic gradient term.
+        Is used as a wrapper for evolving the particles,
+        and can be provided to "any" ODE integrator.
+
+        Parameters
+        ----------
+        x : 2d-array,
+            Particle positions (dimension x number of particles).
+        t : float,
+            Time t within the [t1,t2] interval.
+
+        Returns
+        -------
+        2d-array
+            Returns the deterministic forces required to ntegrate the particle
+            positions for one time step,
+            i.e. return :math:`f(x,t)-\frac{1}{2}\sigma^2\nabla \rho_t(x)`,
+            evaluated at the current positions x and t.
+
+        """
+
 
         dimi, N = x.shape
         ### detect min and max of forward flow for each dimension
@@ -261,6 +327,22 @@ class DPFC(object):
      ###same as forward sampling but without reweighting - this is for bridge reweighting
         ### not for constraint reweighting
     def forward_sampling_Otto_true(self):
+        """
+        (Relevant only when forward sampling happens with Brownian bridge
+        reweighting)
+        Same as forward sampling but without reweighting.
+
+        Returns
+        -------
+        int
+            Returns 0 to make sure everything runs correctly.
+            The sampled density is stored in place in the array `self.Ztr`.
+
+        See also
+        ---------
+        DPFC.forward_sampling, DPFC.forward_sampling_Otto
+
+        """
         logging.info('Sampling forward with deterministic particles and true drift...')
         #W = np.ones((self.N,1))/self.N
         for ti, tt in enumerate(self.timegrid):
@@ -283,6 +365,20 @@ class DPFC(object):
 
 
     def forward_sampling_Otto(self):
+        """
+        Samples the forward probability flow with deterministic particle
+        dynamics.
+        If required at every timestep a particle reweighting takes place
+        employing the weights obtained from the exponentiated path constraint
+        :math:`U(x,t)`
+
+        Returns
+        -------
+        int
+            Returns 0 to make sure everything runs correctly.
+            The sampled density is stored in place in the array `self.Z`.
+
+        """
         logging.info('Sampling forward with deterministic particles...')
         W = np.ones((self.N, 1))/self.N
         for ti, tt in enumerate(self.timegrid):
@@ -421,20 +517,22 @@ class DPFC(object):
 
     def calculate_u(self, grid_x, ti):
         """
-        Computes the control at position(s) grid_x at timestep ti (i.e. at time self.timegrid[ti]).
+        Computes the control at position(s) grid_x at timestep ti
+        (i.e. at time self.timegrid[ti]).
 
         Parameters
         ----------
         grid_x : ndarray,
                  size d x number of points to be evaluated.
         ti     : int,
-                  time index in timegrid for the computation of u.           
+                  time index in timegrid for the computation of u.
 
 
         Returns
         -------
         u_t: ndarray,
-             same size as grid_x. These are the controls u(grid_x, t), where t=self.timegrid[ti].
+             same size as grid_x. These are the controls u(grid_x, t),
+             where t=self.timegrid[ti].
 
         """
         #a = 0.001
@@ -471,12 +569,16 @@ class DPFC(object):
                     stdtz = np.std(self.Ztr[di, :, ti])
                     u_t[di] = -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
         elif ti > 5:
-            ### clipping not used at the end but provided here for cases when number of particles is small
+            ### clipping not used at the end but provided here for cases when
+            ### number of particles is small
             ### and trajectories fall out of simulated flows
-            ### TO DO: add clipping as an option to be selected when initialising the function
-            ###if point for evaluating control falls out of the region where we have points, clip the points to
-            ###fall within the calculated region - we do not change the position of the point, only the control value will be
-            ###calculated with clipped positions
+            ### TO DO: add clipping as an option to be selected when
+            ### initialising the function
+            ### if point for evaluating control falls out of the region where we
+            ### have points, clip the points to
+            ### fall within the calculated region - we do not change the
+            ### position of the point, only the control value will be
+            ### calculated with clipped positions
             bndsb = np.zeros((self.dim, 2))
             bndsz = np.zeros((self.dim, 2))
             for di in range(self.dim):
