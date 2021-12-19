@@ -1,7 +1,7 @@
 API
 ===
 
-DeterministicParticleFlowControl
+Deterministic Particle Flow Control
 ---------
 
 .. automodule:: DeterministicParticleFlowControl.DeterministicParticleFlowControl
