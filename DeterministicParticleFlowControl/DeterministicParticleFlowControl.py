@@ -443,7 +443,26 @@ class DPFC(object):
         return grad_ln_ro
 
 
-    def bw_density_estimation(self, ti, rev_ti):
+    def bw_density_estimation(self, rev_ti):
+        """
+        Estimates the logaritmic gradient of the backward flow evaluated at
+        particle positions of the backward flow.
+
+
+        Parameters
+        ----------
+
+        rev_ti : int,
+                 indicates the time point in the timegrid where the estimation
+                 will take place, i.e. for time t=self.timegrid[rev_ti.
+
+        Returns
+        -------
+        grad_ln_b: 2d-array,
+                    with the logarithmic gradients of the time reversed
+                    (backward) flow (dim x N) for the timestep `rev_ti`.
+
+        """
         grad_ln_b = np.zeros((self.dim, self.N))
         lnthsc = 2*np.std(self.B[:, :, rev_ti], axis=1)
         #print(ti, rev_ti, rev_ti-1)
@@ -452,14 +471,14 @@ class DPFC(object):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
         #sparse points
         #print(bnds)
-        sum_bnds = np.sum(bnds)
+        #sum_bnds = np.sum(bnds)
 
         Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
 
         for di in range(self.dim):
             grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
 
-        return grad_ln_b # this should be function
+        return grad_ln_b
 
 
     def backward_simulation(self):
@@ -638,7 +657,8 @@ class DPFC(object):
 
     def check_if_covered(self, X, ti):
         """
-        Checks if test point X falls within forward and backward densities at timepoint timegrid[ti]
+        Checks if test point X falls within forward and backward densities at
+        timepoint timegrid[ti].
 
 
         Parameters
@@ -646,7 +666,8 @@ class DPFC(object):
         X : array 1x dim or Kxdim
             Point in state space where control is evaluated.
         ti : int
-            Index in timegrid array indicating the time within the time interval [t1,t2] .
+            Index in timegrid array indicating the time within the
+            time interval [t1,t2].
 
         Returns
         -------
