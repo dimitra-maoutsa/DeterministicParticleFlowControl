@@ -4,7 +4,7 @@ API
 DeterministicParticleFlowControl
 ---------
 
-.. automodule:: DeterministicParticleFlowControl
+.. automodule:: DeterministicParticleFlowControl.DeterministicParticleFlowControl
     :members:
     :special_members:
 
