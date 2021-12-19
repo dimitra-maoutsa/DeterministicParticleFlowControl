@@ -36,10 +36,64 @@ due.cite(BibTeX("""
          path='DeterministicParticleFlowControl')
 
 
-class DPFC:
+class DPFC(object):
+    """
+    Deterministic particle flow control object.
+
+    Contains all the necessary functionality to sample the required probability flows and estimate the controls.
+
+    Attributes
+    ----------
+    t1 : float
+        Initial time.
+    t2: float
+        end time point.
+    y1: array_like 
+        initial position.
+    y2: array_like
+        terminal position.
+    f: function, callable
+        drift function handle.
+    g: float or array_like
+        diffusion coefficient or function handle. 
+    N: int
+        number of particles/trajectories.        
+    M: int
+        number of sparse points for grad log density estimation.
+    reweight: boolean 
+        determines if reweighting will follow.
+    U: function, callable
+        reweighting function to be employed during reweighting: dim_y1 \to 1.
+    dens_est: str
+              > 'nonparametric' : non parametric density estimation (this was used in the paper)
+              TO BE ADDED:
+              > 'hermit1' : parametic density estimation empoying hermite polynomials (physiscist's)
+              > 'hermit2' : parametic density estimation empoying hermite polynomials (probabilists's)
+              > 'poly' : parametic density estimation empoying simple polynomials
+              > 'RBF' : parametric density estimation employing radial basis functions.
+    kern: str
+        type of kernel: 'RBF' or 'periodic' (only the 'RBF' was used and gives robust results. Do not use 'periodic' yet!).
+    reject: boolean 
+        parameter indicating whether non valid backward trajectories will be rejected.
+    plotting: boolean 
+        parameter indicating whether bridge statistics will be plotted.
+    f_true: funtion, callable
+        in case of Brownian bridge reweighting this is the true forward drift for simulating the forward dynamics.
+    brown_bridge: boolean,
+        determines if the reweighting concearns contstraint or reweighting with respect to brownian bridge.
+
+    Methods
+    -------
+    forward_sampling_Otto
+        Creates samples of the forward flow.
+    f_seperate(x,t)
+        Drift for the deterministic propagation of partcles that are at time t in position x.
+
+    """
+    
+    
     def __init__(self,t1,t2,y1,y2,f,g,N,M,reweight=False, U=None,dens_est='nonparametric',reject=True,kern='RBF',f_true=None,brown_bridge=False):
-        """
-        Deterministic particle flow control - class initialising function
+        """Deterministic particle flow control - class initialising function
         
         Parameters:
         -----------
