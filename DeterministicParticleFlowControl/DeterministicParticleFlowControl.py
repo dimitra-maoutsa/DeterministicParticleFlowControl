@@ -68,7 +68,7 @@ class DPFC(object):
         determines if reweighting will follow.
     U: function, callable
         reweighting function to be employed during reweighting,
-        dimensions :math:`dim_y1,t \to 1`.
+        dimensions :math:`dim_y1,t \\to 1`.
     dens_est: str
               > 'nonparametric' : non parametric density estimation (this was
                                   used in the paper)
@@ -250,7 +250,7 @@ class DPFC(object):
         2d-array
             Returns the deterministic forces required to ntegrate the particle
             positions for one time step,
-            i.e. return :math:`f(x,t)-\frac{1}{2}\sigma^2\nabla \rho_t(x)`,
+            i.e. return :math:`f(x,t)-\\frac{1}{2}\\sigma^2\\nabla \\rho_t(x)`,
             evaluated at the current positions x and t.
 
         """
@@ -294,7 +294,7 @@ class DPFC(object):
         2d-array
             Returns the deterministic forces required to ntegrate the particle
             positions for one time step,
-            i.e. return :math:`f(x,t)-\frac{1}{2}\sigma^2\nabla \rho_t(x)`,
+            i.e. return :math:`f(x,t)-\\frac{1}{2}\\sigma^2\\nabla \\rho_t(x)`,
             evaluated at the current positions x and t.
 
         """
@@ -463,6 +463,18 @@ class DPFC(object):
 
 
     def backward_simulation(self):
+        """
+        Sample time reversed flow with deterministic dynamics.
+        Trajectories are stored in place in `self.B` array of dimensionality
+        (dim x N x timegrid.size).
+        `self.B` does not need to be timereversed at the end!!!
+
+        Returns
+        -------
+        int
+            Returns 0 to ensure everything was executed correctly.
+
+        """
 
         for ti, tt in enumerate(self.timegrid[:-1]):
 
@@ -495,6 +507,18 @@ class DPFC(object):
 
 
     def reject_trajectories(self):
+        """
+        Reject backward trajectories that do not reach the vicinity of the
+        initial point.
+        Deletes in place relevant rows of the `self.B` array that contains
+        the time reversed trajectories.
+
+        Returns
+        -------
+        int
+            Returns 0.
+
+        """
         fplus = self.y1+self.f(self.y1, self.t1)*self.dt+4*self.g**2 *np.sqrt(self.dt)
         fminus = self.y1+self.f(self.y1, self.t1) *self.dt-4*self.g**2 *np.sqrt(self.dt)
         for iii in range(2):
