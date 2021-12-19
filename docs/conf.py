@@ -291,8 +291,10 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'DeterministicParticleFlowControl.tex', 'DeterministicParticleFlowControl Documentation',
-   'Dimitra Maoutsa', 'manual'),
+   'Dimitra Maoutsa'),
 ]
+
+
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
