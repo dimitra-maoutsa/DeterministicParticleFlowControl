@@ -104,11 +104,9 @@ class DPFC(object):
     reject_trajectories():
         Rejects backward trajectories that do not end up in the vicinity of the initial point. 
         Run only if the instance is attribute "reject" is set to True.
-        Gives logging.warning messages  
-        
+        Gives logging.warning messages.        
     forward_sampling_Otto_true():
         Relevant only when forward sampling happens with Brownian bridge. 
-
     """
 
 
