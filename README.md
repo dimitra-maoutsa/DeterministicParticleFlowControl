@@ -10,6 +10,7 @@
 | [**Main functionality**](#dpfc)
 | [**Cite us**](#citeus)
 | [**References**](#references)
+| [**Ask a question**](https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/discussions)
 
 # Deterministic Particle Flow Control
 
