@@ -13,6 +13,7 @@ import time
 import numpy as np
 import ot
 import numba
+import logging
 from score_function_estimators import  score_function_multid_seperate
 from optimal_transport_reweighting import reweight_optimal_transport_multidim
 from due import due, BibTeX
@@ -151,9 +152,9 @@ class DPFC(object):
         self.kern = kern
         if kern == 'periodic':
             kern = 'RBF'
-            print('Please do not use periodic kernel yet!')
-            print('For all the numerical experiments RBF was used')
-            print('We changed your choice to RBF')
+            logging.warning('Please do not use periodic kernel yet!')
+            logging.warning('For all the numerical experiments RBF was used')
+            logging.warning('We changed your choice to RBF')
         # DRIFT /DIFFUSION
         self.f = f
         self.g = g #scalar or array
@@ -206,7 +207,7 @@ class DPFC(object):
         #    self.plot_statistics()
 
     def forward_sampling(self):
-        print('Sampling forward...')
+        logging.info('Sampling forward...')
         W = np.ones((self.N, 1))/self.N
         for ti, tt in enumerate(self.timegrid):
 
@@ -228,14 +229,12 @@ class DPFC(object):
 
                         ###REWEIGHT
                         Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
-                        #P = Tstar *N
-                        # print(Tstar.shape)
-                        # print(X.shape)
+                        
                         self.Z[:, :, ti] = (self.Z[:, :, ti])@Tstar
 
         for di in range(self.dim):
             self.Z[di, :, -1] = self.y2[di]
-        print('Forward sampling done!')
+        logging.info('Forward sampling done!')
         return 0
 
 
@@ -291,7 +290,7 @@ class DPFC(object):
      ###same as forward sampling but without reweighting - this is for bridge reweighting
         ### not for constraint reweighting
     def forward_sampling_Otto_true(self):
-        print('Sampling forward with deterministic particles and true drift...')
+        logging.info('Sampling forward with deterministic particles and true drift...')
         #W = np.ones((self.N,1))/self.N
         for ti, tt in enumerate(self.timegrid):
 
@@ -307,13 +306,13 @@ class DPFC(object):
             else:
                 self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt))
 
-        print('Forward sampling with Otto true is ready!')
+        logging.info('Forward sampling with Otto true is ready!')
         return 0
 
 
 
     def forward_sampling_Otto(self):
-        print('Sampling forward with deterministic particles...')
+        logging.info('Sampling forward with deterministic particles...')
         W = np.ones((self.N, 1))/self.N
         for ti, tt in enumerate(self.timegrid):
             print(ti)
@@ -345,9 +344,9 @@ class DPFC(object):
                     #print(Tstar)
                     if ti == 3:
                         stop = time.time()
-                        print('Timepoint: %d needed '%ti, stop-start)
+                        logging.info('Timepoint: %d needed '%ti, stop-start)
                     self.Z[:, :, ti] = ((self.Z[:, :, ti])@Tstar) #####
-        print('Forward sampling with Otto is ready!')
+        logging.info('Forward sampling with Otto is ready!')
         return 0
 
     def density_estimation(self, ti, rev_ti):
@@ -441,9 +440,9 @@ class DPFC(object):
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
         print(sinx)
         temp = len(sinx)
-        print("Identified %d invalid bridge trajectories "%len(sinx))
+        logging.warning("Identified %d invalid bridge trajectories "%len(sinx))
         if self.reject:
-            print("Deleting invalid trajectories...")
+            logging.warning("Deleting invalid trajectories...")
             sinx = sinx[::-1]
             for element in sinx:
                 self.B = np.delete(self.B, element, axis=1)
