@@ -6,7 +6,7 @@ Classes
 -------
 
 .. autoclass:: DPFC
-.. currentmodule:: DeterministicParticleFlowControl
+
 
 
 .. autosummary::
