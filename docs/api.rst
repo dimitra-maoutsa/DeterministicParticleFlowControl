@@ -1,7 +1,7 @@
 API
 ===
 
-Module
+DPFC
 ---------
 
 .. automodule:: DeterministicParticleFlowControl.DPFC
