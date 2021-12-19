@@ -4,6 +4,13 @@
 [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
 
+[**Setting**](#setting)
+| [**Documentation**](https://deterministicparticleflowcontrol.readthedocs.io/)
+| [**Installation**](#installation)
+| [**Main functionality**](#dpfc)
+| [**Cite us**](#citeus)
+| [**References**](#references)
+
 # Deterministic Particle Flow Control
 
 Repository for the **Deterministic Particle Flow Control framework**
@@ -23,7 +30,7 @@ Repository for the **Deterministic Particle Flow Control framework**
 
 Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive a *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
 
-## Setting:
+## Setting:<a id="setting"></a>
 
 We consider a stochastic system described by a stochastic differential equation (SDE) 
 
@@ -44,7 +51,7 @@ Following the assumptions of the Path Integral control formalism, i.e. assuming 
 Here, instead of solving the backward PDE to obtain the optimal drift adjustment that implements the constraints, we express the optimal interventions as the **difference of the logarithmic gradient of two probability flows**, <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> and <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)">. The probability flow or density <img src="https://render.githubusercontent.com/render/math?math=\rho_t(x)"> satisfies the forward filtering equation, a forward PDE that in the absence of path constraints is the Fokker--Planck equation of the uncontrolled dynamics, while <img src="https://render.githubusercontent.com/render/math?math=\q_t(x)"> is the marginal constrained density that in turn satisfies the Fokker--Planck equation of the optimally  controlled dynamics.
 
 
-## Instalation
+## Installation:<a id="installation"></a>
 
 To install the install the software run the following commands
 
@@ -59,7 +66,7 @@ pip install -e ./
 ```
 
 
-## Main functionality: `DPFC`
+## Main functionality: `DPFC`<a id="dpfc"></a>
 
 To obtain the time dependent control functions create an instance of `DPFC`
 ```python
@@ -94,12 +101,24 @@ This returns an object that contains the sampled flows and control functions. To
 u = control_flows.calculate_u(x,ti)
 ```
 
+## Cite us:<a id="citeus"></a>
+
+The method is introduced in this paper
+[paper](https://arxiv.org/abs/2112.05735). To cite it:
+
+```
+@article{maoutsa2021deterministic,
+  title={Deterministic particle flows for constraining stochastic nonlinear systems},
+  author={Maoutsa, Dimitra and Opper, Manfred},
+  journal={arXiv preprint arXiv:2112.05735},
+  year={2021}
+}
+```
 
 
 
 
-
-# References
+# Further references:<a id="references"></a>
 
 \[1\] Dimitra Maoutsa, Manfred Opper. "Deterministic particle flows for constraining stochastic nonlinear systems". 2021. [[arXiv]](http://arxiv.org/abs/2112.05735)
 
