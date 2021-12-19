@@ -14,7 +14,7 @@ Classes
    :template: class.rst
    :toctree: gen_api
 
-   DPFC
+   DeterministicParticleFlowControl.py
 
 
 Functions
