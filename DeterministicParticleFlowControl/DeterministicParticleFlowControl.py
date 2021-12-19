@@ -12,7 +12,7 @@ import ot
 import numba
 from . import score_function_estimators
 from . import optimal_transport_reweighting
-from .due import due, BibTex
+from .due import due, BibTeX
 
 from matplotlib import pyplot as plt
 import time
