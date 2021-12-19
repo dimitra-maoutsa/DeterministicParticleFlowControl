@@ -25,6 +25,10 @@ Classes
 Functions
 ---------
 
+.. autofunction:: reweight_optimal_transport_multidim
+
+.. autofunction:: score_function_multid_seperate
+
 .. autosummary::
    :template: function.rst
    :toctree: gen_api
