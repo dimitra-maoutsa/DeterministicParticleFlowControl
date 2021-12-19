@@ -8,15 +8,16 @@ Created on Sun Dec 12 00:02:39 2021
 
 
 #
+from matplotlib import pyplot as plt
+import time
+import numpy as np
 import ot
 import numba
 from . import score_function_estimators
 from . import optimal_transport_reweighting
 from .due import due, BibTeX
 
-from matplotlib import pyplot as plt
-import time
-import numpy as np
+
 
 __all__ = ["DPFC"]
 
@@ -255,9 +256,9 @@ class DPFC(object):
         lnthsc = 2*np.std(x, axis=1)
 
         for ii in range(dimi):
-            gpsi[ii, :]= score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
+            gpsi[ii, :] = score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
 
-        return (self.f_true(x, t)-0.5* self.g**2* gpsi)
+        return self.f_true(x, t)-0.5* self.g**2* gpsi
 
 
     ### effective forward drift - estimated seperatelly for each dimension
@@ -273,7 +274,7 @@ class DPFC(object):
         sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
             ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
-            plt.figure(figsize=(6,4)), plt.plot(self.Z[0].T, self.Z[1].T, alpha=0.3)
+            plt.figure(figsize=(6, 4)), plt.plot(self.Z[0].T, self.Z[1].T, alpha=0.3)
             plt.show()
 
         ##these are the inducing points
@@ -283,9 +284,9 @@ class DPFC(object):
         lnthsc = 2*np.std(x, axis=1)
 
         for ii in range(dimi):
-            gpsi[ii, :]= score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
+            gpsi[ii, :] = score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
 
-        return (self.f(x, t)-0.5* self.g**2* gpsi)
+        return self.f(x, t)-0.5* self.g**2* gpsi
 
      ###same as forward sampling but without reweighting - this is for bridge reweighting
         ### not for constraint reweighting
@@ -314,11 +315,11 @@ class DPFC(object):
     def forward_sampling_Otto(self):
         print('Sampling forward with deterministic particles...')
         W = np.ones((self.N, 1))/self.N
-        for ti,tt in enumerate(self.timegrid):
+        for ti, tt in enumerate(self.timegrid):
             print(ti)
             if ti == 0:
                 for di in range(self.dim):
-                    self.Z[di,:,0] = self.y1[di]
+                    self.Z[di, :, 0] = self.y1[di]
                     if self.brown_bridge:
                         self.Z[di, :, -1] = self.y2[di]
                     ## we start forward trajectories for a delta function.
@@ -412,7 +413,7 @@ class DPFC(object):
                 if ti==1:
                     print(rev_ti,rev_ti-1)
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                            self.f(self.B[:,:,rev_ti], self.timegrid[rev_ti])*self.dt + \
+                                            self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
                                                     (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
                 else:
@@ -428,15 +429,15 @@ class DPFC(object):
 
 
     def reject_trajectories(self):
-        fplus = self.y1+self.f(self.y1,self.t1)*self.dt+4*self.g**2 *np.sqrt(self.dt)
-        fminus = self.y1+self.f(self.y1,self.t1) *self.dt-4*self.g**2 *np.sqrt(self.dt)
+        fplus = self.y1+self.f(self.y1, self.t1)*self.dt+4*self.g**2 *np.sqrt(self.dt)
+        fminus = self.y1+self.f(self.y1, self.t1) *self.dt-4*self.g**2 *np.sqrt(self.dt)
         for iii in range(2):
             if fplus[iii] < fminus[iii]:
                 temp = fminus[iii]
                 fminus[iii] = fplus[iii]
                 fplus[iii] = temp
 
-        sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])) , np.logical_not( np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
+        sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])), np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
         print(sinx)
         temp = len(sinx)
@@ -465,67 +466,68 @@ class DPFC(object):
 
         """
         #a = 0.001
-        #grad_dirac = lambda x,di: - 2*(x[di] -self.y2[di])*np.exp(- (1/a**2)* (x[0]- self.y2[0])**2)/(a**3 *np.sqrt(np.pi))
+        #grad_dirac = lambda x,di: - 2*(x[di] -self.y2[di])*
+        #np.exp(- (1/a**2)* (x[0]- self.y2[0])**2)/(a**3 *np.sqrt(np.pi))
         u_t = np.zeros(grid_x.T.shape)
 
 
-        lnthsc1 = 2*np.std(self.B[:,:,ti],axis=1)
-        lnthsc2 = 2*np.std(self.Z[:,:,ti],axis=1)
+        lnthsc1 = 2*np.std(self.B[:, :, ti], axis=1)
+        lnthsc2 = 2*np.std(self.Z[:, :, ti], axis=1)
 
 
         bnds = np.zeros((self.dim,2))
         for ii in range(self.dim):
             if self.reweight==False or self.brown_bridge==False:
-                bnds[ii] = [max(np.min(self.Z[ii,:,ti]),np.min(self.B[ii,:,ti])),min(np.max(self.Z[ii,:,ti]),np.max(self.B[ii,:,ti]))]
+                bnds[ii] = [max(np.min(self.Z[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Z[ii, :, ti]), np.max(self.B[ii, :, ti]))]
             else:
-                bnds[ii] = [max(np.min(self.Ztr[ii,:,ti]),np.min(self.B[ii,:,ti])),min(np.max(self.Ztr[ii,:,ti]),np.max(self.B[ii,:,ti]))]
+                bnds[ii] = [max(np.min(self.Ztr[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Ztr[ii, :, ti]), np.max(self.B[ii, :, ti]))]
 
-        if ti<=5 or (ti>= self.k-5):
-            if self.reweight==False or self.brown_bridge==False:
+        if ti <= 5 or (ti >= self.k-5):
+            if self.reweight == False or self.brown_bridge == False:
                 ##for the first and last 5 timesteps, to avoid numerical singularities just assume gaussian densities
                 for di in range(self.dim):
-                    mutb = np.mean(self.B[di,:,ti])
-                    stdtb = np.std(self.B[di,:,ti])
-                    mutz = np.mean(self.Z[di,:,ti])
-                    stdtz = np.std(self.Z[di,:,ti])
-                    u_t[di] =  -(grid_x[:,di]- mutb)/stdtb**2 - (  -(grid_x[:,di]- mutz)/stdtz**2 )
-            elif self.reweight==True and self.brown_bridge==True:
+                    mutb = np.mean(self.B[di, :, ti])
+                    stdtb = np.std(self.B[di, :, ti])
+                    mutz = np.mean(self.Z[di, :, ti])
+                    stdtz = np.std(self.Z[di, :, ti])
+                    u_t[di] =  -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
+            elif self.reweight == True and self.brown_bridge == True:
                 for di in range(self.dim):
-                    mutb = np.mean(self.B[di,:,ti])
-                    stdtb = np.std(self.B[di,:,ti])
-                    mutz = np.mean(self.Ztr[di,:,ti])
-                    stdtz = np.std(self.Ztr[di,:,ti])
-                    u_t[di] =  -(grid_x[:,di]- mutb)/stdtb**2 - (  -(grid_x[:,di]- mutz)/stdtz**2 )
-        elif ti>5:
+                    mutb = np.mean(self.B[di, :, ti])
+                    stdtb = np.std(self.B[di, :, ti])
+                    mutz = np.mean(self.Ztr[di, :, ti])
+                    stdtz = np.std(self.Ztr[di, :, ti])
+                    u_t[di] =  -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
+        elif ti > 5:
             ### clipping not used at the end but provided here for cases when number of particles is small
             ### and trajectories fall out of simulated flows
             ### TO DO: add clipping as an option to be selected when initialising the function
             ###if point for evaluating control falls out of the region where we have points, clip the points to
             ###fall within the calculated region - we do not change the position of the point, only the control value will be
             ###calculated with clipped positions
-            bndsb = np.zeros((self.dim,2))
-            bndsz = np.zeros((self.dim,2))
+            bndsb = np.zeros((self.dim, 2))
+            bndsz = np.zeros((self.dim, 2))
             for di in range(self.dim):
-                bndsb[di] = [np.min(self.B[di,:,ti]), np.max(self.B[di,:,ti])]
-                bndsz[di] = [np.min(self.Z[di,:,ti]), np.max(self.Z[di,:,ti])]
+                bndsb[di] = [np.min(self.B[di, :, ti]), np.max(self.B[di, :, ti])]
+                bndsz[di] = [np.min(self.Z[di, :, ti]), np.max(self.Z[di, :, ti])]
 
             ## clipping not used at the end!
             ###cliping the values of points when evaluating the grad log p
             grid_b = grid_x#np.clip(grid_x, bndsb[0], bndsb[1])
             grid_z = grid_x#np.clip(grid_x, bndsz[0], bndsz[1])
 
-            Sxx = np.array([ np.random.uniform(low=bnd[0],high=bnd[1],size=(self.N_sparse)) for bnd in bnds ] )
+            Sxx = np.array([ np.random.uniform(low=bnd[0], high=bnd[1],size=(self.N_sparse)) for bnd in bnds ])
             for di in range(self.dim):
-                score_Bw = score_function_multid_seperate(self.B[:,:,ti].T,Sxx.T,func_out= True,C=0.001,which=1,l=lnthsc1,which_dim=di+1, kern=self.kern)(grid_b)
-                if self.reweight==False or self.brown_bridge==False:
-                    score_Fw = score_function_multid_seperate(self.Z[:,:,ti].T,Sxx.T,func_out= True,C=0.001,which=1,l=lnthsc2,which_dim=di+1, kern=self.kern)(grid_z)
+                score_Bw = score_function_multid_seperate(self.B[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc1, which_dim=di+1, kern=self.kern)(grid_b)
+                if self.reweight == False or self.brown_bridge == False:
+                    score_Fw = score_function_multid_seperate(self.Z[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc2, which_dim=di+1, kern=self.kern)(grid_z)
                 else:
                     bndsztr = np.zeros((self.dim,2))
                     for ii in range(self.dim):
-                        bndsztr[di] = [np.min(self.Ztr[di,:,ti]), np.max(self.Ztr[di,:,ti])]
+                        bndsztr[di] = [np.min(self.Ztr[di, :, ti]), np.max(self.Ztr[di,:,ti])]
                     grid_ztr = np.clip(grid_x, bndsztr[0], bndsztr[1])
-                    lnthsc3 = 2*np.std(self.Ztr[:,:,ti],axis=1)
-                    score_Fw = score_function_multid_seperate(self.Ztr[:,:,ti].T,Sxx.T,func_out= True,C=0.001,which=1,l=lnthsc3,which_dim=di+1, kern=self.kern)(grid_ztr)
+                    lnthsc3 = 2*np.std(self.Ztr[:, :, ti],axis=1)
+                    score_Fw = score_function_multid_seperate(self.Ztr[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc3, which_dim=di+1, kern=self.kern)(grid_ztr)
 
                 u_t[di] = score_Bw - score_Fw
             # for di in range(self.dim):
@@ -554,12 +556,12 @@ class DPFC(object):
 
         """
         covered = True
-        bnds = np.zeros((self.dim,2))
+        bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
-            bnds[ii] = [max(np.min(self.Z[ii,:,ti]),np.min(self.B[ii,:,ti])),min(np.max(self.Z[ii,:,ti]),np.max(self.B[ii,:,ti]))]
+            bnds[ii] = [max(np.min(self.Z[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Z[ii, :, ti]), np.max(self.B[ii, :, ti]))]
             #bnds[ii] = [np.min(self.B[ii,:,ti]),np.max(self.B[ii,:,ti])]
 
-            covered = covered * ( (X[ii] >= bnds[ii][0]) and (X[ii] <= bnds[ii][1]) )
+            covered = covered * ((X[ii] >= bnds[ii][0]) and (X[ii] <= bnds[ii][1]))
 
         return covered
 
