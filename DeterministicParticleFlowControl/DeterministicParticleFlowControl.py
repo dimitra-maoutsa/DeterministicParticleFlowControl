@@ -42,7 +42,7 @@ class DPFC(object):
     """
     Deterministic particle flow control top-level functionality.
 
-    Contains all the necessary functionality to sample the required probability
+    Provides the necessary functions to sample the required probability
     flows and estimate the controls.
 
     Attributes
