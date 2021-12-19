@@ -1,10 +1,8 @@
 API
 ===
 
-Deterministic Particle Flow Control.
+Module
 ---------
 
 .. automodule:: DeterministicParticleFlowControl.DPFC
     :members:
-    :special_members:
-
