@@ -21,8 +21,10 @@ Functions
 ---------
 
 .. autofunction:: reweight_optimal_transport_multidim
+   :module: optimal_transport_reweighting.py
 
 .. autofunction:: score_function_multid_seperate
+   :module: score_function_estimators.py
 
 .. autosummary::
    :template: function.rst
