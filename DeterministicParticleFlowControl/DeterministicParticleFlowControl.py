@@ -92,6 +92,9 @@ class DPFC(object):
     brown_bridge: boolean,
         determines if the reweighting concearns contstraint or reweighting with
         respect to brownian bridge.
+    deterministic: boolean,
+        indicates the type of dynamics the particles will follow.
+        If False the flows are simulated with stochastic path sampling.
 
     Methods
     -------
@@ -114,7 +117,7 @@ class DPFC(object):
     """
 
 
-    def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None, dens_est='nonparametric', reject=True, kern='RBF', f_true=None, brown_bridge=False):
+    def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None, dens_est='nonparametric', reject=True, kern='RBF', f_true=None, brown_bridge=False, deterministic=True):
 
         self.dim = y1.size # dimensionality of the system
         self.t1 = t1
@@ -140,9 +143,11 @@ class DPFC(object):
         self.N_sparse = M
 
         self.dt = 0.001 #((t2-t1)/k)
-        ### reject unreasonable backward trajectories that do not return to initial condition
+        ### reject unreasonable backward trajectories that do not return
+        ### to initial condition
         self.reject = reject
-
+        ### indicator for what type of dynamics the particles follow
+        self.deterministic = deterministic
 
 
         self.timegrid = np.arange(self.t1, self.t2+self.dt/2, self.dt)
@@ -153,33 +158,32 @@ class DPFC(object):
         if self.reweight:
             self.U = U
             if self.brown_bridge:
-                self.Ztr = np.zeros((self.dim, self.N, self.k)) #storage for forward trajectories with true drift
+                #storage for forward trajectories with true drift
+                self.Ztr = np.zeros((self.dim, self.N, self.k))
                 self.f_true = f_true
 
 
 
-
-        self.Z = np.zeros((self.dim, self.N, self.k)) #storage for forward trajectories
-        self.B = np.zeros((self.dim, self.N, self.k)) #storage for backward trajectories
+        #storage for forward trajectories
+        self.Z = np.zeros((self.dim, self.N, self.k))
+        #storage for backward trajectories
+        self.B = np.zeros((self.dim, self.N, self.k))
         self.ln_roD = [] ## storing the estimated forward logarithmic gradients
 
 
-
-        #self.forward_sampling() ## we do not really use it but this employs stochastic path sampling
-        # TO DO: add option to select between stochastic and deterministic path sampling
-
-        self.forward_sampling_Otto()
-        ### if a Brownian bridge is used for forward sampling
-        if self.reweight and self.brown_bridge:
-            self.forward_sampling_Otto_true()
-
-
-
+        ##the stochastic sampling is provided for comparison
+        if self.deterministic:
+            self.forward_sampling_Otto()
+            ### if a Brownian bridge is used for forward sampling
+            if self.reweight and self.brown_bridge:
+                self.forward_sampling_Otto_true()
+        else:
+            self.forward_sampling()
+        ## the backward function selects internally for type of dynamics 
         self.backward_simulation()
-        self.reject_trajectories()
-        #self.calculate_true_statistics() ##this is only for Ornstein-Uhlenbeck processes
-        #if plotting:
-        #    self.plot_statistics()
+        if self.reject:
+            self.reject_trajectories()
+
 
     def forward_sampling(self):
         """
@@ -254,8 +258,6 @@ class DPFC(object):
             evaluated at the current positions x and t.
 
         """
-
-
         dimi, N = x.shape
         bnds = np.zeros((dimi, 2))
         for ii in range(dimi):
@@ -378,7 +380,7 @@ class DPFC(object):
         """
         logging.info('Sampling forward with deterministic particles...')
         W = np.ones((self.N, 1))/self.N
-        for ti, tt in enumerate(self.timegrid):            
+        for ti, tt in enumerate(self.timegrid):
             if ti == 0:
                 for di in range(self.dim):
                     self.Z[di, :, 0] = self.y1[di]
@@ -465,10 +467,7 @@ class DPFC(object):
         bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
-        #sparse points
-        #print(bnds)
-        #sum_bnds = np.sum(bnds)
-
+        #sparse points        
         Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
 
         for di in range(self.dim):
@@ -479,10 +478,12 @@ class DPFC(object):
 
     def backward_simulation(self):
         """
-        Sample time reversed flow with deterministic dynamics.
+        Sample time reversed flow with deterministic dynamics (or stochastic if
+        `self.deterministic == False`).
         Trajectories are stored in place in `self.B` array of dimensionality
         (dim x N x timegrid.size).
-        `self.B` does not need to be timereversed at the end!!!
+        `self.B` does not require a timereversion at the end, everything
+        is stored in the correct order.
 
         Returns
         -------
@@ -492,18 +493,16 @@ class DPFC(object):
         """
 
         for ti, tt in enumerate(self.timegrid[:-1]):
-
             if ti == 0:
                 for di in range(self.dim):
                     self.B[di, :, -1] = self.y2[di]
             else:
-
                 Ti = self.timegrid.size
                 rev_ti = Ti- ti
 
                 grad_ln_ro = self.density_estimation(ti, rev_ti) #density estimation of forward particles
 
-                if ti == 1:                    
+                if (ti == 1 and self.deterministic) or (not self.deterministic):
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
                                             self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
@@ -515,7 +514,6 @@ class DPFC(object):
 
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
-
         return 0
 
 
@@ -543,7 +541,7 @@ class DPFC(object):
 
         sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])), np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
-        #print(sinx)
+
         temp = len(sinx)
         logging.warning("Identified %d invalid bridge trajectories "%len(sinx))
         if self.reject:
