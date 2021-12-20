@@ -16,7 +16,7 @@ import ot
 import numba
 from matplotlib import pyplot as plt
 from score_function_estimators import  score_function_multid_seperate
-from score import  score_function_multid_seperate2
+#from score import  score_function_multid_seperate2
 from optimal_transport_reweighting import reweight_optimal_transport_multidim
 from due import due, BibTeX
 
@@ -469,9 +469,9 @@ class DPFC(object):
 
         for di in range(self.dim):
             grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
-            grad_ln_a = score_function_multid_seperate2(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
-            #np.testing.assert_array_equal(grad_ln_b[di, :], grad_ln_a)
-            np.testing.assert_allclose(grad_ln_b[di, :], grad_ln_a)
+            # grad_ln_a = score_function_multid_seperate2(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
+            # #np.testing.assert_array_equal(grad_ln_b[di, :], grad_ln_a)
+            # np.testing.assert_allclose(grad_ln_b[di, :], grad_ln_a)
         return grad_ln_b
 
 
