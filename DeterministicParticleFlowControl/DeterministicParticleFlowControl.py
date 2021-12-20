@@ -418,17 +418,13 @@ class DPFC(object):
         rev_t = rev_ti-1
         grad_ln_ro = np.zeros((self.dim, self.N))
         lnthsc = 2*np.std(self.Z[:, :, rev_t], axis=1)
-
         bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_t]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_t]), np.max(self.B[ii, :, rev_ti]))]
         sum_bnds = np.sum(bnds)
-
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
-
             plt.figure(figsize=(6, 4)), plt.plot(self.B[0].T, self.B[1].T, alpha=0.3)
             plt.plot(self.y1[0], self.y1[1], 'go')
-
             plt.show()
         #sparse points
         Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
@@ -504,13 +500,13 @@ class DPFC(object):
 
                 if (ti == 1 and self.deterministic) or (not self.deterministic):
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                            self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt - \
+                                            self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
                                                     (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
                 else:
                     grad_ln_b = self.bw_density_estimation(rev_ti)
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                          (self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])+ self.g**2*grad_ln_ro -0.5*self.g**2*grad_ln_b)*self.dt)
+                                          (self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt)
 
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
