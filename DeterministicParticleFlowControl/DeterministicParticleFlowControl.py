@@ -499,18 +499,18 @@ class DPFC(object):
             else:
                 Ti = self.timegrid.size
                 rev_ti = Ti- ti
-
-                grad_ln_ro = self.density_estimation(ti, rev_ti) #density estimation of forward particles
+                #density estimation of forward particles
+                grad_ln_ro = self.density_estimation(ti, rev_ti) 
 
                 if (ti == 1 and self.deterministic) or (not self.deterministic):
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                            self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
+                                            self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt - \
                                                 self.dt*self.g**2*grad_ln_ro +\
                                                     (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
                 else:
-                    grad_ln_b = self.bw_density_estimation(ti, rev_ti)
+                    grad_ln_b = self.bw_density_estimation(rev_ti)
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                          (self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2 * grad_ln_b)*self.dt)
+                                          (self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])+ self.g**2*grad_ln_ro -0.5*self.g**2*grad_ln_b)*self.dt)
 
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
