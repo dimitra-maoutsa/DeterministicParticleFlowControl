@@ -10,7 +10,7 @@ Created on Sun Dec 12 03:35:29 2021
 ### uses RBF kernel
 import math
 import numpy as np
-from matplotlib import pyplot as plt
+
 from functools import reduce
 from scipy.spatial.distance import cdist
 import numba
@@ -116,14 +116,24 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                 for ii in range(len(l)): 
                     tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
                     ##puts into tempi the cdist result
-                    my_cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),tempi,'sqeuclidean')
-                    res = np.multiply(res,np.exp(-tempi/(2*l[ii]*l[ii])))                    
-                    return res
+                    #my_cdist(x[:,ii:ii+1], y[:,ii:ii+1],tempi,'sqeuclidean')
+                    tempi = cdist(x[:,ii:ii+1], y[:,ii:ii+1],'sqeuclidean')
+                    res = np.multiply(res, np.exp(-tempi/(2*l[ii]*l[ii])))                    
+                return res
             else:
                 tempi = np.zeros((x.shape[0], y.shape[0] ))                
                 my_cdist(x, y,tempi,'sqeuclidean') #this sets into the array tempi the cdist result
                 return np.exp(-tempi/(2*l*l))
-            
+        
+        def K1(x,y,l,multil=False):
+            if multil:                
+                res = np.ones((x.shape[0],y.shape[0]))                
+                for ii in range(len(l)): 
+                    res = np.multiply(res,np.exp(-cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),'sqeuclidean')/(2*l[ii]*l[ii])))
+                return res
+            else:
+                return np.exp(-cdist(x, y,'sqeuclidean')/(2*l*l))
+        
         #@njit
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
             N,dim = x.shape            
