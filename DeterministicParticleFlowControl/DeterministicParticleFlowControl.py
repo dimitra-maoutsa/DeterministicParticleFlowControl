@@ -16,6 +16,7 @@ import ot
 import numba
 from matplotlib import pyplot as plt
 from score_function_estimators import  score_function_multid_seperate
+from score import  score_function_multid_seperate2
 from optimal_transport_reweighting import reweight_optimal_transport_multidim
 from due import due, BibTeX
 
@@ -179,10 +180,10 @@ class DPFC(object):
                 self.forward_sampling_Otto_true()
         else:
             self.forward_sampling()
-        ## the backward function selects internally for type of dynamics 
+        ## the backward function selects internally for type of dynamics
         self.backward_simulation()
-        if self.reject:
-            self.reject_trajectories()
+        # if self.reject:
+        #     self.reject_trajectories()
 
 
     def forward_sampling(self):
@@ -415,7 +416,7 @@ class DPFC(object):
         return 0
 
     def density_estimation(self, ti, rev_ti):
-        rev_t = rev_ti-1
+        rev_t = rev_ti
         grad_ln_ro = np.zeros((self.dim, self.N))
         lnthsc = 2*np.std(self.Z[:, :, rev_t], axis=1)
         bnds = np.zeros((self.dim, 2))
@@ -463,12 +464,14 @@ class DPFC(object):
         bnds = np.zeros((self.dim, 2))
         for ii in range(self.dim):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
-        #sparse points        
+        #sparse points
         Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
 
         for di in range(self.dim):
             grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
-
+            grad_ln_a = score_function_multid_seperate2(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
+            #np.testing.assert_array_equal(grad_ln_b[di, :], grad_ln_a)
+            np.testing.assert_allclose(grad_ln_b[di, :], grad_ln_a)
         return grad_ln_b
 
 
@@ -493,29 +496,30 @@ class DPFC(object):
                 for di in range(self.dim):
                     self.B[di, :, -1] = self.y2[di]
             else:
-                Ti = self.timegrid.size
-                rev_ti = Ti- ti
+
+                rev_ti = self.k -ti-1
                 #density estimation of forward particles
-                grad_ln_ro = self.density_estimation(ti, rev_ti) 
+                grad_ln_ro = self.density_estimation(ti, rev_ti+1)
 
                 if (ti == 1 and self.deterministic) or (not self.deterministic):
-                    self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                            self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
+
+                    self.B[:, :, rev_ti] = (self.B[:, :, rev_ti+1] -\
+                                            self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
                                                     (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
                 else:
-                    grad_ln_b = self.bw_density_estimation(rev_ti)
-                    self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
-                                          (self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])- self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt)
+                    grad_ln_b = self.bw_density_estimation(rev_ti+1)
+                    self.B[:, :, rev_ti] = (self.B[:, :, rev_ti+1] -\
+                                          (self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])- self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt)
 
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
         return 0
 
 
-
+    """
     def reject_trajectories(self):
-        """
+        
         Reject backward trajectories that do not reach the vicinity of the
         initial point.
         Deletes in place relevant rows of the `self.B` array that contains
@@ -526,27 +530,40 @@ class DPFC(object):
         int
             Returns 0.
 
-        """
-        fplus = self.y1+self.f(self.y1, self.t1)*self.dt+4*self.g**2 *np.sqrt(self.dt)
-        fminus = self.y1+self.f(self.y1, self.t1) *self.dt-4*self.g**2 *np.sqrt(self.dt)
-        for iii in range(2):
+        
+        fplus = self.y1+self.f(self.y1, self.t1)*self.dt+6*self.g**2 *np.sqrt(self.dt)
+        fminus = self.y1+self.f(self.y1, self.t1) *self.dt-6*self.g**2 *np.sqrt(self.dt)
+        reverse_order = np.zeros(self.dim)
+        #this is an indicator if along one of the dimensions fplus
+        #is smaller than fminus
+        for iii in range(self.dim):
             if fplus[iii] < fminus[iii]:
-                temp = fminus[iii]
-                fminus[iii] = fplus[iii]
-                fplus[iii] = temp
+                reverse_order[iii] = 1
+        to_delete = np.zeros(self.N)
+        ##these will be one if ith trajectory is out of bounds
 
-        sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])), np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
+        ## checking if out of bounds for each dim
+        for iii in range(self.dim):
+            if reverse_order[iii] == 0:
+                to_delete += np.logical_not(np.logical_and(self.B[iii, :, 1] < fplus[iii], self.B[iii, :, 1] > fminus[iii]))
+            elif reverse_order[iii] == 1:
+                to_delete += np.logical_not(np.logical_and(self.B[iii, :, 1] > fplus[iii], self.B[iii, :, 1] < fminus[iii]))
+            
+        sinx = np.where(to_delete >= 1)[0]
+        #sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])), np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
 
-        temp = len(sinx)
-        logging.warning("Identified %d invalid bridge trajectories "%len(sinx))
-        if self.reject:
-            logging.warning("Deleting invalid trajectories...")
-            sinx = sinx[::-1]
-            for element in sinx:
-                self.B = np.delete(self.B, element, axis=1)
-        return 0
 
+        #logging.warning("Identified %d invalid bridge trajectories "%len(sinx))
+        # if self.reject:
+        #     logging.warning("Deleting invalid trajectories...")
+        #     sinx = sinx[::-1]
+        #     for element in sinx:
+        #         self.B = np.delete(self.B, element, axis=1)
+        return 0
+    """
+    
+    
     def calculate_u(self, grid_x, ti):
         """
         Computes the control at position(s) grid_x at timestep ti
