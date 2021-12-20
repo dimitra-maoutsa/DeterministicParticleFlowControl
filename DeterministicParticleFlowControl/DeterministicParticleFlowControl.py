@@ -306,7 +306,6 @@ class DPFC(object):
         bnds = np.zeros((dimi, 2))
         for ii in range(dimi):
             bnds[ii] = [np.min(x[ii, :]), np.max(x[ii, :])]
-
         sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
         if np.isnan(sum_bnds) or np.isinf(sum_bnds):
             ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
@@ -318,7 +317,6 @@ class DPFC(object):
         Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
         gpsi = np.zeros((dimi, N))
         lnthsc = 2*np.std(x, axis=1)
-
         for ii in range(dimi):
             gpsi[ii, :] = score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
 
@@ -351,7 +349,6 @@ class DPFC(object):
                 for di in range(self.dim):
                     self.Ztr[di, :, 0] = self.y1[di]
 
-
             elif ti == 1: #propagate one step with stochastic to avoid the delta function
                                           #substract dt because I want the time at t-1
                 self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt*self.f_true(self.Ztr[:, :, ti-1], tt-self.dt)+\
@@ -381,8 +378,7 @@ class DPFC(object):
         """
         logging.info('Sampling forward with deterministic particles...')
         W = np.ones((self.N, 1))/self.N
-        for ti, tt in enumerate(self.timegrid):
-            print(ti)
+        for ti, tt in enumerate(self.timegrid):            
             if ti == 0:
                 for di in range(self.dim):
                     self.Z[di, :, 0] = self.y1[di]
@@ -507,8 +503,7 @@ class DPFC(object):
 
                 grad_ln_ro = self.density_estimation(ti, rev_ti) #density estimation of forward particles
 
-                if ti == 1:
-                    print(rev_ti, rev_ti-1)
+                if ti == 1:                    
                     self.B[:, :, rev_ti-1] = (self.B[:, :, rev_ti] -\
                                             self.f(self.B[:, :, rev_ti], self.timegrid[rev_ti])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
