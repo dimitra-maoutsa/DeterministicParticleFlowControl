@@ -34,7 +34,7 @@ Computing optimal interventions for stochastic nonlinear systems is a computatio
 
 We consider a stochastic system described by a stochastic differential equation (SDE) 
 
-<img src="https://render.githubusercontent.com/render/math?math=dX_t = f(X_t,t) dt %2B \sigma(x,t) dW_t">
+<img src="https://render.githubusercontent.com/render/math?math=dX_t = f(X_t,t) dt %2B \sigma(X_t,t) dW_t">
 
 with drift `f(x,t)` and diffusion `σ(x,t)`.
 
