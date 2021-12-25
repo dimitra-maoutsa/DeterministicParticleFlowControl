@@ -103,7 +103,7 @@ u = control_flows.calculate_u(x,ti)
 
 ## Cite us:<a id="citeus"></a>
 
-The method is introduced in this paper
+The method is introduced in this
 [paper](https://arxiv.org/abs/2112.05735). To cite it:
 
 ```
