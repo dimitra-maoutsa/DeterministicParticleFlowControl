@@ -74,7 +74,8 @@ extensions = ['sphinx.ext.autodoc',
              'IPython.sphinxext.ipython_directive',
              'IPython.sphinxext.ipython_console_highlighting',
              'matplotlib.sphinxext.plot_directive',    
-             'sphinx_copybutton']
+             'sphinx_copybutton',
+             'nbsphinx']
 
 # For napoleon parsing parameters of functions
 # Napoleon settings
@@ -98,7 +99,7 @@ napoleon_attr_annotations = True
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = [".rst", ".md"]
 
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
