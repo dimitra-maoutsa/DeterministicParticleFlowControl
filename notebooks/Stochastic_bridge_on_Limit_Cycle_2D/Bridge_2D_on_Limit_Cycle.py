@@ -87,7 +87,7 @@ y2 = F[:,100+steps]
 ##create object bridg2d that contains the simulated flows
 bridg2d = dpfc.DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', deterministic=True)
 
-
+# sphinx_gallery_thumbnail_number = 1
 plt.figure(figsize=(10,10)),
 plt.plot(F[0],F[1],'.')
 plt.plot(bridg2d.B[0].T,bridg2d.B[1].T, alpha=0.5, c='grey')
