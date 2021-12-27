@@ -74,7 +74,8 @@ extensions = ['sphinx.ext.autodoc',
              'IPython.sphinxext.ipython_directive',
              'IPython.sphinxext.ipython_console_highlighting',
              'matplotlib.sphinxext.plot_directive',    
-             'sphinx_copybutton']
+             'sphinx_copybutton',
+             'nbsphinx']
 
 # For napoleon parsing parameters of functions
 # Napoleon settings
@@ -98,7 +99,7 @@ napoleon_attr_annotations = True
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = [".rst", ".md"]
 
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
@@ -276,10 +277,10 @@ htmlhelp_basename = 'DPFdoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+'papersize': 'letterpaper',
 
 # The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
 #'preamble': '',
@@ -290,7 +291,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'DeterministicParticleFlowControl.tex', 'DeterministicParticleFlowControl Documentation',
-   'Dimitra Maoutsa'),
+   'Dimitra Maoutsa', 'manual',),
 ]
 
 
@@ -304,10 +305,10 @@ latex_documents = [
 #latex_use_parts = False
 
 # If true, show page references after internal links.
-#latex_show_pagerefs = False
+latex_show_pagerefs = True
 
 # If true, show URL addresses after external links.
-#latex_show_urls = False
+latex_show_urls = True
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
@@ -344,13 +345,72 @@ texinfo_documents = [
 #texinfo_appendices = []
 
 # If false, no module index is generated.
-texinfo_domain_indices = False
+#texinfo_domain_indices = False
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+# -- Options for Epub output --------------------------------------------------
+
+# Bibliographic Dublin Core info.
+epub_title = 'DeterministicParticleFlowControl'
+epub_author = 'Dimitra Maoutsa'
+epub_publisher = 'Dimitra Maoutsa'
+epub_copyright = '2021, Dimitra Maoutsa'
+
+# The language of the text. It defaults to the language option
+# or en if the language is not set.
+# epub_language = ''
+
+# The scheme of the identifier. Typical schemes are ISBN or URL.
+# epub_scheme = ''
+
+# The unique identifier of the text. This can be a ISBN number
+# or the project homepage.
+# epub_identifier = ''
+
+# A unique identification for the text.
+# epub_uid = ''
+
+# A tuple containing the cover image and cover page html template filenames.
+# epub_cover = ()
+
+# A sequence of (type, uri, title) tuples for the guide element of content.opf.
+# epub_guide = ()
+
+# HTML files that should be inserted before the pages created by sphinx.
+# The format is a list of tuples containing the path and title.
+# epub_pre_files = []
+
+# HTML files shat should be inserted after the pages created by sphinx.
+# The format is a list of tuples containing the path and title.
+# epub_post_files = []
+
+# A list of files that should not be packed into the epub file.
+# epub_exclude_files = []
+
+# The depth of the table of contents in toc.ncx.
+# epub_tocdepth = 3
+
+# Allow duplicate toc entries.
+# epub_tocdup = True
+
+# Fix unsupported image types using the PIL.
+# epub_fix_images = False
+
+# Scale large images.
+# epub_max_image_width = 0
+
+# If 'no', URL addresses will not be shown.
+# epub_show_urls = 'inline'
+
+# If false, no index is generated.
+# epub_use_index = True
+
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}

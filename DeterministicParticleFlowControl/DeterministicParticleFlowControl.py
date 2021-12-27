@@ -130,7 +130,7 @@ class DPFC(object):
         ##density estimation stuff
         self.kern = kern
         if kern == 'periodic':
-            kern = 'RBF'
+            self.kern = 'RBF'
             logging.warning('Please do not use periodic kernel yet!')
             logging.warning('For all the numerical experiments RBF was used')
             logging.warning('We changed your choice to RBF')

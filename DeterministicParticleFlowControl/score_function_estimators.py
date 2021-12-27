@@ -114,7 +114,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
             if multil:                         
                 res = np.ones((x.shape[0],y.shape[0]))                
                 for ii in range(len(l)): 
-                    tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
+                    #tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
                     ##puts into tempi the cdist result
                     #my_cdist(x[:,ii:ii+1], y[:,ii:ii+1],tempi,'sqeuclidean')
                     tempi = cdist(x[:,ii:ii+1], y[:,ii:ii+1],'sqeuclidean')
@@ -138,7 +138,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
             N,dim = x.shape            
             diffs = x[:,None]-y                         
-            redifs = np.zeros((1*N,N))
+            #redifs = np.zeros((1*N,N))
             ii = which_dim -1            
             if multil:
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l,True))/(l[ii]*l[ii])   
@@ -150,7 +150,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
         def grdy_K(x,y): # gradient with respect to the second argument
             N,dim = x.shape
             diffs = x[:,None]-y            
-            redifs = np.zeros((N,N))
+            #redifs = np.zeros((N,N))
             ii = which_dim -1              
             redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)         
             return -redifs
@@ -199,7 +199,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
           N,dim = x.shape            
           diffs = x[:,None]-y   
           #print('diffs:',diffs)
-          redifs = np.zeros((1*N,N))
+          #redifs = np.zeros((1*N,N))
           ii = which_dim -1
           #print(ii)
           if multil:
@@ -341,7 +341,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
             N,dim = x.shape 
             M,_ = y.shape
             diffs = x[:,None]-y                         
-            redifs = np.zeros((1*N,M))
+            #redifs = np.zeros((1*N,M))
             ii = which_dim -1            
             if multil:
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l,True))/(l[ii]*l[ii])  
@@ -383,7 +383,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
       def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
           N,dim = x.shape            
           diffs = x[:,None]-y             
-          redifs = np.zeros((1*N,N))
+          #redifs = np.zeros((1*N,N))
           ii = which_dim -1          
           if multil:
               redifs = np.divide( np.multiply( np.multiply( np.multiply( -2*K(x,y,l,True),diffs[:,:,ii] ),np.sin( np.abs(diffs[:,:,ii]) / 2) ) ,np.cos( np.abs(diffs[:,:,ii])  / 2) ) , (l[ii]*l[ii]* np.abs(diffs[:,:,ii]))  ) 
@@ -501,7 +501,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
             N,dim = x.shape            
             diffs = x[:,None]-y               
-            redifs = np.zeros((1*N,N))
+            #redifs = np.zeros((1*N,N))
             ii = which_dim -1            
             if multil:
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l,True))/(l[ii]*l[ii])   
@@ -512,7 +512,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
         def grdy_K(x,y): # gradient with respect to the second argument
             N,dim = x.shape
             diffs = x[:,None]-y            
-            redifs = np.zeros((N,N))
+            #redifs = np.zeros((N,N))
             ii = which_dim -1              
             redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)         
             return -redifs            

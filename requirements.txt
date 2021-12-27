@@ -11,3 +11,4 @@ sphinx
 sphinx-gallery
 sphinx-readable-theme
 sphinx-copybutton
+nbsphinx
