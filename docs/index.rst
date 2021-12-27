@@ -27,9 +27,7 @@ Contents:
    theory
    auto_examples/index
    api
-   DeterministicParticleFlowControl/DeterministicParticleFlowControl
-   DeterministicParticleFlowControl/optimal_transport_reweighting   
-   DeterministicParticleFlowControl/score_function_estimators
+   
    
    
    
