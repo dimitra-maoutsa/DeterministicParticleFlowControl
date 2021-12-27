@@ -1,5 +1,5 @@
 ================
-Gallery
+Example Gallery
 ================
 
 Here you will find an example gallery for the Deterministic Particle Flow Control framework.
