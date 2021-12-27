@@ -1,8 +1,8 @@
 .. DeterministicParticleFlowControl documentation master file, created by sphinx-quickstart on Tue Dec 14 10:29:06 2021. This should at least contain the root `toctree` directive.
 
-================
+==================================================
  Deterministic Particle Flow Control documentation
-================
+==================================================
 
 Welcome to DeterministicParticleFlowControl's documentation!
 ====================================
