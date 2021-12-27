@@ -22,7 +22,7 @@ stored in F. We create an instance of DPFC with proper attributes (i.e. initial
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
-import DeterministicParticleFlowControl  as dpfc
+import DeterministicParticleFlowControl as dpfc
 #from DeterministicParticleFlowControl import DPFC
 
 ### ploting parameters
@@ -62,7 +62,7 @@ dt = 0.001
 t_start = 0.
 T = 500.
 #x0 = np.array([1.81, -1.41])
-x0 = np.array([-0., -1.0])
+x_0 = np.array([-0., -1.0])
 
 timegridall = np.arange(0,T,dt)
 F = np.zeros((2,timegridall.size))
@@ -70,7 +70,7 @@ F = np.zeros((2,timegridall.size))
 g = 0.1
 for ti,t in enumerate(timegridall):
     if ti==0:
-        F[:,0] = x0
+        F[:,0] = x_0
     else:
         F[:,ti] = F[:,ti-1]+ dt* f(F[:,ti-1])+(g)*np.random.normal(loc=0.0, scale=np.sqrt(dt), size=(2,))
 
@@ -85,19 +85,33 @@ y2 = F[:,100+steps]
 
 
 ##create object bridg2d that contains the simulated flows
-bridg2d = DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', deterministic=True)
+bridg2d = dpfc.DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', deterministic=True)
 
 
 plt.figure(figsize=(10,10)),
-plt.plot(F[0],F[1],'.');
-plt.plot(bridg2d.B[0].T,bridg2d.B[1].T,alpha=0.5,c='grey');
-plt.plot(y1[0],y1[1],'g.',markersize=16);
-plt.plot(y2[0],y2[1],'x',c='silver',markersize=16);
-plt.title('Invariant density of the limit cycle and backwad flow');
+plt.plot(F[0],F[1],'.')
+plt.plot(bridg2d.B[0].T,bridg2d.B[1].T, alpha=0.5, c='grey')
+plt.plot(y1[0], y1[1],'g.', markersize=16)
+plt.plot(y2[0], y2[1],'x', c='silver', markersize=16)
+plt.title('Invariant density of the limit cycle and backward flow')
+plt.show()
 #plt.savefig('bridge_with_correct_drift.png')
 #plt.figure(),plt.plot(bridg2d.B[0].T,alpha=0.3)
 
+#%%
 
+plt.figure(figsize=(10,5)),
+plt.subplot(1,2,1)
+plt.plot(bridg2d.timegrid,bridg2d.B[0,:,:].T,'maroon',alpha=0.5)
+plt.plot(bridg2d.timegrid[-1],y2[0],'x', c='silver',markersize=10)
+plt.plot(bridg2d.timegrid[0],y1[0],'.g')
+#plt.ylim(-2,2)
+
+plt.subplot(1,2,2)
+plt.plot(bridg2d.timegrid,bridg2d.B[1].T,'maroon',alpha=0.5)
+plt.plot(bridg2d.timegrid[-1],y2[1],'x', c='silver',markersize=10)
+plt.plot(bridg2d.timegrid[0],y1[1],'.g')
+plt.suptitle('Zoomed in each dimension seperately')
 
 
 
