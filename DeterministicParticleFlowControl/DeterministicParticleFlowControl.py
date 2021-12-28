@@ -18,7 +18,7 @@ from matplotlib import pyplot as plt
 from .score_function_estimators import  score_function_multid_seperate
 #from score import  score_function_multid_seperate2
 from .optimal_transport_reweighting import reweight_optimal_transport_multidim
-from due import due, BibTeX
+from duecredit import due, BibTeX
 
 
 
