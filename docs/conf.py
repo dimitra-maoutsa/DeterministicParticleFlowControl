@@ -114,7 +114,7 @@ sphinx_gallery_conf = {
     # path where to save gallery generated examples
     'gallery_dirs': 'auto_examples',
     # To auto-generate example sections in the API
-    'doc_module': ('DeterministicParticleFlowControl', 'score_estimators'),
+    'doc_module': ('DeterministicParticleFlowControl',),
     # Auto-generated mini-galleries go here
     'backreferences_dir': 'gen_api'
 }
