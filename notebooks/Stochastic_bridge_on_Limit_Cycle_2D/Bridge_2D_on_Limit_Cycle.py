@@ -51,11 +51,12 @@ x_0 = np.array([-0., -1.0])
 timegridall = np.arange(0, T, dt)
 F = np.zeros((2, timegridall.size))
 
-for ti,t in enumerate(timegridall):
+for ti, _ in enumerate(timegridall):
     if ti == 0:
         F[:, 0] = x_0
     else:
-        F[:, ti] = F[:, ti-1]+ dt* f(F[:, ti-1])+(g)*np.random.normal(loc=0.0, scale=np.sqrt(dt), size=(2, ))
+        F[:, ti] = F[:, ti-1]+ dt* f(F[:, ti-1])+\
+            (g)*np.random.normal(loc=0.0, scale=np.sqrt(dt), size=(2, ))
 
 #%%
 # Set initial and terminal conditions for the bridge and
@@ -92,8 +93,8 @@ bridg2d = dpfc.DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', determ
 ############## sphinx_gallery_thumbnail_number = 1
 # sphinx_gallery_thumbnail_path = '_figs/bridge_on_LC.png'
 
-plt.figure(figsize=(10,10)),
-plt.plot(F[0], F[1],'.')
+plt.figure(figsize=(10, 10))
+plt.plot(F[0], F[1], '.')
 plt.plot(bridg2d.B[0].T, bridg2d.B[1].T, alpha=0.5, c='maroon')
 plt.plot(y1[0], y1[1], 'g.', markersize=16)
 plt.plot(y2[0], y2[1], 'x', c='silver', markersize=16)
@@ -105,14 +106,14 @@ plt.show()
 #%%
 # Plot of the sampled constrained flow across ach dimension.
 
-plt.figure(figsize=(10, 5)),
+plt.figure(figsize=(10, 5))
 plt.subplot(1, 2, 1)
-plt.plot(bridg2d.timegrid,bridg2d.B[0,:,:].T, 'maroon', alpha=0.5)
+plt.plot(bridg2d.timegrid, bridg2d.B[0, :, :].T, 'maroon', alpha=0.5)
 plt.plot(bridg2d.timegrid[-1], y2[0], 'x', c='silver', markersize=10)
-plt.plot(bridg2d.timegrid[0], y1[0],'.g')
+plt.plot(bridg2d.timegrid[0], y1[0], '.g')
 #plt.ylim(-2,2)
 
-plt.subplot(1,2,2)
+plt.subplot(1, 2, 2)
 plt.plot(bridg2d.timegrid, bridg2d.B[1].T, 'maroon', alpha=0.5)
 plt.plot(bridg2d.timegrid[-1], y2[1], 'x', c='silver', markersize=10)
 plt.plot(bridg2d.timegrid[0], y1[1], '.g')
