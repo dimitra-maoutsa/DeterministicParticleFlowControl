@@ -40,13 +40,13 @@ sys.path.append(os.path.join(currentdir, 'notebooks'))
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl'))
-sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/'))
-sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/reweighting/'))
-sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/score_estimators/'))
-for x in os.walk('../../DeterministicParticleFlowControl'):
-    sys.path.insert(0, x[0])
+sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl'))
+#sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/'))
+#sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/reweighting/'))
+#sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/score_estimators/'))
+#for x in os.walk('../../DeterministicParticleFlowControl'):
+    #sys.path.insert(0, x[0])
 
 # -- General configuration ------------------------------------------------
 
