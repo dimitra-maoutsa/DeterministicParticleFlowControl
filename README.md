@@ -63,7 +63,7 @@ source venv/bin/activate
 pip install DeterministicParticleFlowControl
 ```
 
-or 
+or to install from the downloaded repository run
 
 ```python
 
