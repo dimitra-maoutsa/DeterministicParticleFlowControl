@@ -5,8 +5,9 @@ API
 DPFC
 ---------
 
-.. automodule:: .DeterministicParticleFlowControl
+.. automodule:: DeterministicParticleFlowControl
     :members:
+    :show-inheritance:
     
 
 DPFC2
@@ -25,3 +26,13 @@ Classes
 .. autosummary::
    :template: class.rst
    :toctree: gen_api
+
+
+
+
+Indices and tables
+==================
+ 
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
