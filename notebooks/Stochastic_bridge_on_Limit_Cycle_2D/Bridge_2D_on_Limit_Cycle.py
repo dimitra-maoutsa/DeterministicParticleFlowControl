@@ -7,16 +7,15 @@ This example demonstrates how to call the framework for a multidimensional
 system with only terminal constraint.
 """
 # @author: maout
+#%%
+# Here we consider a two dimensional system with a limit cycle, and we will
+# create a stochastic bridge between two points on the limit cycle, i.e. we will
+# impose a terminal constraint onto the dynamics.
+#
+# For sanity check we simulate a long trajectory of the uncontrolled system
+# stored in F. We create an instance of DPFC with proper attributes (i.e. initial
+# and terminal state and time, drift and diffusion of the uncontrolled process).
 
-"""
-Here we consider a two dimensional system with a limit cycle, and we will
-create a stochastic bridge between two points on the limit cycle, i.e. we will
-impose a terminal constraint onto the dynamics.
-
-For sanity check we simulate a long trajectory of the uncontrolled system
-stored in F. We create an instance of DPFC with proper attributes (i.e. initial
- and terminal state and time, drift and diffusion of the uncontrolled process).
-"""
 
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -59,10 +58,10 @@ for ti,t in enumerate(timegridall):
         F[:,ti] = F[:,ti-1]+ dt* f(F[:,ti-1])+(g)*np.random.normal(loc=0.0, scale=np.sqrt(dt), size=(2,))
 
 #%%
-# Set initial and terminal conditions for the bridge and 
+# Set initial and terminal conditions for the bridge and
 # create a DPFC object that samples the two probability flows.
-#         
-        
+#
+
 
 steps = 4000 #steps between initial and terminal points
 
@@ -85,10 +84,10 @@ y2 = F[:,100+steps]
 bridg2d = dpfc.DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', deterministic=True)
 
 #%%
-# Plot of the invariant density of the limit cycle as approximated by the 
+# Plot of the invariant density of the limit cycle as approximated by the
 # long simulation, and the sampled backward probability flow (maroon).
 # The sampled time-reversed flow already represents the constrained (marginal)
-# density.  
+# density.
 
 
 
@@ -121,5 +120,5 @@ plt.suptitle('Zoomed in each dimension seperately')
 
 
 #%%
-# 
+#
 
