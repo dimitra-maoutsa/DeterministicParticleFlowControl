@@ -53,7 +53,17 @@ Here, instead of solving the backward PDE to obtain the optimal drift adjustment
 
 ## Installation:<a id="installation"></a>
 
-To install the install the software run the following commands
+To install the install the software through [Pypi](https://pypi.org/project/DeterministicParticleFlowControl/) run the following commands
+
+```python
+
+# Create and activate a new virtualenvironment
+python -m venv venv
+source venv/bin/activate
+pip install DeterministicParticleFlowControl
+```
+
+or to install from the downloaded repository run
 
 ```python
 
@@ -64,7 +74,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 pip install -e ./
 ```
-
 
 ## Main functionality: `DPFC`<a id="dpfc"></a>
 
