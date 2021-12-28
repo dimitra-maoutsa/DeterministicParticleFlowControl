@@ -146,12 +146,12 @@ plt.suptitle('Zoomed in each dimension seperately')
 dim = 2
 reps = 30
 ### storage for controlled trajectories
-Fcont = np.zeros((dim, bridg2d.timegrid.size, reps))
+Fcont = np.zeros((dim, bridg2d.timegrid.size-1, reps))
 ### storagefor uncontrolled trajectories
-Fnon =  np.zeros((dim, bridg2d.timegrid.size, reps))
+Fnon =  np.zeros((dim, bridg2d.timegrid.size-1, reps))
 ### storage for controls
 used_u =  np.zeros((dim, bridg2d.timegrid.size, reps))
-for ti, tt in enumerate(bridg2d.timegrid[:]):
+for ti, tt in enumerate(bridg2d.timegrid[:-1]):
 
 
     if ti == 0:
