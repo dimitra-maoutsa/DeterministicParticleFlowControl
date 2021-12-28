@@ -97,10 +97,18 @@ plt.figure(figsize=(10, 10))
 plt.plot(F[0], F[1], '.')
 plt.plot(bridg2d.B[0].T, bridg2d.B[1].T, alpha=0.5, c='maroon')
 plt.plot(y1[0], y1[1], 'g.', markersize=16)
-plt.plot(y2[0], y2[1], 'x', c='silver', markersize=16)
-plt.title('Invariant density of the limit cycle and backward flow')
+plt.plot(y2[0], y2[1], '*', c='yellow', markersize=16)
+plt.title('Invariant density and time reversed flow', fontsize=20)
+plt.xlabel('x', fontsize=16)
+plt.ylabel('y', fontsize=16)
+ax = plt.gca()
+ax.annotate("target", xy=(-0.9, 0.55), xycoords='data',
+            xytext=(-1.3, 0.7), textcoords='data', size=18, 
+            arrowprops=dict(arrowstyle="->",
+                            connectionstyle="arc3,rad=-.3", color='k', lw=2.5),
+            )
 plt.show()
-#plt.savefig('bridge_with_correct_drift.png')
+plt.savefig('bridge_with_correct_drift.png')
 #plt.figure(),plt.plot(bridg2d.B[0].T,alpha=0.3)
 
 #%%
@@ -109,17 +117,21 @@ plt.show()
 plt.figure(figsize=(10, 5))
 plt.subplot(1, 2, 1)
 plt.plot(bridg2d.timegrid, bridg2d.B[0, :, :].T, 'maroon', alpha=0.5)
-plt.plot(bridg2d.timegrid[-1], y2[0], 'x', c='silver', markersize=10)
+plt.plot(bridg2d.timegrid[-1], y2[0], '*', c='yellow', markersize=10)
 plt.plot(bridg2d.timegrid[0], y1[0], '.g')
+plt.xlabel('time')
+plt.ylabel('x')
 #plt.ylim(-2,2)
 
 plt.subplot(1, 2, 2)
 plt.plot(bridg2d.timegrid, bridg2d.B[1].T, 'maroon', alpha=0.5)
-plt.plot(bridg2d.timegrid[-1], y2[1], 'x', c='silver', markersize=10)
+plt.plot(bridg2d.timegrid[-1], y2[1], '*', c='yellow', markersize=10)
 plt.plot(bridg2d.timegrid[0], y1[1], '.g')
+plt.xlabel('time')
+plt.ylabel('y')
 plt.suptitle('Zoomed in each dimension seperately')
 
 
 #%%
-#
+# Set the controls for the heart of the star
 
