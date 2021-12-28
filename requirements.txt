@@ -2,7 +2,6 @@ ipython
 numpy
 scipy
 matplotlib
-python-math
 numpydoc
 numba
 POT
@@ -12,3 +11,4 @@ sphinx-gallery
 sphinx-readable-theme
 sphinx-copybutton
 nbsphinx
+duecredit
