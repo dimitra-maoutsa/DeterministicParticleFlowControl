@@ -112,7 +112,7 @@ plt.show()
 #plt.figure(),plt.plot(bridg2d.B[0].T,alpha=0.3)
 
 #%%
-# .. image:: _figs/bridge_on_LC.png
+# .. image:: bridge_on_LC.png
 #    :scale: 70%
 #    :align: center
 #    :alt: Some Text
