@@ -26,7 +26,7 @@ import DeterministicParticleFlowControl as dpfc
 ### ploting parameters
 sns.set(style="white", rc={"axes.facecolor": (0, 0, 0, 0)})
 plt.rcParams["axes.edgecolor"] = "1.0"
-plt.rcParams["axes.linewidth"]  = 2
+plt.rcParams["axes.linewidth"] = 2
 
 
 # Drift of the system
