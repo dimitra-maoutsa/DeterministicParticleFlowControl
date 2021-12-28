@@ -56,7 +56,7 @@ for x in os.walk('../../DeterministicParticleFlowControl'):
 # ones.
 sys.path.append(os.path.abspath('sphinxext'))
 
-extensions = ['sphinx.ext.autodoc',
+extensions = ['nbsphinx','sphinx.ext.autodoc',
               'sphinx.ext.doctest',
               'sphinx.ext.intersphinx',
               'sphinx.ext.todo',
@@ -74,8 +74,7 @@ extensions = ['sphinx.ext.autodoc',
              'IPython.sphinxext.ipython_directive',
              'IPython.sphinxext.ipython_console_highlighting',
              'matplotlib.sphinxext.plot_directive',    
-             'sphinx_copybutton',
-             'nbsphinx']
+             'sphinx_copybutton']
 
 # For napoleon parsing parameters of functions
 # Napoleon settings
