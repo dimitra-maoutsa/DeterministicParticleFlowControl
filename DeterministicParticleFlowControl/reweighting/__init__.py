@@ -3,3 +3,4 @@
 Module providing particle reweighting functionality.
 
 """
+from .optimal_transport_reweighting import *
