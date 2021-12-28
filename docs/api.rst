@@ -7,8 +7,7 @@ API
 :py:mod:`DeterministicParticleFlowControl`:
 
 .. autosummary::
-   :toctree: gen_modules/
-   
+   :toctree: gen_modules/   
 
    DeterministicParticleFlowControl
    score_estimators
