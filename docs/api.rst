@@ -2,6 +2,30 @@
 API
 ===
 
+.. currentmodule:: DeterministicParticleFlowControl
+
+:py:mod:`DeterministicParticleFlowControl`:
+
+.. autosummary::
+   :toctree: gen_modules/
+   :template: module.rst
+
+   DeterministicParticleFlowControl
+   score_estimators
+   reweighting
+   
+
+.. autosummary::
+   :toctree: ../modules/generated/
+   :template: module.rst
+
+.. automodule:: DeterministicParticleFlowControl
+   :members:
+
+
+
+
+
 DPFC
 ---------
 
@@ -31,7 +55,7 @@ Classes
 
 
 Indices and tables
-==================
+---------------------
  
 * :ref:`genindex`
 * :ref:`modindex`
