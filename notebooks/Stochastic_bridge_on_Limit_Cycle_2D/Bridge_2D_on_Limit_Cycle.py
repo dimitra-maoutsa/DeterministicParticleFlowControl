@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """
-Stochastic bridge on Limit Cycle
-==================================
+Stochastic bridge on a Limit Cycle
+===================================
 This example demonstrates how to call the framework for a multidimensional
 system with only terminal constraint.
 """
-# @author: maout
+
 #%%
 # Here we consider a two dimensional system with a limit cycle, and we will
 # create a stochastic bridge between two points on the limit cycle, i.e. we will
