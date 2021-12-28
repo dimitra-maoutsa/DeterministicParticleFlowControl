@@ -9,7 +9,7 @@ API
 .. autosummary::
    :toctree: gen_modules/   
 
-   DeterministicParticleFlowControl
+   DPFC
    score_estimators
    reweighting
    
