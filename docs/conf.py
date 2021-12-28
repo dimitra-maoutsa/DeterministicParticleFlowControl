@@ -43,6 +43,8 @@ sys.path.append(os.path.join(currentdir, 'notebooks'))
 sys.path.insert(0, os.path.abspath('../'))
 sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl'))
 sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/'))
+sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/reweighting/'))
+sys.path.insert(0, os.path.abspath('../DeterministicParticleFlowControl/score_estimators/'))
 for x in os.walk('../../DeterministicParticleFlowControl'):
     sys.path.insert(0, x[0])
 
