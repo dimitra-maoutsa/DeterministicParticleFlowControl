@@ -53,7 +53,7 @@ Here, instead of solving the backward PDE to obtain the optimal drift adjustment
 
 ## Installation:<a id="installation"></a>
 
-To install the install the software through Pypi run the following commands
+To install the install the software through [Pypi](https://pypi.org/project/DeterministicParticleFlowControl/) run the following commands
 
 ```python
 
