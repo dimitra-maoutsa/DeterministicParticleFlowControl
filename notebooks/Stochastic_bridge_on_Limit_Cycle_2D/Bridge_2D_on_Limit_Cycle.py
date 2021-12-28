@@ -90,7 +90,7 @@ bridg2d = dpfc.DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', determ
 # density.
 
 
-
+# sphinx_gallery_thumbnail_path = '_figs/bridge_on_LC.png'
 # sphinx_gallery_thumbnail_number = 1
 plt.figure(figsize=(10,10)),
 plt.plot(F[0], F[1],'.')
