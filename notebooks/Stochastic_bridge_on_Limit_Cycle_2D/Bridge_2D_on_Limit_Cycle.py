@@ -112,13 +112,13 @@ plt.show()
 #plt.figure(),plt.plot(bridg2d.B[0].T,alpha=0.3)
 
 #%%
-# .. figure:: '_figs/bridge_on_LC.png'
+# .. figure:: '../docs/_figs/bridge_on_LC.png'
 #    :scale: 70%
 #    :align: center
 #    :alt: Some Text
 
 #%%
-# Plot of the sampled constrained flow across ach dimension.
+# Plot of the sampled constrained flow across each dimension.
 
 plt.figure(figsize=(10, 5))
 plt.subplot(1, 2, 1)
