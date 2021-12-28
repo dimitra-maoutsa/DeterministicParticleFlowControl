@@ -8,7 +8,7 @@ API
 
 .. autosummary::
    :toctree: gen_modules/
-   :template: module.rst
+   
 
    DeterministicParticleFlowControl
    score_estimators
