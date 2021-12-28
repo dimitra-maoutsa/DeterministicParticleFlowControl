@@ -80,10 +80,10 @@ y1 = F[:, 100]
 # terminal state
 y2 = F[:, 100+steps]
 
-
+print('Starting sampling...')
 ##create object bridg2d that contains the sampled flows
 bridg2d = dpfc.DPFC(t1, t2, y1, y2, f, g, N, M, dens_est='nonparametric', deterministic=True)
-
+print('Sampling done!')
 #%%
 # Plot of the invariant density of the limit cycle as approximated by the
 # long simulation, and the sampled backward probability flow (maroon).
@@ -102,13 +102,13 @@ plt.title('Invariant density and time reversed flow', fontsize=20)
 plt.xlabel('x', fontsize=16)
 plt.ylabel('y', fontsize=16)
 ax = plt.gca()
-ax.annotate("target", xy=(-0.9, 0.55), xycoords='data',
-            xytext=(-1.3, 0.7), textcoords='data', size=18, 
+ax.annotate("target", xy=y2, xycoords='data',
+            xytext=(y2[0]-0.5, y2[1]+0.3), textcoords='data', size=18,
             arrowprops=dict(arrowstyle="->",
                             connectionstyle="arc3,rad=-.3", color='k', lw=2.5),
             )
 plt.show()
-plt.savefig('bridge_with_correct_drift.png')
+#plt.savefig('bridge_with_correct_drift.png')
 #plt.figure(),plt.plot(bridg2d.B[0].T,alpha=0.3)
 
 #%%
@@ -133,5 +133,62 @@ plt.suptitle('Zoomed in each dimension seperately')
 
 
 #%%
-# Set the controls for the heart of the star
+# Set the controls for the heart of the star.
+# Simulate an ensemble of controlled and an ensemble of uncontrolled
+# trajectories.
 
+dim = 2
+reps = 30
+### storage for controlled trajectories
+Fcont = np.zeros((dim, bridg2d.timegrid.size, reps))
+### storagefor uncontrolled trajectories
+Fnon =  np.zeros((dim, bridg2d.timegrid.size, reps))
+### storage for controls
+used_u =  np.zeros((dim, bridg2d.timegrid.size, reps))
+for ti, tt in enumerate(bridg2d.timegrid[:]):
+
+
+    if ti == 0:
+        Fcont[:,ti] = y1.reshape(dim, -1)
+        Fnon[:,ti] = y1.reshape(dim, -1)
+
+    else:
+        
+        uu = bridg2d.calculate_u(np.atleast_2d(Fcont[:, ti-1]).T, ti)
+
+
+
+        used_u[:, ti] = uu
+
+        Fcont[:, ti] =  (Fcont[:, ti-1]+ dt* f(Fcont[:, ti-1])+dt*g**2 *uu+\
+                        (g)*np.random.normal(loc=0.0, scale=np.sqrt(dt), size=(dim, reps)))
+        Fnon[:, ti] =  (Fnon[:, ti-1]+ dt* f(Fnon[:, ti-1])+\
+                       (g)*np.random.normal(loc=0.0, scale=np.sqrt(dt), size=(dim, reps)))
+
+#%%
+#
+
+plt.figure(figsize=(20, 10))
+plt.subplot(1, 2, 1)
+plt.plot(F[0], F[1], '.')
+plt.plot(bridg2d.B[0].T, bridg2d.B[1].T, alpha=0.5, c='maroon')
+ax = plt.gca()
+orange = next(ax._get_lines.prop_cycler)['color']
+plt.plot(Fcont[0], Fcont[1], c=orange, alpha=0.8)
+plt.plot(y1[0], y1[1], 'g.', markersize=16)
+plt.plot(y2[0], y2[1], '*', c='yellow', markersize=16)
+plt.title('Controlled trajectories', fontsize=20)
+plt.xlabel('x', fontsize=16)
+plt.ylabel('y', fontsize=16)
+
+plt.subplot(1, 2, 2)
+plt.plot(F[0], F[1], '.')
+plt.plot(bridg2d.B[0].T, bridg2d.B[1].T, alpha=0.5, c='maroon')
+plt.plot(Fnon[0], Fnon[1], c='silver', alpha=0.8)
+plt.plot(y1[0], y1[1], 'g.', markersize=16)
+plt.plot(y2[0], y2[1], '*', c='yellow', markersize=16)
+plt.title('Uncontrolled trajectories', fontsize=20)
+plt.xlabel('x', fontsize=16)
+plt.ylabel('y', fontsize=16)
+#plt.savefig('Controlled_and_uncontrolled_LC.png')
+plt.show()
