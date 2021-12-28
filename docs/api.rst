@@ -5,13 +5,25 @@ API
 DPFC
 ---------
 
-.. automodule:: DeterministicParticleFlowControl.DPFC
+.. automodule:: .DeterministicParticleFlowControl.DPFC
     :members:
     
 DPFC2
 ---------
 
 .. automodule:: DPFC
+    :members:
+    
+DPFC3
+---------
+
+.. automodule:: ../DeterministicParticleFlowControl.DPFC
+    :members:
+    
+DPFC4
+---------
+
+.. automodule:: ../DPFC
     :members:
     
 Classes
