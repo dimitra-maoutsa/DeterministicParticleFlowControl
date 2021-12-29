@@ -155,7 +155,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
         
         #@njit
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
-            N,dim = x.shape            
+            _,dim = x.shape            
             diffs = x[:,None]-y                         
             #redifs = np.zeros((1*N,N))
             ii = which_dim -1            
@@ -167,7 +167,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
             
      
         def grdy_K(x,y): # gradient with respect to the second argument
-            N,dim = x.shape
+            _,dim = x.shape
             diffs = x[:,None]-y            
             #redifs = np.zeros((N,N))
             ii = which_dim -1              
