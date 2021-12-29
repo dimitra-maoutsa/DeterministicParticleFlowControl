@@ -207,7 +207,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
               res = np.multiply(res, np.exp(- 2* (np.sin(cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),'minkowski', p=1)/ 2 )**2) /(l[ii]*l[ii])) )
           return -res
         else:
-            tempi = np.zeros((x.shape[0], y.shape[0] ))
+            #tempi = np.zeros((x.shape[0], y.shape[0] ))
             ##puts into tempi the cdist result
             #my_cdist(x, y, tempi,'l1')
             #res = np.exp(-2* ( np.sin( tempi / 2 )**2 ) /(l*l) )
@@ -373,8 +373,8 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
             
         
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
-            N,dim = x.shape 
-            M,_ = y.shape
+            #_,dim = x.shape 
+            #M,_ = y.shape
             diffs = x[:,None]-y                         
             #redifs = np.zeros((1*N,M))
             ii = which_dim -1            
