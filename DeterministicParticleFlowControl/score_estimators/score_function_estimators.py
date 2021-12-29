@@ -79,7 +79,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
     by samples X across dimension "which_dim" only. 
     
     - When `funct_out == False`: computes grad-log at the sample points.
-    - When `funct_out == True` : return a function for the grad log to be 
+    - When `funct_out == True`: return a function for the grad log to be 
                                  employed for interpolation/estimation of
                                  the logarithmic gradient in the vicinity of the samples.
                                
@@ -291,7 +291,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
     by samples X for all dimensions simultaneously. 
     
     - When `funct_out == False`: computes grad-log at the sample points.
-    - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
+    - When `funct_out == True`: return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
     
     Parameters
@@ -508,7 +508,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
     by samples X across dimension "which_dim" only. 
     
     - When `funct_out == False`: computes grad-log at the sample points.
-    - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
+    - When `funct_out == True`: return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
                                
     
