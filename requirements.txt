@@ -12,4 +12,4 @@ sphinx-readable-theme
 sphinx-copybutton
 nbsphinx
 duecredit
-
+logging
