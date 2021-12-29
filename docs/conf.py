@@ -132,8 +132,8 @@ def skip(app, what, name, obj, skip, options):
         return False
     return skip
 
-def setup(app):
-    app.connect("autodoc-skip-member", skip)
+#def setup(app):
+#    app.connect("autodoc-skip-member", skip)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
