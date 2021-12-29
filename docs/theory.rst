@@ -6,7 +6,7 @@ We consider a stochastic system described by a stochastic differential equation 
 
 .. math::
 
-    dX_t = f(X_t,t) dt + \sigma(x,t) dW_t
+    dX_t = f(X_t,t) dt + \sigma(X_t,t) dW_t
 
 
 
@@ -26,7 +26,7 @@ We implement the constraints in terms a time- and state-dependent perturbation o
 
 .. math::
 
-    dX_t = f(X_t,t) dt + u(x,t) dt + \sigma(x,t) dW_t.
+    dX_t = f(X_t,t) dt + u(X_t,t) dt + \sigma(X_t,t) dW_t.
 
 Following the assumptions of the Path Integral control formalism, i.e. assuming that control costs are inversely proportional of noise variance (see [Maoutsa2021a]_ , [Maoutsa2021b]_ for more details), we can show that the interventions :math:`u(x,t)` can be obtained from the **logarithmic gradient of the solution of a backward partial differential equation** rescaled by the noise variance. 
 
