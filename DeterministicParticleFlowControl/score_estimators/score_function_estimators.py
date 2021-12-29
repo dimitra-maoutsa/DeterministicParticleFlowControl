@@ -510,21 +510,29 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
     - When `funct_out == False`: computes grad-log at the sample points.
     - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
-    (For estimation across all dimensions simultaneously see score_function_multid_seperate_all_dims )
+                               
+    
     
     Parameters
     -----------
             X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system,
-           Z: inducing points points (M x dim),
-           func_out : Boolean, True returns function, if False return grad-log-p on data points,                    
-           l: lengthscale of rbf kernel (scalar or vector of size dim),
-           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)          
-           which: return 1: grad log p(x) 
-           which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension)
+            Z: inducing points points (M x dim),
+            func_out : Boolean, True returns function, if False return grad-log-p on data points,                    
+            l: lengthscale of rbf kernel (scalar or vector of size dim),
+            C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)          
+            which: return 1: grad log p(x) 
+            which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension)
     Returns
     -------
         res1: array with density along the given dimension  N_s x 1 or function 
                  that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1.
+    
+    
+    For estimation across all dimensions simultaneously see also
+    
+    See also
+    ---------
+    score_function_multid_seperate_all_dims
     
     """
     if kern=='RBF':       
