@@ -43,6 +43,8 @@ due.cite(BibTeX("""
          path='DeterministicParticleFlowControl')
 
 
+         
+         
 class DPFC(object):
     """
     Deterministic particle flow control top-level class.
@@ -74,15 +76,15 @@ class DPFC(object):
         reweighting function to be employed during reweighting,
         dimensions :math:`dim_y1,t \\to 1`.
     dens_est: str
-              > 'nonparametric' : non parametric density estimation (this was
+              - 'nonparametric' : non parametric density estimation (this was
                                   used in the paper)
-              TO BE ADDED:
-              > 'hermit1' : parametic density estimation empoying hermite
+              - TO BE ADDED:
+                  - 'hermit1' : parametic density estimation empoying hermite
                             polynomials (physiscist's)
-              > 'hermit2' : parametic density estimation empoying hermite
+                 - 'hermit2' : parametic density estimation empoying hermite
                             polynomials (probabilists's)
-              > 'poly' : parametic density estimation empoying simple polynomials
-              > 'RBF' : parametric density estimation employing radial basis functions.
+                 - 'poly' : parametic density estimation empoying simple polynomials
+                 - 'RBF' : parametric density estimation employing radial basis functions.
     kern: str
         type of kernel: 'RBF' or 'periodic' (only the 'RBF' was used and gives
                         robust results. Do not use 'periodic' yet!).
