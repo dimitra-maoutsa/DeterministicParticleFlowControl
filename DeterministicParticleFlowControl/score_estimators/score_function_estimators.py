@@ -192,7 +192,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
         
         ## Kx(x,y) = (K(x,y)* (x - y) cos(abs(x - y)/2) sin(abs(x - y)/2))/(l^2 abs(x - y))
         ## -(2 K(x,y) π (x - y) sin((2 π abs(x - y))/per))/(l^2 s abs(x - y))
-      per = 2*np.pi ##period of the kernel
+      ##per = 2*np.pi ##period of the kernel
       #l = 0.5
       def K(x,y,l,multil=False):
         
