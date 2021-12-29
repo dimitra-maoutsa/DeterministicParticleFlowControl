@@ -15,8 +15,7 @@ import numpy as np
 #import ot
 #import numba
 from matplotlib import pyplot as plt
-#import score_estimators
-#import reweighting
+
 if __name__ == "DeterministicParticleFlowControl.DeterministicParticleFlowControl":
     from .score_estimators.score_function_estimators import  score_function_multid_seperate
     from .reweighting.optimal_transport_reweighting import reweight_optimal_transport_multidim
