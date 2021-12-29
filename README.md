@@ -1,6 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/DeterministicParticleFlowControl.svg)](https://badge.fury.io/py/DeterministicParticleFlowControl)
 [![Documentation Status](https://readthedocs.org/projects/deterministicparticleflowcontrol/badge/?version=latest)](https://deterministicparticleflowcontrol.readthedocs.io/en/latest/?badge=latest)
 [![PyPI format](https://img.shields.io/pypi/format/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/dimitra-maoutsa/DeterministicParticleFlowControl.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dimitra-maoutsa/DeterministicParticleFlowControl/context:python)
 [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
 
