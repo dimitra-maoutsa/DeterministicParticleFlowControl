@@ -11,13 +11,13 @@ DPFC
    
 
 
-Summary
-------------
-:py:mod:`DeterministicParticleFlowControl`:
+Classes
+----------
 
+.. autoclass:: DeterministicParticleFlowControl.DPFC
+   :members:
+   
+   
 .. autosummary::
-   :toctree: gen_modules/   
-
-   DeterministicParticleFlowControl
-   score_estimators
-   reweighting
+   :template: class.rst
+   :toctree: gen_api
