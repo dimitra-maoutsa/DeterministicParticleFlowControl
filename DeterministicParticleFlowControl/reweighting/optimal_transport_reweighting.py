@@ -19,15 +19,14 @@ def reweight_optimal_transport_multidim(samples, weights):
     Computes deterministic transport map for particle reweighting.
     Particle state is multidimensional.
 
-
-    Parameters:
+    Parameters
     ------------
         samples: array-like,
             Samples from distribution M x dim , with dim>=2.
         weights: array-like,
             weights for each sample M.
 
-    Returns:
+    Returns
     --------
         T: array like,
             transport map.
