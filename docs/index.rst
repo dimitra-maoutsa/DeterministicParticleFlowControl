@@ -18,7 +18,9 @@ is a deterministic particle-based stochastic optimal control framework implement
   
 
 For a fast introduction on how to use it, please refer to the `README file 
-<https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md>`_ in the Github repository. Here you will find more detailed descriptions of the components. (this documentation is getting updated.)
+<https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/README.md>`_ in the Github repository. Here you will find more detailed descriptions of the components. 
+
+(this documentation is getting updated.)
 
 
 
