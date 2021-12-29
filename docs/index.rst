@@ -31,6 +31,7 @@ Contents:
    theory
    auto_examples/index
    api
+   lost
    
    
    
