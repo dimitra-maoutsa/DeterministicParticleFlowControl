@@ -79,8 +79,9 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
     by samples X across dimension "which_dim" only. 
     
     - When `funct_out == False`: computes grad-log at the sample points.
-    - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
-                               in the vicinity of the samples.
+    - When `funct_out == True` : return a function for the grad log to be 
+                                 employed for interpolation/estimation of
+                                 the logarithmic gradient in the vicinity of the samples.
                                
     (For estimation across all dimensions simultaneously see score_function_multid_seperate_all_dims )
     
@@ -298,18 +299,18 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
             X: N x dim array,
                N samples from the density (N x dim), where dim>=2 the 
                dimensionality of the system.
-           Z: M x dim array,
+            Z: M x dim array,
               inducing points points (M x dim).
-           func_out : Boolean, 
+            func_out : Boolean, 
                       True returns function, 
                       if False returns grad-log-p evaluated on samples X.                    
-           l: float or array-like,
+            l: float or array-like,
                lengthscale of rbf kernel (scalar or vector of size dim).
-           C: float,
+            C: float,
               weighting constant 
               (leave it at default value to avoid unreasonable contraction 
               of deterministic trajectories).
-           kern: string,
+            kern: string,
                 options:
                     - 'RBF': radial basis function/Gaussian kernel  
                     - 'periodic': periodic, not functional yet.           
