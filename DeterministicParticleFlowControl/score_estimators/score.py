@@ -7,15 +7,15 @@ Created on Mon Dec 20 04:31:59 2021
 
 
 import numpy as np
-from sklearn.metrics.pairwise import pairwise_kernels
-from numpy.linalg import pinv
-from functools import reduce
-from scipy.stats import gamma,norm,dweibull,tukeylambda,skewnorm
-from matplotlib import pyplot as plt
-from sklearn import preprocessing
+#from sklearn.metrics.pairwise import pairwise_kernels
+#from numpy.linalg import pinv
+#from functools import reduce
+#from scipy.stats import gamma,norm,dweibull,tukeylambda,skewnorm
+#from matplotlib import pyplot as plt
+#from sklearn import preprocessing
 from scipy.spatial.distance import cdist
-import time
-from scipy.spatial.distance import cdist
+#import time
+#from scipy.spatial.distance import cdist
 def score_function_multid_seperate2(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,which=1,which_dim=1):
     
     """
@@ -48,7 +48,7 @@ def score_function_multid_seperate2(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,
             N,dim = x.shape            
             diffs = x[:,None]-y   
             #print(diffs.shape)
-            redifs = np.zeros((1*N,N))
+            #redifs = np.zeros((1*N,N))
             ii = which_dim -1
             #print(ii)
             if multil:
@@ -61,7 +61,7 @@ def score_function_multid_seperate2(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,
         def grdy_K(x,y): # gradient with respect to the second argument
             N,dim = x.shape
             diffs = x[:,None]-y            
-            redifs = np.zeros((N,N))
+            #redifs = np.zeros((N,N))
             ii = which_dim -1              
             redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)         
             return -redifs
