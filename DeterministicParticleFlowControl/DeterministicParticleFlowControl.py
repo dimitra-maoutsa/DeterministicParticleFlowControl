@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Dec 12 00:02:39 2021
 
-@author: maout
-"""
+#Created on Sun Dec 12 00:02:39 2021
+
+#@author: maout
+
 
 
 
@@ -20,7 +20,7 @@ from matplotlib import pyplot as plt
 ###from .score_estimators.score_function_estimators import  score_function_multid_seperate
 #from score_estimators import score_function_estimators.score_function_multid_seperate
 #from score import  score_function_multid_seperate2
-###from .reweighting.optimal_transport_reweighting import reweight_optimal_transport_multidim
+from .reweighting.optimal_transport_reweighting import reweight_optimal_transport_multidim
 from duecredit import due, BibTeX
 
 
