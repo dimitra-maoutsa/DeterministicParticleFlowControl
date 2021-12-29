@@ -13,7 +13,7 @@ DPFC
 
 
 =====================
-Indices and tables
+Are you lost?
 =====================
  
 * :ref:`genindex`
