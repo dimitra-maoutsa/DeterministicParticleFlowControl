@@ -84,7 +84,12 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                                  employed for interpolation/estimation of
                                  the logarithmic gradient in the vicinity of the samples.
                                
-    (For estimation across all dimensions simultaneously see score_function_multid_seperate_all_dims )
+    For estimation across all dimensions simultaneously see also
+    
+    See also
+    ----------
+    score_function_multid_seperate_all_dims 
+    
     
     Parameters
     ----------
@@ -127,7 +132,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                 tempi = np.zeros((x.shape[0], y.shape[0] ), dtype=np.float64)                
                 my_cdist(x, y,tempi,'sqeuclidean') #this sets into the array tempi the cdist result
                 res = np.exp(-tempi/(2*l*l))
-            return 0
+            #return 0
         
         def K(x,y,l,multil=False):
             if multil:                         
@@ -165,7 +170,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)            
             return redifs
             
-     
+        """
         def grdy_K(x,y): # gradient with respect to the second argument
             _,dim = x.shape
             diffs = x[:,None]-y            
@@ -184,6 +189,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                 for jj in range(which_dim-1,which_dim):
                     redifs[ii, jj ] = np.multiply(np.multiply(diffs[:,:,ii],diffs[:,:,jj])+(l*l)*(ii==jj),K(x,y))/(l**4) 
             return -redifs
+        """
             
             #############################################################################
     elif kern=='periodic': ###############################################################################################
