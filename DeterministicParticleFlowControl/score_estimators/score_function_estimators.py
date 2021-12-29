@@ -503,7 +503,8 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
 def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,which=1,which_dim=1):
     
     """
-    !!!This version computes distances with cdist from scipy. If numba is not available use this estimator.!!!!
+    .. warning:: !!!This version computes distances with cdist from scipy. If numba is not available use this estimator.!!!!
+    
     Sparse kernel based estimation of multidimensional logarithmic gradient of empirical density represented 
     by samples X across dimension "which_dim" only. 
     
