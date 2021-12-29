@@ -78,8 +78,8 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
     Sparse kernel based estimation of multidimensional logarithmic gradient of empirical density represented 
     by samples X across dimension "which_dim" only. 
     
-    - When "funct_out == False": computes grad-log at the sample points.
-    - When "funct_out == True" : return a function for the grad log to be employed for interpolation/estimation of grad log 
+    - When `funct_out == False`: computes grad-log at the sample points.
+    - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
                                
     (For estimation across all dimensions simultaneously see score_function_multid_seperate_all_dims )
@@ -279,11 +279,14 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
     """
     Sparse kernel based estimation of multidimensional logarithmic gradient of empirical density represented 
     by samples X for all dimensions simultaneously. 
-    When "funct_out == False": computes grad-log at the sample points.
-    When "funct_out == True" : return a function for the grad log to be employed for interpolation/estimation of grad log 
+    
+    - When `funct_out == False`: computes grad-log at the sample points.
+    - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
     
-    Input: X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system
+    Parameters
+    -----------
+            X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system,
            Z: inducing points points (M x dim)
            func_out : Boolean, True returns function, if False return grad-log-p on data points                    
            l: lengthscale of rbf kernel (scalar or vector of size dim)
@@ -291,8 +294,10 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
            kern: options: 'RBF'  ('periodic' will become also available in the future)
            
            
-    Output: res1: array with logarithmic gradient of the density  N_s x dim or function 
-                 that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1
+    Returns
+    -------
+        res1: array with logarithmic gradient of the density  N_s x dim or function 
+                 that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1.
     
     """
     
@@ -480,19 +485,25 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
     !!!This version computes distances with cdist from scipy. If numba is not available use this estimator.!!!!
     Sparse kernel based estimation of multidimensional logarithmic gradient of empirical density represented 
     by samples X across dimension "which_dim" only. 
-    When "funct_out == False": computes grad-log at the sample points.
-    When "funct_out == True" : return a function for the grad log to be employed for interpolation/estimation of grad log 
+    
+    - When `funct_out == False`: computes grad-log at the sample points.
+    - When `funct_out == True` : return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
     (For estimation across all dimensions simultaneously see score_function_multid_seperate_all_dims )
-    Input: X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system
-           Z: inducing points points (M x dim)
-           func_out : Boolean, True returns function, if False return grad-log-p on data points                    
-           l: lengthscale of rbf kernel (scalar or vector of size dim)
+    
+    Parameters
+    -----------
+            X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system,
+           Z: inducing points points (M x dim),
+           func_out : Boolean, True returns function, if False return grad-log-p on data points,                    
+           l: lengthscale of rbf kernel (scalar or vector of size dim),
            C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)          
            which: return 1: grad log p(x) 
            which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension)
-    Output: res1: array with density along the given dimension  N_s x 1 or function 
-                 that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1
+    Returns
+    -------
+        res1: array with density along the given dimension  N_s x 1 or function 
+                 that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1.
     
     """
     if kern=='RBF':       
