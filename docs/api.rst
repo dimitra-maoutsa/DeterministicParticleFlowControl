@@ -11,11 +11,3 @@ DPFC
    
 
 
-
-=====================
-Are you lost?
-=====================
- 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
