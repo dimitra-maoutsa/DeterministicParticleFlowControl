@@ -620,7 +620,7 @@ class DPFC(object):
                     mutz = np.mean(self.Ztr[di, :, ti])
                     stdtz = np.std(self.Ztr[di, :, ti])
                     u_t[di] = -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
-        elif ti > 5:
+        else: #if ti > 5:
             ### clipping not used at the end but provided here for cases when
             ### number of particles is small
             ### and trajectories fall out of simulated flows
