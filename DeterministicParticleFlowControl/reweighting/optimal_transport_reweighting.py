@@ -35,11 +35,10 @@ def reweight_optimal_transport_multidim(samples, weights):
     algorithm proposed by `Reich 2013`.
     Employes Optimal Transport to compute a resampling scheme which minimises the
     expected distances between the particles before and after the resampling
-    :math: `CO = X'*X`
+    :math: `CO = X^T \\cdot X`
     :math: `CO = diag(CO)*ones(1,M) -2*CO + ones(M,1)*diag(CO)'`
-
-    :math: `[dist,T] = emd_hat_mex(ww,ones(M,1)/M,CO,-1,3)`
-    :math: `T = T*M`
+    :math: `[dist,T] = emd(ww,ones(M,1)/M,CO,-1,3)`
+    :math: `T = T \\cdot M`
 
     """
 
