@@ -11,6 +11,8 @@ Created on Sun Dec 12 04:14:07 2021
 import numpy as np
 from pyemd import emd_with_flow
 from scipy.spatial.distance import pdist, squareform
+
+
 def reweight_optimal_transport_multidim(samples, weights):
 
     """
@@ -18,26 +20,26 @@ def reweight_optimal_transport_multidim(samples, weights):
 
 
     Parameters:
-    ------
+    ------------
         samples: array-like,
             Samples from distribution M x dim , with dim>=2.
         weights: array-like,
             weights for each sample M.
 
     Returns:
-    ------
+    --------
         T: array like,
             transport map.
 
     Reweighting particles according to ensemble transform erticle filter
-    algorithm proposed by Reich 2013
-    Employes OT to compute a resampling scheme which minimises the
+    algorithm proposed by `Reich 2013`.
+    Employes Optimal Transport to compute a resampling scheme which minimises the
     expected distances between the particles before and after the resampling
-    CO = X'*X;
-    CO = diag(CO)*ones(1,M) -2*CO + ones(M,1)*diag(CO)';
+    :math: `CO = X'*X`
+    :math: `CO = diag(CO)*ones(1,M) -2*CO + ones(M,1)*diag(CO)'`
 
-    [dist,T] = emd_hat_mex(ww,ones(M,1)/M,CO,-1,3);
-    T = T*M;
+    :math: `[dist,T] = emd_hat_mex(ww,ones(M,1)/M,CO,-1,3)`
+    :math: `T = T*M`
 
     """
 
