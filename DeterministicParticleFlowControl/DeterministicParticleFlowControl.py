@@ -12,8 +12,8 @@
 import time
 import logging
 import numpy as np
-import ot
-import numba
+#import ot
+#import numba
 from matplotlib import pyplot as plt
 #import score_estimators
 #import reweighting
@@ -522,7 +522,7 @@ class DPFC(object):
 
     """
     def reject_trajectories(self):
-        
+
         Reject backward trajectories that do not reach the vicinity of the
         initial point.
         Deletes in place relevant rows of the `self.B` array that contains
@@ -533,7 +533,7 @@ class DPFC(object):
         int
             Returns 0.
 
-        
+
         fplus = self.y1+self.f(self.y1, self.t1)*self.dt+6*self.g**2 *np.sqrt(self.dt)
         fminus = self.y1+self.f(self.y1, self.t1) *self.dt-6*self.g**2 *np.sqrt(self.dt)
         reverse_order = np.zeros(self.dim)
@@ -551,7 +551,7 @@ class DPFC(object):
                 to_delete += np.logical_not(np.logical_and(self.B[iii, :, 1] < fplus[iii], self.B[iii, :, 1] > fminus[iii]))
             elif reverse_order[iii] == 1:
                 to_delete += np.logical_not(np.logical_and(self.B[iii, :, 1] > fplus[iii], self.B[iii, :, 1] < fminus[iii]))
-            
+
         sinx = np.where(to_delete >= 1)[0]
         #sinx = np.where(np.logical_or(np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0])), np.logical_not(np.logical_and(self.B[0, :, 1] < fplus[0], self.B[0, :, 1] > fminus[0]))))[0]
                            #((self.B[1,:,-2]<fplus[1]))  ) & ( & (self.B[1,:,-2]>fminus[1]) )  ))[0]
@@ -565,8 +565,8 @@ class DPFC(object):
         #         self.B = np.delete(self.B, element, axis=1)
         return 0
     """
-    
-    
+
+
     def calculate_u(self, grid_x, ti):
         """
         Computes the control at position(s) grid_x at timestep ti
