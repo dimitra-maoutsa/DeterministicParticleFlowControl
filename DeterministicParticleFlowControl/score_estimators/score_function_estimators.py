@@ -86,13 +86,22 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
     
     Parameters
     ----------
-           X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system,
-           Z: inducing points points (M x dim),
-           func_out : Boolean, True returns function, if False return grad-log-p on data points,                    
-           l: lengthscale of rbf kernel (scalar or vector of size dim)
-           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories),          
-           which: return 1: grad log p(x) ,
-           which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension),
+           X: N x dim array ,
+              N samples from the density (N x dim), where dim>=2 the dimensionality of the system.
+           Z: M x dim array,
+              inducing points points (M x dim).
+           func_out : Boolean, 
+                      True returns function, if False return grad-log-p on data points.                    
+           l: float or array-like,
+               lengthscale of rbf kernel (scalar or vector of size dim).
+           C: float,
+              weighting constant (leave it at default value to avoid 
+              unreasonable contraction of deterministic trajectories).         
+           which: (depracated) ,
+                 do not use.
+           which_dim: int,
+                      which gradient of log density we want to compute 
+                      (starts from 1 for the 0-th dimension).
     Returns
     -------
             res1: array with logarithmic gadient of the density along the given dimension  N_s x 1 or function
