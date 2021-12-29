@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Dec 12 03:35:29 2021
 
-@author: maout
-"""
+#Created on Sun Dec 12 03:35:29 2021
+
+#@author: maout
+
 
 
 ### calculate score function from empirical distribution
@@ -27,6 +27,7 @@ def my_cdist(r,y, output,dist='euclidean'):
     Fast computation of pairwise distances between data points in r and y matrices.
     Stores the distances in the output array.
     Available distances: 'euclidean' and 'seucledian'
+    
     Parameters
     ----------
     r : NxM array
@@ -76,19 +77,26 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
     """
     Sparse kernel based estimation of multidimensional logarithmic gradient of empirical density represented 
     by samples X across dimension "which_dim" only. 
-    When "funct_out == False": computes grad-log at the sample points.
-    When "funct_out == True" : return a function for the grad log to be employed for interpolation/estimation of grad log 
+    
+    - When "funct_out == False": computes grad-log at the sample points.
+    - When "funct_out == True" : return a function for the grad log to be employed for interpolation/estimation of grad log 
                                in the vicinity of the samples.
+                               
     (For estimation across all dimensions simultaneously see score_function_multid_seperate_all_dims )
-    Input: X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system
-           Z: inducing points points (M x dim)
-           func_out : Boolean, True returns function, if False return grad-log-p on data points                    
+    
+    Parameters
+    ----------
+           X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system,
+           Z: inducing points points (M x dim),
+           func_out : Boolean, True returns function, if False return grad-log-p on data points,                    
            l: lengthscale of rbf kernel (scalar or vector of size dim)
-           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)          
-           which: return 1: grad log p(x) 
-           which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension)
-    Output: res1: array with logarithmic gadient of the density along the given dimension  N_s x 1 or function 
-                 that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1
+           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories),          
+           which: return 1: grad log p(x) ,
+           which_dim: which gradient of log density we want to compute (starts from 1 for the 0-th dimension),
+    Returns
+    -------
+            res1: array with logarithmic gadient of the density along the given dimension  N_s x 1 or function
+                 that accepts as inputs 2dimensional arrays of dimension (K x dim), where K>=1.
     
     """
     
