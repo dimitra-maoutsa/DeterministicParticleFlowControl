@@ -9,12 +9,19 @@ DPFC
    :members:
    :show-inheritance:
    
-Score function estimation
+Score function estimators
 ---------------------------
 
 .. automodule:: score_function_estimators
    :members:
    :show-inheritance:
+   
+Reweighting
+---------------------------
+
+.. automodule:: reweighting
+   :members:
+   :show-inheritance:   
 
 Classes
 ----------
