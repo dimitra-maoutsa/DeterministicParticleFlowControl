@@ -117,7 +117,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
     """
     
     if kern=='RBF':
-        
+        """
         #@numba.njit(parallel=True,fastmath=True)
         def Knumba(x,y,l,res,multil=False): #version of kernel in the numba form when the call already includes the output matrix
             if multil:                                        
@@ -133,7 +133,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
                 my_cdist(x, y,tempi,'sqeuclidean') #this sets into the array tempi the cdist result
                 res = np.exp(-tempi/(2*l*l))
             #return 0
-        
+        """
         def K(x,y,l,multil=False):
             if multil:                         
                 res = np.ones((x.shape[0],y.shape[0]))                
@@ -330,7 +330,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
     """
     
     if kern=='RBF':
-        
+        """
         #@numba.njit(parallel=True,fastmath=True)
         def Knumba(x,y,l,res,multil=False): #version of kernel in the numba form when the call already includes the output matrix
             if multil:                                        
@@ -346,6 +346,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
                 my_cdist(x, y,tempi,'sqeuclidean') #this sets into the array tempi the cdist result
                 res = np.exp(-tempi/(2*l*l))
             return 0
+        """
         
         def K(x,y,l,multil=False):
             if multil:   
@@ -564,7 +565,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
             else:
                 redifs = np.multiply(diffs[:,:,ii],K(x,y,l))/(l*l)            
             return redifs            
-     
+        """
         def grdy_K(x,y): # gradient with respect to the second argument
             #N,dim = x.shape
             diffs = x[:,None]-y            
@@ -581,7 +582,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
                 for jj in range(which_dim-1,which_dim):
                     redifs[ii, jj ] = np.multiply(np.multiply(diffs[:,:,ii],diffs[:,:,jj])+(l*l)*(ii==jj),K(x,y))/(l**4) 
             return -redifs            
-     
+        """
     if isinstance(l, (list, tuple, np.ndarray)):
        ### for different lengthscales for each dimension 
        K_xz = K(X,Z,l,multil=True) 
