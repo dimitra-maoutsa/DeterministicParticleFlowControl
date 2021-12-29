@@ -2,16 +2,12 @@
 API
 ===
 
-.. currentmodule:: DeterministicParticleFlowControl
+DPFC
+---------
 
-:py:mod:`DeterministicParticleFlowControl`:
-
-.. autosummary::
-   :toctree: gen_modules/   
-
-   DeterministicParticleFlowControl
-   score_estimators
-   reweighting
+.. automodule:: DeterministicParticleFlowControl
+   :members:
+   :show-inheritance:
    
 
 
