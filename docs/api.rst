@@ -19,7 +19,7 @@ Score function estimators
 Reweighting
 ---------------------------
 
-.. automodule:: reweighting
+.. automodule:: optimal_transport_reweighting
    :members:
    :show-inheritance:   
 
