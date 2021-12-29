@@ -12,6 +12,7 @@ import numpy as np
 from pyemd import emd_with_flow
 from scipy.spatial.distance import pdist, squareform
 
+__all__ = ["reweight_optimal_transport_multidim"]
 
 def reweight_optimal_transport_multidim(samples, weights):
 
