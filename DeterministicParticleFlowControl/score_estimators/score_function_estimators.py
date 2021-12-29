@@ -401,7 +401,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
         if multil:       
           res = np.ones((x.shape[0],y.shape[0]))                
           for ii in range(len(l)): 
-              tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
+              #tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
               ##puts into tempi the cdist result
               #my_cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),tempi, 'l1')              
               #res = np.multiply(res, np.exp(- 2* (np.sin(tempi/ 2 )**2) /(l[ii]*l[ii])) )
@@ -416,7 +416,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
             return res
         
       def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
-          N,dim = x.shape            
+          #N,dim = x.shape            
           diffs = x[:,None]-y             
           #redifs = np.zeros((1*N,N))
           ii = which_dim -1          
@@ -549,7 +549,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
                 return np.exp(-cdist(x, y,'sqeuclidean')/(2*l*l))            
         
         def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
-            N,dim = x.shape            
+            #N,dim = x.shape            
             diffs = x[:,None]-y               
             #redifs = np.zeros((1*N,N))
             ii = which_dim -1            
@@ -560,7 +560,7 @@ def score_function_multid_seperate_old(X,Z,func_out=False, C=0.001,kern ='RBF',l
             return redifs            
      
         def grdy_K(x,y): # gradient with respect to the second argument
-            N,dim = x.shape
+            #N,dim = x.shape
             diffs = x[:,None]-y            
             #redifs = np.zeros((N,N))
             ii = which_dim -1              
