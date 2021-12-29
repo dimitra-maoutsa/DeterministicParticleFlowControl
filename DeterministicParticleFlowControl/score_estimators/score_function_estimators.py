@@ -295,13 +295,24 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
     
     Parameters
     -----------
-            X: N samples from the density (N x dim), where dim>=2 the dimensionality of the system,
-           Z: inducing points points (M x dim)
-           func_out : Boolean, True returns function, if False return grad-log-p on data points                    
-           l: lengthscale of rbf kernel (scalar or vector of size dim)
-           C: weighting constant (leave it at default value to avoid unreasonable contraction of deterministic trajectories)
-           kern: options: 'RBF'  ('periodic' will become also available in the future)
-           
+            X: N x dim array,
+               N samples from the density (N x dim), where dim>=2 the 
+               dimensionality of the system.
+           Z: M x dim array,
+              inducing points points (M x dim).
+           func_out : Boolean, 
+                      True returns function, 
+                      if False returns grad-log-p evaluated on samples X.                    
+           l: float or array-like,
+               lengthscale of rbf kernel (scalar or vector of size dim).
+           C: float,
+              weighting constant 
+              (leave it at default value to avoid unreasonable contraction 
+              of deterministic trajectories).
+           kern: string,
+                options:
+                    - 'RBF': radial basis function/Gaussian kernel  
+                    - 'periodic': periodic, not functional yet.           
            
     Returns
     -------
