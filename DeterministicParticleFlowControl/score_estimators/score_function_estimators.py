@@ -206,7 +206,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
           
           res = np.ones((x.shape[0],y.shape[0]))                
           for ii in range(len(l)): 
-              tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
+              #tempi = np.zeros((x[:,ii].size, y[:,ii].size ))
               ##puts into tempi the cdist result
               #my_cdist(x[:,ii].reshape(-1,1), y[:,ii].reshape(-1,1),tempi, 'l1')              
               #res = np.multiply(res, np.exp(- 2* (np.sin(tempi/ 2 )**2) /(l[ii]*l[ii])) )
@@ -221,7 +221,7 @@ def score_function_multid_seperate(X,Z,func_out=False, C=0.001,kern ='RBF',l=1,w
             return res
         
       def grdx_K(x,y,l,which_dim=1,multil=False): #gradient with respect to the 1st argument - only which_dim
-          N,dim = x.shape            
+          #N,dim = x.shape            
           diffs = x[:,None]-y   
           #print('diffs:',diffs)
           #redifs = np.zeros((1*N,N))
