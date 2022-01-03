@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+authors:
+- family-names: "Maoutsa"
+  given-names: "Dimitra"
+  affiliation: "Technical University of Berlin"
+  orcid: "https://orcid.org/0000-0002-3553-8658"
+title: "DeterministicParticleFlowControl"
+version: 0.3.2
+date-released: 2021-12-29
+url: "https://pypi.org/project/DeterministicParticleFlowControl/0.3.2/"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Maoutsa"
+    given-names: "Dimitra"
+    orcid: "https://orcid.org/0000-0002-3553-8658"
+    affiliation: "Technical University of Berlin, and University of Potsdam"
+  - family-names: "Opper"
+    given-names: "Manfred"  
+  journal: "arXiv preprint arXiv:2112.05735"  
+  title: "Deterministic particle flows for constraining stochastic nonlinear systems"  
+  year: 2021
