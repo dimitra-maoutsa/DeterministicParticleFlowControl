@@ -32,10 +32,11 @@ def reweight_optimal_transport_multidim(samples, weights):
         T: array like,
             transport map.
 
-    Reweighting particles according to ensemble transform erticle filter
-    algorithm proposed by `Reich 2013`.
-    Employes Optimal Transport to compute a resampling scheme which minimises the
-    expected distances between the particles before and after the resampling
+    Reweighting particles according to ensemble transform particle filter
+    (ETPF) algorithm proposed by `Reich 2013`.
+    Instead of particle resampling, ETPF employes Optimal Transport to 
+    compute a deterministic particle shift which minimises the
+    expected distances between the particles before and after the transformation.
     :math: `CO = X^T \\cdot X`
     :math: `CO = diag(CO)*ones(1,M) -2*CO + ones(M,1)*diag(CO)'`
     :math: `[dist,T] = emd(ww,ones(M,1)/M,CO,-1,3)`
