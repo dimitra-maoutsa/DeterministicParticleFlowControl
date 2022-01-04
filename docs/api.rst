@@ -34,3 +34,11 @@ Classes
 .. autosummary::
    :template: class.rst
    :toctree: gen_api
+
+
+Index
+----------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
