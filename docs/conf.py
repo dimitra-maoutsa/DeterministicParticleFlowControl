@@ -77,7 +77,8 @@ extensions = ['nbsphinx','sphinx.ext.autodoc',
              'IPython.sphinxext.ipython_directive',
              'IPython.sphinxext.ipython_console_highlighting',
              'matplotlib.sphinxext.plot_directive',    
-             'sphinx_copybutton']
+             'sphinx_copybutton',
+             'rst2pdf.pdfbuilder']
 
 # For napoleon parsing parameters of functions
 # Napoleon settings
