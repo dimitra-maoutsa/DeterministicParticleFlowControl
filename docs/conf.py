@@ -319,7 +319,7 @@ latex_show_urls = True
 # If false, no module index is generated.
 #latex_domain_indices = True
 
-
+pdf_documents = [('index', u'rst2pdf', u'DeterministicParticleFlowControl', u'Dimitra Maoutsa'),]
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
