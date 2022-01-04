@@ -7,9 +7,9 @@ Created on Sun Dec 12 04:14:07 2021
 
 
 # optimal transport multidimensional reweighting
-
-import numpy as np
 from pyemd import emd_with_flow
+import numpy as np
+
 from scipy.spatial.distance import pdist, squareform
 
 __all__ = ["reweight_optimal_transport_multidim"]
