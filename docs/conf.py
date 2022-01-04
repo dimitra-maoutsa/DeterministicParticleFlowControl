@@ -51,6 +51,11 @@ for x in os.walk('../DeterministicParticleFlowControl'):
 
 # -- General configuration ------------------------------------------------
 
+# Build PDF & ePub
+formats:
+  - epub
+  - pdf
+    
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '>=1.0'  # numpydoc requires sphinc >= 1.0
 
