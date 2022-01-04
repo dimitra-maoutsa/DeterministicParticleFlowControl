@@ -1,4 +1,4 @@
-pyemd
+pyemd==0.5.1
 ipython
 numpy
 scipy
