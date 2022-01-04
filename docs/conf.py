@@ -183,7 +183,7 @@ pygments_style = 'sphinx'
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
-#autodoc_mock_imports = ["ot",  "POT"]
+autodoc_mock_imports = ["fc-match"]
 #autodoc_mock_imports = ["ot", "logging", "math", "python-math", "POT", "time", "numba", "score_estimators", "reweighting", "duecredit", "pyemd", "scipy"]
 # -- Options for HTML output ----------------------------------------------
 
