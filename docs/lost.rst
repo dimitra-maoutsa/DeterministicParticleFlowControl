@@ -3,7 +3,7 @@
 Are you lost?
 =====================
 
-Was it all in vain? Or did you cry?
+Was it all in vain?
 
 Are you still lost?
 
