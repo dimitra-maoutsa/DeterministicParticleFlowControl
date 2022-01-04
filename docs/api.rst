@@ -28,6 +28,7 @@ Classes
 
 .. autoclass:: DeterministicParticleFlowControl.DPFC
    :members:
+   :undoc-members:
    
    
 .. autosummary::
