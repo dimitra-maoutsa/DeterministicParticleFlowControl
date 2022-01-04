@@ -13,4 +13,4 @@ sphinx-copybutton
 nbsphinx
 duecredit
 seaborn
-
+rst2pdf
