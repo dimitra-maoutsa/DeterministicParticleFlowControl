@@ -52,7 +52,7 @@ for x in os.walk('../DeterministicParticleFlowControl'):
 # -- General configuration ------------------------------------------------
 
 # Build PDF & ePub
-formats: all
+formats: pdf
   
     
 # If your documentation needs a minimal Sphinx version, state it here.
