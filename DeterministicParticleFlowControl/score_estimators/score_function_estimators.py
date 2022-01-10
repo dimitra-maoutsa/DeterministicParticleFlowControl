@@ -451,11 +451,11 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
        A = K_xz.T @ K_xz    
               
        gradx_K = -grdx_K_all(X,Z,l,multil=True) #-
-       gradxK = np.zeros((X.shape[0],Z.shape[0],dim))
-       for ii in range(dim):
-           gradxK[:,:,ii] = -grdx_K(X,Z,l,multil=True,which_dim=ii+1)
+       #gradxK = np.zeros((X.shape[0],Z.shape[0],dim))
+       #for ii in range(dim):
+           #gradxK[:,:,ii] = -grdx_K(X,Z,l,multil=True,which_dim=ii+1)
        
-       np.testing.assert_allclose(gradxK, gradx_K) 
+       #np.testing.assert_allclose(gradxK, gradx_K) 
     else:
         multil = False
         
