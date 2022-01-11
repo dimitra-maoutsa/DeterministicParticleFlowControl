@@ -249,17 +249,24 @@ class torched_DPFC(object):
 
         """
         dimi, N = x.shape
-        bnds = np.zeros((dimi, 2))
+        bnds = torch.zeros(dimi, 2, dtype=torch.float32, device=self.device)
         for ii in range(dimi):
             bnds[ii] = [np.min(x[ii, :]), np.max(x[ii, :])]
-        #sum_bnds = np.sum(bnds)
+        
+        Sxx = np.array([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) for bnd in bnds])
+        
+        #gpsi = torch.zeros(dimi, N, dtype=torch.float32, device=self.device)
+        lnthsc = 2*torch.std(x, dim=1)
 
-        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
-        gpsi = np.zeros((dimi, N))
-        lnthsc = 2*np.std(x, axis=1)
-
-        for ii in range(dimi):
-            gpsi[ii, :] = score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
+        
+        gpsi = torched_score_function_multid_seperate_all_dims(torch.t(x), 
+                                                               torch.t(Sxx), 
+                                                               False, C=0.001,
+                                                               which=1, 
+                                                               l=lnthsc, 
+                                                               which_dim=ii+1,
+                                                               kern=self.kern,
+                                                               device=self.device)
 
         return self.f_true(x, t)-0.5* self.g**2* gpsi
 
