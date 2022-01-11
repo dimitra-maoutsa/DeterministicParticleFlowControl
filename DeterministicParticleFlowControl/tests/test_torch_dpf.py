@@ -214,9 +214,10 @@ class torched_DPFC(object):
                         M = ot.dist(self.Z[:,:,ti].T, self.Z[:,:,ti].T)
                         M /= M.max()
                         a = W[:,0]
-                        b =  np.ones_like(W[:,0])/self.N
+                        b =  torch.ones_like(W[:,0], dtype=torch.float32, 
+                                         device=self.device)/self.N
                         T2 = ot.emd(a, b, M)
-                        self.Z[:, :, ti] = (self.Z[:, :, ti])@T2
+                        self.Z[:, :, ti] = (self.N*self.Z[:, :, ti])@T2
 
         for di in range(self.dim):
             self.Z[di, :, -1] = self.y2[di]
@@ -420,12 +421,19 @@ class torched_DPFC(object):
 
                     ###REWEIGHT
                     start = time.time()
-                    Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
+                    M = ot.dist(self.Z[:,:,ti].T, self.Z[:,:,ti].T)
+                    M /= M.max()
+                    a = W[:,0]
+                    b =  torch.ones_like(W[:,0], dtype=torch.float32, 
+                                         device=self.device)/self.N
+                    T2 = ot.emd(a, b, M)
+                    self.Z[:, :, ti] = (self.N*self.Z[:, :, ti])@T2
+                    #Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
                     #print(Tstar)
                     if ti == 3:
                         stop = time.time()
                         logging.info('Timepoint: %d needed '%ti, stop-start)
-                    self.Z[:, :, ti] = ((self.Z[:, :, ti])@Tstar) #####
+                    
         logging.info('Forward sampling with Otto is ready!')
         return 0
 
