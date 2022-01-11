@@ -216,33 +216,42 @@ def grdx_K_all(x,y,l,multil=False): #gradient with respect to the 1st argument -
 
 
 #%%
-
+DEVICE = set_device()
+dtype = torch.float
 dim = 2
 N = 3
 M = 4
-X = torch.randn(N, dim)
-Z = torch.randn(M, dim)
+X = torch.randn(N, dim, device=DEVICE)
+Z = torch.randn(M, dim, device=DEVICE)
 # common device agnostic way of writing code that can run on cpu OR gpu
 # that we provide for you in each of the tutorials
-DEVICE = set_device()
-dtype = torch.float
+
 
 
 #%% test kernel evaluation with single lengthscale
 
 lengthsc = 2
 # pytorched
-K_instance = RBF(length_scale=lengthsc, multil=False) ##instance of kernel object - non-evaluated
-Ktorch = K_instance.Kernel(X, Z).detach().numpy()
-gradK_torch = K_instance.gradient_X(X, Z).detach().numpy()
+K_instance = RBF(length_scale=lengthsc, multil=False, device=DEVICE) ##instance of kernel object - non-evaluated
+if DEVICE=='cpu':
+    Ktorch = K_instance.Kernel(X, Z).detach().numpy()
+    gradK_torch = K_instance.gradient_X(X, Z).detach().numpy()
+else:
+    Ktorch = K_instance.Kernel(X, Z).cpu().detach().numpy()
+    gradK_torch = K_instance.gradient_X(X, Z).cpu().detach().numpy()
+
 # numpyed
-K_numpy = Knp(X.detach().numpy(), Z.detach().numpy(),l=lengthsc, multil=False).astype(np.float32)
-grad_K_numpy = grdx_K_all(X.detach().numpy(), Z.detach().numpy(), l=lengthsc, multil=False).astype(np.float32)
+if DEVICE=='cpu':
+    K_numpy = Knp(X.detach().numpy(), Z.detach().numpy(),l=lengthsc, multil=False).astype(np.float32)
+    grad_K_numpy = grdx_K_all(X.detach().numpy(), Z.detach().numpy(), l=lengthsc, multil=False).astype(np.float32)
+
+else:
+    K_numpy = Knp(X.cpu().detach().numpy(), Z.cpu().detach().numpy(),l=lengthsc, multil=False).astype(np.float32)
+    grad_K_numpy = grdx_K_all(X.cpu().detach().numpy(), Z.cpu().detach().numpy(), l=lengthsc, multil=False).astype(np.float32)
 
 
 np.testing.assert_allclose(Ktorch, K_numpy, rtol=1e-06)
 np.testing.assert_allclose(gradK_torch, grad_K_numpy, rtol=1e-06)
-
 
 #%% test kernel evaluation with multiple lengthscales
 lengthsc = np.array([1,2])
