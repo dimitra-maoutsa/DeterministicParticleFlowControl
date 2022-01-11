@@ -251,9 +251,11 @@ class torched_DPFC(object):
         dimi, N = x.shape
         bnds = torch.zeros(dimi, 2, dtype=torch.float32, device=self.device)
         for ii in range(dimi):
-            bnds[ii] = [np.min(x[ii, :]), np.max(x[ii, :])]
+            bnds[ii] = [torch.min(x[ii, :]), torch.max(x[ii, :])]
         
-        Sxx = np.array([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) for bnd in bnds])
+        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) 
+                            for bnd in bnds], dtype=torch.float32, 
+                           device=self.device)
         
         #gpsi = torch.zeros(dimi, N, dtype=torch.float32, device=self.device)
         lnthsc = 2*torch.std(x, dim=1)
@@ -302,18 +304,20 @@ class torched_DPFC(object):
         dimi, N = x.shape
         ### detect min and max of forward flow for each dimension
         ### we want to know the state space volume of the forward flow
-        bnds = np.zeros((dimi, 2))
+        bnds = torch.zeros((dimi, 2, dtype=torch.float32, device=self.device))
         for ii in range(dimi):
-            bnds[ii] = [np.min(x[ii, :]), np.max(x[ii, :])]
-        sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
-        if np.isnan(sum_bnds) or np.isinf(sum_bnds):
-            ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
-            plt.figure(figsize=(6, 4)), plt.plot(self.Z[0].T, self.Z[1].T, alpha=0.3)
-            plt.show()
+            bnds[ii] = [torch.min(x[ii, :]), torch.max(x[ii, :])]
+        # sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
+        # if np.isnan(sum_bnds) or np.isinf(sum_bnds):
+        #     ##if we get unreasoble bounds just plot the first 2 dimensions of the trajectories
+        #     plt.figure(figsize=(6, 4)), plt.plot(self.Z[0].T, self.Z[1].T, alpha=0.3)
+        #     plt.show()
 
         ##these are the inducing points
         ## here we select them from a uniform distribution within the state space volume spanned from the forward flow
-        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
+        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) 
+                            for bnd in bnds], dtype=torch.float32, 
+                           device=self.device)
         gpsi = np.zeros((dimi, N))
         lnthsc = 2*np.std(x, axis=1)
         for ii in range(dimi):
