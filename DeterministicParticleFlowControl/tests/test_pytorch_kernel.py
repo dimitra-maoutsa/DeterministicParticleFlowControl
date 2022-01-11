@@ -135,10 +135,10 @@ class RBF(object):
             # |X_i - Y_j|^2 # (N, M, D)
             sqd     = torch.sum( (X_i - Y_j)**2, 2)         
             # Divide by length scale            
-            sqd  = torch.div(sqd, self.length_scale**2)
+            sqd  = torch.div(sqd, self.length_scale.to(self.device)**2)
             K    = torch.exp( -0.5* sqd )
         else:          
-          sqd1     = torch.div( (X_i - Y_j)**2, self.length_scale**2) 
+          sqd1     = torch.div( (X_i - Y_j)**2, self.length_scale.to(self.device)**2) 
           sqd     = torch.sum( sqd1, 2)  
           K    = torch.exp( -0.5* sqd )
 
@@ -151,7 +151,7 @@ class RBF(object):
         M,_ = Y.shape
         diffs = X[:,None]-Y           
                   
-        redifs = torch.div(diffs, self.length_scale**2)
+        redifs = torch.div(diffs, self.length_scale.to(self.device)**2)
         redifs = torch.einsum( 'ijk,ij->ijk', redifs, self.K_data)
         
               
