@@ -254,7 +254,7 @@ np.testing.assert_allclose(Ktorch, K_numpy, rtol=1e-06)
 np.testing.assert_allclose(gradK_torch, grad_K_numpy, rtol=1e-06)
 
 #%% test kernel evaluation with multiple lengthscales
-## test kernel evaluation with multiple lengthscales
+
 lengthsc = np.array([1,2])
 # pytorched
 if DEVICE=='cpu':
