@@ -12,9 +12,28 @@
 import time
 import logging
 import numpy as np
-#import ot
-#import numba
+try:
+    import ot
+    POTTED = True
+except ImportError:
+    POTTED = False
+    pass
+
+try:
+    import numba
+    NUMBED = True
+except ImportError:
+    NUMBED = False
+    pass
+
+
 from matplotlib import pyplot as plt
+try:
+    import torch
+    TORCHED = True
+except ImportError:
+    TORCHED = False
+    pass
 
 if __name__ == "DeterministicParticleFlowControl.DeterministicParticleFlowControl":
     from .score_estimators.score_function_estimators import  score_function_multid_seperate
@@ -25,8 +44,10 @@ else:
 from duecredit import due, BibTeX
 
 
-
-__all__ = ["DPFC"]
+if TORCHED:
+    __all__ = ["DPFC"]#, "torched_DPFC"]
+else:
+    __all__ = ["DPFC"]
 
 # Use duecredit (duecredit.org) to provide a citation to relevant work to
 # be cited. This does nothing, unless the user has duecredit installed,
