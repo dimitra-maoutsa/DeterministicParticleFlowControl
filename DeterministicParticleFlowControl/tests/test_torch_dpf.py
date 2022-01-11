@@ -11,6 +11,7 @@ import numpy as np
 import logging
 import torched_score_function_multid_seperate_all_dims
 import time
+import ot
 
 class torched_DPFC(object):
     """
@@ -190,8 +191,8 @@ class torched_DPFC(object):
         """
         logging.info('Sampling forward...')
         W = torch.ones(self.N, 1, dtype=torch.float32, device=self.device)/self.N
+        
         for ti, tt in enumerate(self.timegrid):
-
             if ti == 0:
                 self.Z[0, :, 0] = self.y1[0]
                 self.Z[1, :, 0] = self.y1[1]
@@ -209,9 +210,13 @@ class torched_DPFC(object):
                         W = W/torch.sum(W)
 
                         ###REWEIGHT with pot TO DO:
-                        Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
-
-                        self.Z[:, :, ti] = (self.Z[:, :, ti])@Tstar
+                        #Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
+                        M = ot.dist(self.Z[:,:,ti].T, self.Z[:,:,ti].T)
+                        M /= M.max()
+                        a = W[:,0]
+                        b =  np.ones_like(W[:,0])/self.N
+                        T2 = ot.emd(a, b, M)
+                        self.Z[:, :, ti] = (self.Z[:, :, ti])@T2
 
         for di in range(self.dim):
             self.Z[di, :, -1] = self.y2[di]
