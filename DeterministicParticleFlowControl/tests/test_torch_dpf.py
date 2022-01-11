@@ -9,7 +9,7 @@ Created on Tue Jan 11 04:08:30 2022
 import torch
 import numpy as np
 import logging
-
+import torched_score_function_multid_seperate_all_dims
          
          
 class torched_DPFC(object):
@@ -198,9 +198,9 @@ class torched_DPFC(object):
             else:
                 for i in range(self.N):
                     #self.Z[:,i,:] = sdeint.itoint(self.f, self.g, self.Z[i,0], self.timegrid)[:,0]
-                    self.Z[:, i, ti] = (self.Z[:, i, ti-1] + \
-                                      self.dt* self.f(self.Z[:, i, ti-1]) + \
-                                      (self.g)*torch.empty(self.dim,1).normal_(mean=0,std=np.sqrt(self.dt))                                      
+                    self.Z[:, i, ti] = self.Z[:, i, ti-1] + \
+                        self.dt* self.f(self.Z[:, i, ti-1]) + \
+                        (self.g)*torch.empty(self.dim,1).normal_(mean=0,std=np.sqrt(self.dt))                                      
 
                 ###WEIGHT
                 if self.reweight == True:
@@ -208,7 +208,7 @@ class torched_DPFC(object):
                         W[:, 0] = torch.exp(self.U(self.Z[:, :, ti]))
                         W = W/torch.sum(W)
 
-                        ###REWEIGHT with pot
+                        ###REWEIGHT with pot TO DO:
                         Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
 
                         self.Z[:, :, ti] = (self.Z[:, :, ti])@Tstar
@@ -263,10 +263,9 @@ class torched_DPFC(object):
         
         gpsi = torched_score_function_multid_seperate_all_dims(torch.t(x), 
                                                                torch.t(Sxx), 
-                                                               False, C=0.001,
-                                                               which=1, 
-                                                               l=lnthsc, 
-                                                               which_dim=ii+1,
+                                                               func_out=False,
+                                                               C=0.001, 
+                                                               l=lnthsc,                                                                
                                                                kern=self.kern,
                                                                device=self.device)
 
@@ -304,7 +303,7 @@ class torched_DPFC(object):
         dimi, N = x.shape
         ### detect min and max of forward flow for each dimension
         ### we want to know the state space volume of the forward flow
-        bnds = torch.zeros((dimi, 2, dtype=torch.float32, device=self.device))
+        bnds = torch.zeros(dimi, 2, dtype=torch.float32, device=self.device)
         for ii in range(dimi):
             bnds[ii] = [torch.min(x[ii, :]), torch.max(x[ii, :])]
         # sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
@@ -318,11 +317,16 @@ class torched_DPFC(object):
         Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) 
                             for bnd in bnds], dtype=torch.float32, 
                            device=self.device)
-        gpsi = np.zeros((dimi, N))
-        lnthsc = 2*np.std(x, axis=1)
-        for ii in range(dimi):
-            gpsi[ii, :] = score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
-
+        #gpsi = np.zeros((dimi, N))
+        lnthsc = 2*torch.std(x, dim=1)
+        
+        gpsi = torched_score_function_multid_seperate_all_dims(torch.t(x), 
+                                                               torch.t(Sxx), 
+                                                               func_out=False,
+                                                               C=0.001, 
+                                                               l=lnthsc,                                                                
+                                                               kern=self.kern,
+                                                               device=self.device)
         return self.f(x, t)-0.5* self.g**2* gpsi
 
      ###same as forward sampling but without reweighting - this is for bridge reweighting
@@ -354,10 +358,12 @@ class torched_DPFC(object):
 
             elif ti == 1: #propagate one step with stochastic to avoid the delta function
                                           #substract dt because I want the time at t-1
-                self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt*self.f_true(self.Ztr[:, :, ti-1], tt-self.dt)+\
-                                 (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
+                self.Ztr[:, :, ti] = self.Ztr[:, :, ti-1] + \
+                                      self.dt*self.f_true(self.Ztr[:, :, ti-1], tt-self.dt)+\
+                                 (self.g)*torch.empty([self.dim, self.N]).normal_(mean=0, std=np.sqrt(self.dt))
             else:
-                self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt))
+                self.Ztr[:, :, ti] = self.Ztr[:, :, ti-1] + \
+                    self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt)
 
         logging.info('Forward sampling with Otto true is ready!')
         return 0
