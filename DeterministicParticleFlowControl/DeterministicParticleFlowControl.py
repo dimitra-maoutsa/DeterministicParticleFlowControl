@@ -17,14 +17,14 @@ try:
     POTTED = True
 except ImportError:
     POTTED = False
-    pass
+    
 
 try:
     import numba
     NUMBED = True
 except ImportError:
     NUMBED = False
-    pass
+    
 
 
 from matplotlib import pyplot as plt
@@ -33,7 +33,7 @@ try:
     TORCHED = True
 except ImportError:
     TORCHED = False
-    pass
+    
 
 if __name__ == "DeterministicParticleFlowControl.DeterministicParticleFlowControl":
     from .score_estimators.score_function_estimators import  score_function_multid_seperate
