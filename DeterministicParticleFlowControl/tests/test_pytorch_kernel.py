@@ -254,16 +254,25 @@ np.testing.assert_allclose(Ktorch, K_numpy, rtol=1e-06)
 np.testing.assert_allclose(gradK_torch, grad_K_numpy, rtol=1e-06)
 
 #%% test kernel evaluation with multiple lengthscales
+## test kernel evaluation with multiple lengthscales
 lengthsc = np.array([1,2])
 # pytorched
-K_instance2 = RBF(length_scale=lengthsc, multil=True) ##instance of kernel object - non-evaluated
-Ktorch = K_instance2.Kernel(X, Z).detach().numpy()
-gradK_torch = K_instance2.gradient_X(X, Z).detach().numpy()
+if DEVICE=='cpu':
+    K_instance2 = RBF(length_scale=lengthsc, multil=True, device=DEVICE) ##instance of kernel object - non-evaluated
+    Ktorch = K_instance2.Kernel(X, Z).detach().numpy()
+    gradK_torch = K_instance2.gradient_X(X, Z).detach().numpy()
+else:
+    K_instance2 = RBF(length_scale=lengthsc, multil=True, device=DEVICE) ##instance of kernel object - non-evaluated
+    Ktorch = K_instance2.Kernel(X, Z).cpu().detach().numpy()
+    gradK_torch = K_instance2.gradient_X(X, Z).cpu().detach().numpy()
 # numpyed
-K_numpy = Knp(X.detach().numpy(), Z.detach().numpy(),l=lengthsc, multil=True).astype(np.float32)
-grad_K_numpy = grdx_K_all(X.detach().numpy(), Z.detach().numpy(), l=lengthsc, multil=True).astype(np.float32)
+if DEVICE=='cpu':
+    K_numpy = Knp(X.detach().numpy(), Z.detach().numpy(),l=lengthsc, multil=True).astype(np.float32)
+    grad_K_numpy = grdx_K_all(X.detach().numpy(), Z.detach().numpy(), l=lengthsc, multil=True).astype(np.float32)
+else:
+    K_numpy = Knp(X.cpu().detach().numpy(), Z.cpu().detach().numpy(),l=lengthsc, multil=True).astype(np.float32)
+    grad_K_numpy = grdx_K_all(X.cpu().detach().numpy(), Z.cpu().detach().numpy(), l=lengthsc, multil=True).astype(np.float32)
 
 
 np.testing.assert_allclose(Ktorch, K_numpy, rtol=1e-06)
 np.testing.assert_allclose(gradK_torch, grad_K_numpy, rtol=1e-06)
-
