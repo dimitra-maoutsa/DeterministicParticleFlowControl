@@ -7,7 +7,8 @@ Created on Wed Jan 19 02:20:34 2022
 import torch
 import numpy as np
 from matplotlib import pyplot as plt
-from .DeterministicParticleFlowControl import torched_DPFC
+from DeterministicParticleFlowControl import torched_DPFC
+#import DeterministicParticleFlowControl as dpfc
 from utils.utils_pytorch import set_device
 
 ###Limit cycle function and analytic gradient for passing for comparison calculations
