@@ -8,6 +8,8 @@ Created on Wed Jan 19 01:15:07 2022
 import torch
 import numpy as np
 from typing import Union
+from .kernels.RBF_pytorch import RBF
+
 __all__ = ["torched_score_function_multid_seperate_all_dims"]
 
 
