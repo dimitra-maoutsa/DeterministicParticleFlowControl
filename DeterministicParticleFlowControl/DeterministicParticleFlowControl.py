@@ -40,6 +40,7 @@ if __name__ == "DeterministicParticleFlowControl.DeterministicParticleFlowContro
     from .reweighting.optimal_transport_reweighting import reweight_optimal_transport_multidim
     if TORCHED:
         from .score_estimators.score_function_estimators_pytorch import  torched_score_function_multid_seperate_all_dims
+        #from .utils.utils_pytorch import set_device
         
 else:
     ###this clause is for imports to work properly for the documendation
@@ -47,6 +48,7 @@ else:
     from reweighting.optimal_transport_reweighting import reweight_optimal_transport_multidim
     if TORCHED:
         from score_estimators.score_function_estimators_pytorch import  torched_score_function_multid_seperate_all_dims
+        #from utils.utils_pytorch import set_device
 from duecredit import due, BibTeX
 
 
