@@ -9,9 +9,10 @@ Created on Tue Jan 11 04:08:30 2022
 import torch
 import numpy as np
 import logging
+import torched_score_function_multid_seperate_all_dims
+import time
+import ot
 
-         
-         
 class torched_DPFC(object):
     """
     Deterministic particle flow control top-level class implemented in pytorch.
@@ -93,11 +94,11 @@ class torched_DPFC(object):
     """
 
 
-    def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None, 
-                 dens_est='nonparametric', reject=True, kern='RBF', 
-                 f_true=None, brown_bridge=False, deterministic=True, 
+    def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None,
+                 dens_est='nonparametric', reject=True, kern='RBF',
+                 f_true=None, brown_bridge=False, deterministic=True,
                  device=None):
-        
+
         self.device = device
         # dimensionality of the system
         self.dim = torch.tensor(y1.size, dtype=torch.float32, device=self.device)  # dimensionality of the system
@@ -146,17 +147,17 @@ class torched_DPFC(object):
             self.U = U
             if self.brown_bridge:
                 #storage for forward trajectories with true drift
-                self.Ztr = torch.zeros(self.dim, self.N, self.k, 
+                self.Ztr = torch.zeros(self.dim, self.N, self.k,
                                        dtype=torch.float32, device=self.device)
                 self.f_true = f_true
 
 
 
         #storage for forward trajectories
-        self.Z = torch.zeros(self.dim, self.N, self.k, dtype=torch.float32, 
+        self.Z = torch.zeros(self.dim, self.N, self.k, dtype=torch.float32,
                              device=self.device)
         #storage for backward trajectories
-        self.B = torch.zeros(self.dim, self.N, self.k, dtype=torch.float32, 
+        self.B = torch.zeros(self.dim, self.N, self.k, dtype=torch.float32,
                              device=self.device )
         self.ln_roD = [] ## storing the estimated forward logarithmic gradients
 
@@ -190,17 +191,17 @@ class torched_DPFC(object):
         """
         logging.info('Sampling forward...')
         W = torch.ones(self.N, 1, dtype=torch.float32, device=self.device)/self.N
+        
         for ti, tt in enumerate(self.timegrid):
-
             if ti == 0:
                 self.Z[0, :, 0] = self.y1[0]
                 self.Z[1, :, 0] = self.y1[1]
             else:
                 for i in range(self.N):
                     #self.Z[:,i,:] = sdeint.itoint(self.f, self.g, self.Z[i,0], self.timegrid)[:,0]
-                    self.Z[:, i, ti] = (self.Z[:, i, ti-1] + \
-                                      self.dt* self.f(self.Z[:, i, ti-1]) + \
-                                      (self.g)*torch.empty(self.dim,1).normal_(mean=0,std=np.sqrt(self.dt))                                      
+                    self.Z[:, i, ti] = self.Z[:, i, ti-1] + \
+                        self.dt* self.f(self.Z[:, i, ti-1]) + \
+                        (self.g)*torch.empty(self.dim,1).normal_(mean=0,std=np.sqrt(self.dt))
 
                 ###WEIGHT
                 if self.reweight == True:
@@ -208,10 +209,15 @@ class torched_DPFC(object):
                         W[:, 0] = torch.exp(self.U(self.Z[:, :, ti]))
                         W = W/torch.sum(W)
 
-                        ###REWEIGHT with pot
-                        Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
-
-                        self.Z[:, :, ti] = (self.Z[:, :, ti])@Tstar
+                        ###REWEIGHT with pot TO DO:
+                        #Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
+                        M = ot.dist(self.Z[:,:,ti].T, self.Z[:,:,ti].T)
+                        M /= M.max()
+                        a = W[:,0]
+                        b =  torch.ones_like(W[:,0], dtype=torch.float32, 
+                                         device=self.device)/self.N
+                        T2 = ot.emd(a, b, M)
+                        self.Z[:, :, ti] = (self.N*self.Z[:, :, ti])@T2
 
         for di in range(self.dim):
             self.Z[di, :, -1] = self.y2[di]
@@ -252,21 +258,20 @@ class torched_DPFC(object):
         bnds = torch.zeros(dimi, 2, dtype=torch.float32, device=self.device)
         for ii in range(dimi):
             bnds[ii] = [torch.min(x[ii, :]), torch.max(x[ii, :])]
-        
-        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) 
-                            for bnd in bnds], dtype=torch.float32, 
+
+        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse)
+                            for bnd in bnds], dtype=torch.float32,
                            device=self.device)
-        
+
         #gpsi = torch.zeros(dimi, N, dtype=torch.float32, device=self.device)
         lnthsc = 2*torch.std(x, dim=1)
 
-        
-        gpsi = torched_score_function_multid_seperate_all_dims(torch.t(x), 
-                                                               torch.t(Sxx), 
-                                                               False, C=0.001,
-                                                               which=1, 
-                                                               l=lnthsc, 
-                                                               which_dim=ii+1,
+
+        gpsi = torched_score_function_multid_seperate_all_dims(torch.t(x),
+                                                               torch.t(Sxx),
+                                                               func_out=False,
+                                                               C=0.001,
+                                                               l=lnthsc,
                                                                kern=self.kern,
                                                                device=self.device)
 
@@ -304,7 +309,7 @@ class torched_DPFC(object):
         dimi, N = x.shape
         ### detect min and max of forward flow for each dimension
         ### we want to know the state space volume of the forward flow
-        bnds = torch.zeros((dimi, 2, dtype=torch.float32, device=self.device))
+        bnds = torch.zeros(dimi, 2, dtype=torch.float32, device=self.device)
         for ii in range(dimi):
             bnds[ii] = [torch.min(x[ii, :]), torch.max(x[ii, :])]
         # sum_bnds = np.sum(bnds) ##this is for detecting if sth goes wrong i.e. trajectories explode
@@ -315,14 +320,19 @@ class torched_DPFC(object):
 
         ##these are the inducing points
         ## here we select them from a uniform distribution within the state space volume spanned from the forward flow
-        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse) 
-                            for bnd in bnds], dtype=torch.float32, 
+        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse)
+                            for bnd in bnds], dtype=torch.float32,
                            device=self.device)
-        gpsi = np.zeros((dimi, N))
-        lnthsc = 2*np.std(x, axis=1)
-        for ii in range(dimi):
-            gpsi[ii, :] = score_function_multid_seperate(x.T, Sxx.T, False, C=0.001, which=1, l=lnthsc, which_dim=ii+1, kern=self.kern)
+        #gpsi = np.zeros((dimi, N))
+        lnthsc = 2*torch.std(x, dim=1)
 
+        gpsi = torched_score_function_multid_seperate_all_dims(torch.t(x),
+                                                               torch.t(Sxx),
+                                                               func_out=False,
+                                                               C=0.001,
+                                                               l=lnthsc,
+                                                               kern=self.kern,
+                                                               device=self.device)
         return self.f(x, t)-0.5* self.g**2* gpsi
 
      ###same as forward sampling but without reweighting - this is for bridge reweighting
@@ -354,10 +364,12 @@ class torched_DPFC(object):
 
             elif ti == 1: #propagate one step with stochastic to avoid the delta function
                                           #substract dt because I want the time at t-1
-                self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt*self.f_true(self.Ztr[:, :, ti-1], tt-self.dt)+\
-                                 (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
+                self.Ztr[:, :, ti] = self.Ztr[:, :, ti-1] + \
+                                      self.dt*self.f_true(self.Ztr[:, :, ti-1], tt-self.dt)+\
+                                 (self.g)*torch.empty([self.dim, self.N]).normal_(mean=0, std=np.sqrt(self.dt))
             else:
-                self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt))
+                self.Ztr[:, :, ti] = self.Ztr[:, :, ti-1] + \
+                    self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt)
 
         logging.info('Forward sampling with Otto true is ready!')
         return 0
@@ -380,7 +392,7 @@ class torched_DPFC(object):
 
         """
         logging.info('Sampling forward with deterministic particles...')
-        W = np.ones((self.N, 1))/self.N
+        W = torch.ones(self.N, 1, dtype=torch.float32, device=self.device)/self.N
         for ti, tt in enumerate(self.timegrid):
             if ti == 0:
                 for di in range(self.dim):
@@ -393,47 +405,61 @@ class torched_DPFC(object):
                     #self.Z[di,:,0] = np.random.normal(self.y1[di], 0.05, self.N)
             elif ti == 1: #propagate one step with stochastic to avoid the delta function
                                            #substract dt because I want the time at t-1
-                self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt*self.f(self.Z[:, :, ti-1], tt-self.dt)+\
-                                 (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
+                self.Z[:, :, ti] = self.Z[:, :, ti-1] + \
+                                    self.dt*self.f(self.Z[:, :, ti-1], tt-self.dt)+\
+                                 (self.g)*\
+                                     torch.empty([self.dim, self.N]).normal_(mean=0, std=np.sqrt(self.dt))
             else:
-                self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt))
+                self.Z[:, :, ti] = self.Z[:, :, ti-1] +\
+                    self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt)
                 ###REWEIGHT
             if self.reweight == True:
                 if ti > 0:
 
-                    W[:, 0] = np.exp(self.U(self.Z[:, :, ti], tt)*self.dt) #-1
-                    W = W/np.sum(W)
+                    W[:, 0] = torch.exp(self.U(self.Z[:, :, ti], tt)*self.dt) #-1
+                    W = W/torch.sum(W)
 
                     ###REWEIGHT
                     start = time.time()
-                    Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
+                    M = ot.dist(self.Z[:,:,ti].T, self.Z[:,:,ti].T)
+                    M /= M.max()
+                    a = W[:,0]
+                    b =  torch.ones_like(W[:,0], dtype=torch.float32, 
+                                         device=self.device)/self.N
+                    T2 = ot.emd(a, b, M)
+                    self.Z[:, :, ti] = (self.N*self.Z[:, :, ti])@T2
+                    #Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
                     #print(Tstar)
                     if ti == 3:
                         stop = time.time()
                         logging.info('Timepoint: %d needed '%ti, stop-start)
-                    self.Z[:, :, ti] = ((self.Z[:, :, ti])@Tstar) #####
+                    
         logging.info('Forward sampling with Otto is ready!')
         return 0
 
     def density_estimation(self, ti, rev_ti):
         rev_t = rev_ti
-        grad_ln_ro = np.zeros((self.dim, self.N))
-        lnthsc = 2*np.std(self.Z[:, :, rev_t], axis=1)
-        bnds = np.zeros((self.dim, 2))
+        grad_ln_ro = torch.zeros(self.dim, self.N, dtype=torch.float32,
+                                 device=self.device)
+        lnthsc = 2*torch.std(self.Z[:, :, rev_t], dim=1)
+        bnds = torch.zeros(self.dim, 2, dtype=torch.float32, device=self.device)
         for ii in range(self.dim):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_t]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_t]), np.max(self.B[ii, :, rev_ti]))]
-        sum_bnds = np.sum(bnds)
-        if np.isnan(sum_bnds) or np.isinf(sum_bnds):
-            plt.figure(figsize=(6, 4)), plt.plot(self.B[0].T, self.B[1].T, alpha=0.3)
-            plt.plot(self.y1[0], self.y1[1], 'go')
-            plt.show()
+
         #sparse points
-        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
+        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse)
+                            for bnd in bnds], dtype=torch.float32,
+                           device=self.device)
 
-        for di in range(self.dim):
-            #estimate density from forward (Z) and evaluate at current postitions of backward particles (B)
-            grad_ln_ro[di, :] = score_function_multid_seperate(self.Z[:, :, rev_t].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)(self.B[:, :, rev_ti].T)
-
+        #estimate density from forward (Z) and evaluate at current postitions of backward particles (B)
+        #grad_ln_ro = score_function_multid_seperate(self.Z[:, :, rev_t].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)(self.B[:, :, rev_ti].T)
+        grad_ln_ro = torched_score_function_multid_seperate_all_dims(torch.t(self.Z[:, :, rev_t]),
+                                                               torch.t(Sxx),
+                                                               func_out=True,
+                                                               C=0.001,
+                                                               l=lnthsc,
+                                                               kern=self.kern,
+                                                               device=self.device)(torch.t(self.B[:, :, rev_ti]))
 
         return grad_ln_ro
 
@@ -458,20 +484,27 @@ class torched_DPFC(object):
                     (backward) flow (dim x N) for the timestep `rev_ti`.
 
         """
-        grad_ln_b = np.zeros((self.dim, self.N))
-        lnthsc = 2*np.std(self.B[:, :, rev_ti], axis=1)
-        #print(ti, rev_ti, rev_ti-1)
-        bnds = np.zeros((self.dim, 2))
+        grad_ln_b = torch.zeros(self.dim, self.N, dtype=torch.float32,
+                                device=self.device)
+        lnthsc = 2*torch.std(self.B[:, :, rev_ti], dim=1)
+
+        bnds = torch.zeros(self.dim, 2, dtype=torch.float32, device=self.device)
         for ii in range(self.dim):
             bnds[ii] = [max(np.min(self.Z[ii, :, rev_ti]), np.min(self.B[ii, :, rev_ti])), min(np.max(self.Z[ii, :, rev_ti]), np.max(self.B[ii, :, rev_ti]))]
         #sparse points
-        Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
+        Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse)
+                            for bnd in bnds], dtype=torch.float32,
+                           device=self.device)
 
-        for di in range(self.dim):
-            grad_ln_b[di, :] = score_function_multid_seperate(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
-            # grad_ln_a = score_function_multid_seperate2(self.B[:, :, rev_ti].T, Sxx.T, func_out=False, C=0.001, which=1, l=lnthsc, which_dim=di+1, kern=self.kern)
-            # #np.testing.assert_array_equal(grad_ln_b[di, :], grad_ln_a)
-            # np.testing.assert_allclose(grad_ln_b[di, :], grad_ln_a)
+
+
+        grad_ln_b = torched_score_function_multid_seperate_all_dims(torch.t(self.B[:, :, rev_ti]),
+                                                               torch.t(Sxx),
+                                                               func_out=False,
+                                                               C=0.001,
+                                                               l=lnthsc,
+                                                               kern=self.kern,
+                                                               device=self.device)
         return grad_ln_b
 
 
@@ -503,14 +536,16 @@ class torched_DPFC(object):
 
                 if (ti == 1 and self.deterministic) or (not self.deterministic):
 
-                    self.B[:, :, rev_ti] = (self.B[:, :, rev_ti+1] -\
+                    self.B[:, :, rev_ti] = self.B[:, :, rev_ti+1] -\
                                             self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])*self.dt + \
                                                 self.dt*self.g**2*grad_ln_ro +\
-                                                    (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
+                                                    (self.g)*\
+                                                        torch.empty([self.dim, self.N]).normal_(mean=0, std=np.sqrt(self.dt))
                 else:
                     grad_ln_b = self.bw_density_estimation(rev_ti+1)
-                    self.B[:, :, rev_ti] = (self.B[:, :, rev_ti+1] -\
-                                          (self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])- self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt)
+                    self.B[:, :, rev_ti] = self.B[:, :, rev_ti+1] -\
+                                          (self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])-\
+                                           self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt
 
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
@@ -587,35 +622,38 @@ class torched_DPFC(object):
         #a = 0.001
         #grad_dirac = lambda x,di: - 2*(x[di] -self.y2[di])*
         #np.exp(- (1/a**2)* (x[0]- self.y2[0])**2)/(a**3 *np.sqrt(np.pi))
-        u_t = np.zeros(grid_x.T.shape)
+        u_t = torch.zeros(grid_x.T.shape, dtype=torch.float32,
+                          device=self.device)
 
 
-        lnthsc1 = 2*np.std(self.B[:, :, ti], axis=1)
-        lnthsc2 = 2*np.std(self.Z[:, :, ti], axis=1)
+        lnthsc1 = 2*torch.std(self.B[:, :, ti], dim=1)
+        lnthsc2 = 2*torch.std(self.Z[:, :, ti], dim=1)
 
 
-        bnds = np.zeros((self.dim, 2))
+        bnds = torch.zeros(self.dim, 2, dtype=torch.float32,
+                           device=self.device)
+
         for ii in range(self.dim):
             if self.reweight == False or self.brown_bridge == False:
-                bnds[ii] = [max(np.min(self.Z[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Z[ii, :, ti]), np.max(self.B[ii, :, ti]))]
+                bnds[ii] = [max(torch.min(self.Z[ii, :, ti]), torch.min(self.B[ii, :, ti])), min(torch.max(self.Z[ii, :, ti]), torch.max(self.B[ii, :, ti]))]
             else:
-                bnds[ii] = [max(np.min(self.Ztr[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Ztr[ii, :, ti]), np.max(self.B[ii, :, ti]))]
+                bnds[ii] = [max(torch.min(self.Ztr[ii, :, ti]), torch.min(self.B[ii, :, ti])), min(torch.max(self.Ztr[ii, :, ti]), torch.max(self.B[ii, :, ti]))]
 
         if ti <= 5 or (ti >= self.k-5):
             if self.reweight == False or self.brown_bridge == False:
                 ##for the first and last 5 timesteps, to avoid numerical singularities just assume gaussian densities
                 for di in range(self.dim):
-                    mutb = np.mean(self.B[di, :, ti])
-                    stdtb = np.std(self.B[di, :, ti])
-                    mutz = np.mean(self.Z[di, :, ti])
-                    stdtz = np.std(self.Z[di, :, ti])
+                    mutb = torch.mean(self.B[di, :, ti])
+                    stdtb = torch.std(self.B[di, :, ti])
+                    mutz = torch.mean(self.Z[di, :, ti])
+                    stdtz = torch.std(self.Z[di, :, ti])
                     u_t[di] = -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
             elif self.reweight == True and self.brown_bridge == True:
                 for di in range(self.dim):
-                    mutb = np.mean(self.B[di, :, ti])
-                    stdtb = np.std(self.B[di, :, ti])
-                    mutz = np.mean(self.Ztr[di, :, ti])
-                    stdtz = np.std(self.Ztr[di, :, ti])
+                    mutb = torch.mean(self.B[di, :, ti])
+                    stdtb = torch.std(self.B[di, :, ti])
+                    mutz = torch.mean(self.Ztr[di, :, ti])
+                    stdtz = torch.std(self.Ztr[di, :, ti])
                     u_t[di] = -(grid_x[:, di]- mutb)/stdtb**2 - (-(grid_x[:, di]- mutz)/stdtz**2)
         else: #if ti > 5:
             ### clipping not used at the end but provided here for cases when
@@ -628,35 +666,58 @@ class torched_DPFC(object):
             ### fall within the calculated region - we do not change the
             ### position of the point, only the control value will be
             ### calculated with clipped positions
-            bndsb = np.zeros((self.dim, 2))
-            bndsz = np.zeros((self.dim, 2))
+            bndsb =torch.zeros(self.dim, 2, dtype=torch.float32,
+                          device=self.device)
+            bndsz = torch.zeros(self.dim, 2, dtype=torch.float32,
+                          device=self.device)
             for di in range(self.dim):
-                bndsb[di] = [np.min(self.B[di, :, ti]), np.max(self.B[di, :, ti])]
-                bndsz[di] = [np.min(self.Z[di, :, ti]), np.max(self.Z[di, :, ti])]
+                bndsb[di] = [torch.min(self.B[di, :, ti]), torch.max(self.B[di, :, ti])]
+                bndsz[di] = [torch.min(self.Z[di, :, ti]), torch.max(self.Z[di, :, ti])]
 
             ## clipping not used at the end!
             ###cliping the values of points when evaluating the grad log p
             grid_b = grid_x#np.clip(grid_x, bndsb[0], bndsb[1])
             grid_z = grid_x#np.clip(grid_x, bndsz[0], bndsz[1])
 
-            Sxx = np.array([np.random.uniform(low=bnd[0], high=bnd[1], size=(self.N_sparse)) for bnd in bnds])
-            for di in range(self.dim):
-                score_Bw = score_function_multid_seperate(self.B[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc1, which_dim=di+1, kern=self.kern)(grid_b)
-                if self.reweight == False or self.brown_bridge == False:
-                    score_Fw = score_function_multid_seperate(self.Z[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc2, which_dim=di+1, kern=self.kern)(grid_z)
-                else:
-                    bndsztr = np.zeros((self.dim, 2))
-                    for ii in range(self.dim):
-                        bndsztr[di] = [np.min(self.Ztr[di, :, ti]), np.max(self.Ztr[di, :, ti])]
-                    grid_ztr = np.clip(grid_x, bndsztr[0], bndsztr[1])
-                    lnthsc3 = 2*np.std(self.Ztr[:, :, ti], axis=1)
-                    score_Fw = score_function_multid_seperate(self.Ztr[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc3, which_dim=di+1, kern=self.kern)(grid_ztr)
+            Sxx = torch.tensor([torch.distributions.Uniform(low=bnd[0], high=bnd[1]).sample(self.N_sparse)
+                            for bnd in bnds], dtype=torch.float32,
+                           device=self.device)
 
-                u_t[di] = score_Bw - score_Fw
-            # for di in range(self.dim):
-            #     u_t[di] = score_function_multid_seperate(self.B[:,:,ti].T,Sxx.T,func_out= True,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)(grid_x.T) \
-            #              - score_function_multid_seperate(self.Z[:,:,ti].T,Sxx.T,func_out= True,C=0.001,which=1,l=lnthsc,which_dim=di+1, kern=self.kern)(grid_x.T)
+            #for di in range(self.dim):
+            score_Bw = torched_score_function_multid_seperate_all_dims(torch.t(self.B[:, :, ti]),
+                                                           torch.t(Sxx),
+                                                           func_out=True,
+                                                           C=0.001,
+                                                           l=lnthsc1,
+                                                           kern=self.kern,
+                                                           device=self.device)(grid_b)
 
+                #score_Bw = score_function_multid_seperate(self.B[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc1, which_dim=di+1, kern=self.kern)(grid_b)
+            if self.reweight == False or self.brown_bridge == False:
+                score_Fw = torched_score_function_multid_seperate_all_dims(torch.t(self.Z[:, :, ti]),
+                                                           torch.t(Sxx),
+                                                           func_out=True,
+                                                           C=0.001,
+                                                           l=lnthsc2,
+                                                           kern=self.kern,
+                                                           device=self.device)(grid_z)
+                #score_Fw = score_function_multid_seperate(self.Z[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc2, which_dim=di+1, kern=self.kern)(grid_z)
+            else:
+                bndsztr = torch.zeros(self.dim, 2, dtype=torch.float32,
+                          device=self.device)
+                for ii in range(self.dim):
+                    bndsztr[di] = [torch.min(self.Ztr[di, :, ti]), torch.max(self.Ztr[di, :, ti])]
+                grid_ztr = grid_x #np.clip(grid_x, bndsztr[0], bndsztr[1])
+                lnthsc3 = 2*torch.std(self.Ztr[:, :, ti], dim=1)
+                #score_Fw = score_function_multid_seperate(self.Ztr[:, :, ti].T, Sxx.T, func_out=True, C=0.001, which=1, l=lnthsc3, which_dim=di+1, kern=self.kern)(grid_ztr)
+                score_Fw = torched_score_function_multid_seperate_all_dims(torch.t(self.Ztr[:, :, ti]),
+                                                           torch.t(Sxx),
+                                                           func_out=True,
+                                                           C=0.001,
+                                                           l=lnthsc3,
+                                                           kern=self.kern,
+                                                           device=self.device)(grid_ztr)
+            u_t = score_Bw - score_Fw
 
         return u_t
 
@@ -681,9 +742,11 @@ class torched_DPFC(object):
 
         """
         covered = True
-        bnds = np.zeros((self.dim, 2))
+        bnds = torch.zeros(self.dim, 2, dtype=torch.float32,
+                          device=self.device)
         for ii in range(self.dim):
-            bnds[ii] = [max(np.min(self.Z[ii, :, ti]), np.min(self.B[ii, :, ti])), min(np.max(self.Z[ii, :, ti]), np.max(self.B[ii, :, ti]))]
+            bnds[ii] = [max(torch.min(self.Z[ii, :, ti]), torch.min(self.B[ii, :, ti])),
+                        min(torch.max(self.Z[ii, :, ti]), torch.max(self.B[ii, :, ti]))]
             #bnds[ii] = [np.min(self.B[ii,:,ti]),np.max(self.B[ii,:,ti])]
 
             covered = covered * ((X[ii] >= bnds[ii][0]) and (X[ii] <= bnds[ii][1]))
