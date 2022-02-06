@@ -15,7 +15,7 @@ import seaborn as sns
 
 import pandas as pd
 
-N = 400
+N = 1000
 rhos = [-0.25, -0.5, -0.75, 0.25, 0.5, 0.75]
 alldfs = dict()
 for rho in rhos:
@@ -80,7 +80,7 @@ col2 = cols(0.9)
 
 which = ['control', 'err', 'path error' ]
 
-for one in range(3):
+for one in range(2,3):
     plt.figure(figsize=(7, 3.5),dpi=300)
     for i in range(6):
         plt.subplot(2, 3,i+1)
@@ -91,11 +91,11 @@ for one in range(3):
                   markers="o", scale=.75, ci= 'sd' )
         #plt.title(rho)
         if one==0:
-            plt.ylim(0, 11500)
+            plt.ylim(10, 10800)
         elif  one==1:
-            plt.ylim(0, 0.201)
+            plt.ylim(0, 0.2)
         elif one==2:
-            plt.ylim(0, 0.201)
+            plt.ylim(0, 0.151)
                 
             
         ax = plt.gca()
@@ -123,34 +123,34 @@ for one in range(3):
                ax.set_ylabel('path error\n$\int( X_t - y^*)^2 dt$', multialignment='center')
         if i<3:
             if one == 0:
-                ax.text(x=0.5,y=10150, s=r'$\rho_{xy}=%.2f$'%rho,
+                ax.text(x=0.5,y=28, s=r'$\rho_{xy}=%.2f$'%rho,
                         color='grey', size=12, 
                         horizontalalignment='center', verticalalignment='center',
                         weight='bold')
             elif one == 1:
-                ax.text(x=0.5,y=0.165, s=r'$\rho_{xy}=%.2f$'%rho,
+                ax.text(x=0.5,y=0.175, s=r'$\rho_{xy}=%.2f$'%rho,
                         color='grey', size=12, 
                         horizontalalignment='center', verticalalignment='center',
                         weight='bold')
             elif one == 2:
-                ax.text(x=0.5,y=0.165, s=r'$\rho_{xy}=%.2f$'%rho,
+                ax.text(x=0.5,y=0.12, s=r'$\rho_{xy}=%.2f$'%rho,
                         color='grey', size=12, 
                         horizontalalignment='center', verticalalignment='center',
                         weight='bold')
             
         else:
             if one == 0:
-                ax.text(x=0.5,y=1000, s=r'$\rho_{xy}=%.2f$'%rho,
+                ax.text(x=0.5,y=28, s=r'$\rho_{xy}=%.2f$'%rho,
                         color='grey', size=12, 
                         horizontalalignment='center', verticalalignment='center',
                         weight='bold')
             elif one == 1:
-                ax.text(x=0.5,y=0.165, s=r'$\rho_{xy}=%.2f$'%rho,
+                ax.text(x=0.5,y=0.175, s=r'$\rho_{xy}=%.2f$'%rho,
                         color='grey', size=12, 
                         horizontalalignment='center', verticalalignment='center',
                         weight='bold')
             elif one == 2:
-                ax.text(x=0.5,y=0.165, s=r'$\rho_{xy}=%.2f$'%rho,
+                ax.text(x=0.5,y=0.12, s=r'$\rho_{xy}=%.2f$'%rho,
                         color='grey', size=12, 
                         horizontalalignment='center', verticalalignment='center',
                         weight='bold')
@@ -173,7 +173,8 @@ for one in range(3):
             plt.setp(leg3.get_title(),fontsize='small', color='#4f4949')
             
         #plt.yscale('log')
-
+        if one == 0:
+            plt.yscale('log')
         
         ax.tick_params(axis="both",direction="in", bottom=True, left=True,top=True, right=True,color='#4f4949')
         
@@ -197,5 +198,5 @@ for one in range(3):
     plt.subplots_adjust(left=0.12, bottom=None, right=0.85, top=None,
                     wspace=0.45, hspace=0.3)
 
-    #plt.savefig('Gaussian_evolitionary'+which[one]+'.png', bbox_inches='tight',dpi=300 , pad_inches = 0.1)
-    #plt.savefig('Gaussian_evolitionary'+which[one]+'.pdf', bbox_inches='tight',dpi=300,  pad_inches = 0.1)
+    plt.savefig('Gaussian_evolitionary'+which[one]+'.png', bbox_inches='tight',dpi=300 , pad_inches = 0.1)
+    plt.savefig('Gaussian_evolitionary'+which[one]+'.pdf', bbox_inches='tight',dpi=300,  pad_inches = 0.1)
