@@ -80,7 +80,7 @@ col2 = cols(0.9)
 
 which = ['control', 'err', 'path error' ]
 
-for one in range(2,3):
+for one in range(0,3):
     plt.figure(figsize=(7, 3.5),dpi=300)
     for i in range(6):
         plt.subplot(2, 3,i+1)
