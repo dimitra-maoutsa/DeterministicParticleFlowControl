@@ -437,7 +437,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
               redifs = np.divide( np.multiply( np.multiply( np.multiply( -2*diffs[:,:,ii],np.sin( np.abs(diffs[:,:,ii]) / 2) ) ,K(x,y,l) ),np.cos( np.abs(diffs[:,:,ii]) / 2) ) ,(l*l* np.abs(diffs[:,:,ii])) )           
           return -redifs
 
-    dim = X.shape[1]
+    #dim = X.shape[1]
 
     if isinstance(l, (list, tuple, np.ndarray)):
        multil = True
