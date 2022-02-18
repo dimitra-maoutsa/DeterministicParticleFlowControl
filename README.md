@@ -31,7 +31,7 @@ Repository for the **Deterministic Particle Flow Control framework**
 
 ## Description:
 
-Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive a *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
+Obtaining optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive a *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
 
 ## Setting:<a id="setting"></a>
 
