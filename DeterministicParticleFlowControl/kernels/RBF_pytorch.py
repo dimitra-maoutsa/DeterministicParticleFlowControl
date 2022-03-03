@@ -88,7 +88,7 @@ class RBF:
         if not torch.is_tensor(X):
           # convert inputs to pytorch tensors if not already pytorched
           X = torch.tensor(X, dtype=torch.float64, device=self.device) 
-          N, D = X.shape       
+          #N, D = X.shape       
         if Y is None:
             Y = X
         elif not torch.is_tensor(Y):
@@ -132,7 +132,7 @@ class RBF:
             Array with the gradient of the Kernel -> (N, M, D).
 
         """
-        N, D = X.shape    
+        #N, D = X.shape    
         M,_ = Y.shape
         diffs = X[:,None]-Y            
         #if self.multil:            

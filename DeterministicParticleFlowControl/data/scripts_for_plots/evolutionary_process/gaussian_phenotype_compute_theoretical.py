@@ -9,10 +9,10 @@ Created on Sat Feb  5 01:13:00 2022
 
 import numpy as np
 from matplotlib import pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 from scipy.integrate import odeint
 from odeintw import odeintw
-import joblib
+#import joblib
 #save_file='C:/Users/maout/Data_Assimilation_stuff/codes/results_otto/'
 from scipy.linalg import sqrtm
 ## covariance matrix
