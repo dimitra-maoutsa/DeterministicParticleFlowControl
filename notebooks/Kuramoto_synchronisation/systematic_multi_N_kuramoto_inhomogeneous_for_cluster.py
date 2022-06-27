@@ -927,7 +927,7 @@ reps = 20 ##instanses for stochastic path evaluation of each bridge
 ### first run in kura had scale 0.5
 ### in kura_wide0 I have scale 1
 random.seed(input_num*100+repetition)
-y0 = np.random.normal( loc=3, scale=1,size=dim )  
+y0 = np.random.normal( loc=3, scale=0.5,size=dim )  
 ws = np.ones(dim)
 ws[:round(dim/2)] = freq
 ws[round(dim/2):] = -freq
