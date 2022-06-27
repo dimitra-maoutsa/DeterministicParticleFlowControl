@@ -437,7 +437,7 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
               redifs = np.divide( np.multiply( np.multiply( np.multiply( -2*diffs[:,:,ii],np.sin( np.abs(diffs[:,:,ii]) / 2) ) ,K(x,y,l) ),np.cos( np.abs(diffs[:,:,ii]) / 2) ) ,(l*l* np.abs(diffs[:,:,ii])) )           
           return -redifs
 
-    dim = X.shape[1]
+    #dim = X.shape[1]
 
     if isinstance(l, (list, tuple, np.ndarray)):
        multil = True
@@ -455,11 +455,11 @@ def score_function_multid_seperate_all_dims(X,Z,func_out=False, C=0.001,kern ='R
        A = K_xz.T @ K_xz    
               
        gradx_K = -grdx_K_all(X,Z,l,multil=True) #-
-       gradxK = np.zeros((X.shape[0],Z.shape[0],dim))
-       for ii in range(dim):
-           gradxK[:,:,ii] = -grdx_K(X,Z,l,multil=True,which_dim=ii+1)
+       #gradxK = np.zeros((X.shape[0],Z.shape[0],dim))
+       #for ii in range(dim):
+           #gradxK[:,:,ii] = -grdx_K(X,Z,l,multil=True,which_dim=ii+1)
        
-       np.testing.assert_allclose(gradxK, gradx_K) 
+       #np.testing.assert_allclose(gradxK, gradx_K) 
     else:
         multil = False
         

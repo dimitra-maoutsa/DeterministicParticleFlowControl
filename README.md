@@ -21,7 +21,9 @@ Repository for the **Deterministic Particle Flow Control framework**
 - Link to **poster**: :bar_chart: [poster](https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/Poster_Maoutsa_Deterministic_Particle_Flows_Neurips_3scaled.png)
 - Link to **documendation**: :scroll: [readthedocs](http://deterministicparticleflowcontrol.readthedocs.io/)
 
-[ This is work together with Manfred Opper funded by the [SFB 1294](https://www.sfb1294.de/) ]
+[ This is work together with Manfred Opper funded by the [SFB 1294](https://www.sfb1294.de/). ]
+
+[ [PyPI package](https://pypi.org/project/DeterministicParticleFlowControl/0.3.2/) includes only **numpy** implementation, the github repository here provides both **numpy** and **pytorch** functionalities. ]
 
 <p align="center">
 <img src="https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/waterfall_plot_cmap25b.png" width=50% height=50%>
@@ -29,7 +31,7 @@ Repository for the **Deterministic Particle Flow Control framework**
 
 ## Description:
 
-Computing optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive a *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
+Obtaining optimal interventions for stochastic nonlinear systems is a computationally demanding process requiring the solution of nonlinear partial differential equations. Here we build on the Path Integral control formalism to derive a *noniterative* framework that represents the solutions of the underlying partial differential equations in terms of *deterministic* particle flows.   
 
 ## Setting:<a id="setting"></a>
 
