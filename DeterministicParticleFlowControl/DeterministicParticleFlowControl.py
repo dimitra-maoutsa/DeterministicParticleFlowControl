@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Mon Jun 27 15:03:15 2022
+
+@author: maout
+"""
+
+
+# -*- coding: utf-8 -*-
 
 #Created on Sun Dec 12 00:02:39 2021
 
@@ -131,6 +139,10 @@ class DPFC(object):
     deterministic: boolean,
         indicates the type of dynamics the particles will follow.
         If False the flows are simulated with stochastic path sampling.
+    b_type: string,
+        indicates the type of boundaries relevant for evolving the dynamics
+        Options: - normal:   no boundaries
+                 - kuramoto: periodic boundary [0, 2 pi]
 
     Methods
     -------
@@ -153,7 +165,10 @@ class DPFC(object):
     """
 
 
-    def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None, dens_est='nonparametric', reject=True, kern='RBF', f_true=None, brown_bridge=False, deterministic=True):
+    def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None,
+                 dens_est='nonparametric', reject=True, kern='RBF',
+                 f_true=None, brown_bridge=False, deterministic=True,
+                 b_type='normal'):
 
         self.dim = y1.size # dimensionality of the system
         self.t1 = t1
@@ -161,7 +176,7 @@ class DPFC(object):
         self.y1 = y1
         self.y2 = y2
 
-
+        self.b_type = b_type ###determines type of domain boundaries
         ##density estimation stuff
         self.kern = kern
         if kern == 'periodic':
@@ -244,10 +259,14 @@ class DPFC(object):
             else:
                 for i in range(self.N):
                     #self.Z[:,i,:] = sdeint.itoint(self.f, self.g, self.Z[i,0], self.timegrid)[:,0]
+                    
                     self.Z[:, i, ti] = (self.Z[:, i, ti-1] + \
                                       self.dt* self.f(self.Z[:, i, ti-1]) + \
                                       (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim,)))
-
+                    
+                    if self.b_type=='kuramoto':
+                        self.Z[:, i, ti] = self.Z[:, i, ti] %(2*np.pi)
+                        
                 ###WEIGHT
                 if self.reweight == True:
                     if ti > 0:
@@ -258,9 +277,9 @@ class DPFC(object):
                         Tstar = reweight_optimal_transport_multidim(self.Z[:, :, ti].T, W)
 
                         self.Z[:, :, ti] = (self.Z[:, :, ti])@Tstar
-
-        for di in range(self.dim):
-            self.Z[di, :, -1] = self.y2[di]
+                        if self.b_type=='kuramoto':
+                            self.Z[:, :, ti] = self.Z[:, :, ti] %(2*np.pi)
+        
         logging.info('Forward sampling done!')
         return 0
 
@@ -393,7 +412,9 @@ class DPFC(object):
                                  (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
             else:
                 self.Ztr[:, :, ti] = (self.Ztr[:, :, ti-1] + self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt))
-
+            
+            if self.b_type=='kuramoto':
+                self.Ztr[:, :, ti] = self.Ztr[:, :, ti] %(2*np.pi)
         logging.info('Forward sampling with Otto true is ready!')
         return 0
 
@@ -432,7 +453,10 @@ class DPFC(object):
                                  (self.g)*np.random.normal(loc=0.0, scale=np.sqrt(self.dt), size=(self.dim, self.N)))
             else:
                 self.Z[:, :, ti] = (self.Z[:, :, ti-1] + self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt))
-                ###REWEIGHT
+            ##if kuramoto-periodic     
+            if self.b_type=='kuramoto':
+                self.Z[:, :, ti] = self.Z[:, :, ti] %(2*np.pi)
+            ###REWEIGHT
             if self.reweight == True:
                 if ti > 0:
 
@@ -447,6 +471,8 @@ class DPFC(object):
                         stop = time.time()
                         logging.info('Timepoint: %d needed '%ti, stop-start)
                     self.Z[:, :, ti] = ((self.Z[:, :, ti])@Tstar) #####
+            if self.b_type=='kuramoto':
+                self.Z[:, :, ti] = self.Z[:, :, ti] %(2*np.pi)
         logging.info('Forward sampling with Otto is ready!')
         return 0
 
@@ -546,7 +572,9 @@ class DPFC(object):
                     grad_ln_b = self.bw_density_estimation(rev_ti+1)
                     self.B[:, :, rev_ti] = (self.B[:, :, rev_ti+1] -\
                                           (self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])- self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt)
-
+                
+                if self.b_type=='kuramoto':
+                    self.B[:, :, rev_ti] = self.B[:, :, rev_ti] %(2*np.pi)
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
         return 0
@@ -786,6 +814,11 @@ class torched_DPFC(object):
     device: string,
         indicates the device where computations will be exacuted.
         `cpu` or `gpu/cuda` or `tpu` if available.
+    b_type: string,
+        indicates the type of boundaries relevant for evolving the dynamics
+        Options: - normal:   no boundaries
+                 - kuramoto: periodic boundary [0, 2 pi]
+
 
     Methods
     -------
@@ -811,7 +844,7 @@ class torched_DPFC(object):
     def __init__(self, t1, t2, y1, y2, f, g, N, M, reweight=False, U=None,
                  dens_est='nonparametric', reject=True, kern='RBF',
                  f_true=None, brown_bridge=False, deterministic=True,
-                 device=None):
+                 device=None, b_type='normal'):
 
         self.device = device
         # dimensionality of the system
@@ -825,7 +858,7 @@ class torched_DPFC(object):
             self.y1 = y1
             self.y2 = y2
 
-
+        self.b_type = b_type
         ##density estimation stuff
         self.kern = kern
         if kern == 'periodic':
@@ -1089,7 +1122,8 @@ class torched_DPFC(object):
             else:
                 self.Ztr[:, :, ti] = self.Ztr[:, :, ti-1] + \
                     self.dt* self.f_seperate_true(self.Ztr[:, :, ti-1], tt-self.dt)
-
+            if self.b_type=='kuramoto':
+                self.Ztr[:, :, ti] = self.Ztr[:, :, ti] %(2*np.pi)
         logging.info('Forward sampling with Otto true is ready!')
         return 0
 
@@ -1136,7 +1170,10 @@ class torched_DPFC(object):
             else:
                 self.Z[:, :, ti] = self.Z[:, :, ti-1] +\
                     self.dt* self.f_seperate(self.Z[:, :, ti-1], tt-self.dt)
-                ###REWEIGHT
+            if self.b_type=='kuramoto':
+                self.Z[:, :, ti] = self.Z[:, :, ti] %(2*np.pi)
+            
+            ###REWEIGHT
             if self.reweight == True:
                 if ti > 0:
 
@@ -1157,7 +1194,8 @@ class torched_DPFC(object):
                     if ti == 3:
                         stop = time.time()
                         logging.info('Timepoint: %d needed '%ti, stop-start)
-                    
+                    if self.b_type=='kuramoto':
+                        self.Z[:, :, ti] = self.Z[:, :, ti] %(2*np.pi)
         logging.info('Forward sampling with Otto is ready!')
         return 0
 
@@ -1290,6 +1328,8 @@ class torched_DPFC(object):
                                           (self.f(self.B[:, :, rev_ti+1], self.timegrid[rev_ti+1])-\
                                            self.g**2*grad_ln_ro +0.5*self.g**2*grad_ln_b)*self.dt
 
+                if self.b_type=='kuramoto':
+                    self.B[:, :, ti] = self.B[:, :, ti] %(2*np.pi)
         for di in range(self.dim):
             self.B[di, :, 0] = self.y1[di]
         return 0
