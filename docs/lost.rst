@@ -3,7 +3,7 @@
 Are you lost?
 =====================
 
-Was it all in vain?
+Was it all in vein?
 
 Are you still lost?
 
