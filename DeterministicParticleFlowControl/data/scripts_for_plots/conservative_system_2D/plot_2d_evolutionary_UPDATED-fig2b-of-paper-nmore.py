@@ -672,8 +672,8 @@ ax1.set_xticks([-2,0, 2])
 ax1.set_yticks([0, 1,2])
 ax1.set_xlim(-2,2)
 ax1.set_ylim(0,2)
-ax1.set_xlabel(r'x')
-ax1.set_ylabel(r'y')
+ax1.set_xlabel(r'x',fontsize=26)
+ax1.set_ylabel(r'y',fontsize=26)
 
 handles, labels = ax1.get_legend_handles_labels()
 
@@ -705,13 +705,13 @@ mnstdlc = np.mean(Fcont[0],axis=0)-np.std(Fcont[0],axis=0)
 mnstdupc = np.mean(Fcont[0],axis=0)+np.std(Fcont[0],axis=0)
 #plt.fill_between(timegrid,y1=mnstdlc,y2 = mnstdupc,color=my_mag, alpha=0.4,linewidth=0.15, zorder= 1 )
 
-plt.plot(timegrid,np.mean(Fcont[0],axis=0),linestyle=(0, (3, 3)), c=my_mag, lw=4, zorder=2,label=r'$\mu_{\hat{q}_t^{DPF}}$')
-plt.plot(timegrid[::1],np.mean(Fcont_pice[ni_pice][0, :,::1],axis=0),'-', c='grey',lw=4.,zorder=0,label=r'$\mu_{\hat{q}_t^{\mathrm{pice}}}$')
+plt.plot(timegrid,np.mean(Fcont[0],axis=0),linestyle=(0, (3, 3)), c=my_mag, lw=4, zorder=2,label=r'$\mu_{t}^{DPF}$')
+plt.plot(timegrid[::1],np.mean(Fcont_pice[ni_pice][0, :,::1],axis=0),'-', c='grey',lw=4.,zorder=0,label=r'$\mu_{t}^{\mathrm{pice}}$')
 #plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][0],axis=0),linestyle=(0, (1, 4)), c='#4f4949',lw=4,dash_capstyle='butt')
-plt.plot(timegrid,np.mean(Fnon[0],axis=0),'-',c=orag,lw=2, zorder=0,alpha=0.95,label=r'$\mu_{\hat{q}_t^{\mathrm{unc}}}$')
-plt.plot(timegrid[::20],np.mean(Fcont[0,:,::20],axis=0)-np.std(Fcont[0,:,::20],axis=0),'.', c=my_mag,lw=4 ,label=r'$\sigma_{\hat{q}_t^{\mathrm{DPF}}}$')
+plt.plot(timegrid,np.mean(Fnon[0],axis=0),'-',c=orag,lw=2, zorder=0,alpha=0.95,label=r'$\mu_{t}^{\mathrm{unc}}$')
+plt.plot(timegrid[::20],np.mean(Fcont[0,:,::20],axis=0)-np.std(Fcont[0,:,::20],axis=0),'.', c=my_mag,lw=4 ,label=r'$\sigma_{t}^{\mathrm{DPF}}$')
 plt.plot(timegrid[::20],np.mean(Fcont[0,:,::20],axis=0)+np.std(Fcont[0,:,::20],axis=0),'.', c=my_mag,lw=4)
-plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][0],axis=0)-np.std(Fcont_pice[ni_pice][0],axis=0),linestyle=(0, (6, 5)),c='grey', lw=4,dash_capstyle='butt',zorder=0,label=r'$\sigma_{\hat{q}_t^{\mathrm{pice}}}$')
+plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][0],axis=0)-np.std(Fcont_pice[ni_pice][0],axis=0),linestyle=(0, (6, 5)),c='grey', lw=4,dash_capstyle='butt',zorder=0,label=r'$\sigma_{t}^{\mathrm{pice}}$')
 plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][0],axis=0)+np.std(Fcont_pice[ni_pice][0],axis=0),linestyle=(0, (6, 5)),c='grey',lw=4,dash_capstyle='butt',zorder=0)
 # plt.plot(timegrid[:],np.mean(Fnon[0],axis=0)-np.std(Fnon[0],axis=0),'--',c='grey',zorder=0,alpha=0.95,lw=1)
 # plt.plot(timegrid[:],np.mean(Fnon[0],axis=0)+np.std(Fnon[0],axis=0),'--',c='grey',zorder=0,alpha=0.95,lw=1)
@@ -749,7 +749,7 @@ plt.plot(timegrid,np.mean(Fcont[1],axis=0),linestyle=(0, (3, 3)), c=my_mag, lw=4
 plt.plot(timegrid[::1],np.mean(Fcont_pice[ni_pice][1, :,::1],axis=0),'-', c='grey',lw=4.,zorder=0)
 #plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][0],axis=0),linestyle=(0, (1, 4)), c='#4f4949',lw=4,dash_capstyle='butt')
 plt.plot(timegrid,np.mean(Fnon[1],axis=0),'-',c=orag,lw=2, zorder=0,alpha=0.95)
-plt.plot(timegrid[::20],np.mean(Fcont[1,:,::20],axis=0)-np.std(Fcont[1,:,::20],axis=0),'.', c=my_mag,lw=4,label=r'$\sigma_{\hat{q}_t^{\mathrm{DPF}}}$')
+plt.plot(timegrid[::20],np.mean(Fcont[1,:,::20],axis=0)-np.std(Fcont[1,:,::20],axis=0),'.', c=my_mag,lw=4,label=r'$\sigma_{t}^{\mathrm{DPF}}$')
 plt.plot(timegrid[::20],np.mean(Fcont[1,:,::20],axis=0)+np.std(Fcont[1,:,::20],axis=0),'.', c=my_mag,lw=4)
 plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][1],axis=0)-np.std(Fcont_pice[ni_pice][1],axis=0),linestyle=(0, (6, 5)),c='grey', lw=4,dash_capstyle='butt',zorder=0,label=r'$\sigma_{\hat{q}_t^{\mathrm{pice}}}$')
 plt.plot(timegrid,np.mean(Fcont_pice[ni_pice][1],axis=0)+np.std(Fcont_pice[ni_pice][1],axis=0),linestyle=(0, (6, 5)),c='grey',lw=4,dash_capstyle='butt',zorder=0)
@@ -761,9 +761,9 @@ plt.fill_between(timegrid,y1=mnstdl,y2 = mnstdup,color=orag, alpha=0.2,linewidth
   
 plt.plot(timegrid[0],y1[1],'go')
 plt.plot(timegrid[-1],y2[1],'X', c='silver')
-ax3.set_ylabel(r'x')
-ax4.set_ylabel(r'y')
-ax4.set_xlabel(r'time')
+ax3.set_ylabel(r'x',fontsize=26, labelpad=-5)
+ax4.set_ylabel(r'y',fontsize=26)
+ax4.set_xlabel(r'time',fontsize=26)
 ax3.tick_params(axis="both",direction="in", top=True, right=True)
 ax4.set_xticks([0,0.35,0.7])
 ax3.yaxis.set_minor_locator(tck.AutoMinorLocator())
@@ -785,7 +785,9 @@ for text in leg6.get_texts():
     text.set_color('#4f4949')
 """
 ##########################################################################
-ax5 = fig.add_subplot(gs[0, 2])
+gs01 = gridspec.GridSpecFromSubplotSpec(2, 1, subplot_spec=gs[0:2, 2], wspace=0.5)
+
+ax5 = fig.add_subplot(gs01[0, 0])
 
 purple_pal = cm.magma_r 
 grey_pal = plt.get_cmap('Greys_r')
@@ -823,7 +825,8 @@ for tick, text in zip(ax5.get_xticks(), ax5.get_xticklabels()):
             lw=4, color='silver',solid_capstyle='round',zorder=3)
 sns.despine(trim=True,  top=True, right=True, bottom=True,ax=ax5)
 #sns.despine(offset=10, trim=True)
-plt.ylabel('control\n$\\log \\, \\| u(x,t) \\|_2^2$', multialignment='center')#,fontsize=17)
+plt.ylabel(r'control$ $'+'\n'+r' \fontsize{14pt}{3em}\selectfont{}{$\log \, \| u(x,t) \|_2^2$}', 
+           multialignment='center',fontsize=24, linespacing=0.75)
 ax5.spines['bottom'].set_color('#363636')
 ax5.spines['top'].set_color('#363636')
 ax5.xaxis.label.set_color('#363636')
@@ -831,7 +834,7 @@ ax5.tick_params(axis='x', colors='#363636')
 ax5.yaxis.label.set_color('#363636')
 ax5.tick_params(axis='y', colors='#363636')    
 plt.tick_params(axis='y', which='major')#, labelsize=16) 
-plt.tick_params(axis='x', which='major')#, labelsize=16) 
+plt.tick_params(axis='x', which='major', labelsize=20) 
 ax5.xaxis.set_tick_params(width=0)
 #ax5.set_ylim(None,7700)
 #ax5.set_yscale('log')
@@ -858,7 +861,7 @@ ax5.annotate(u"$1$ iteration ",
 
 
 
-ax6 = fig.add_subplot(gs[1, 2])
+ax6 = fig.add_subplot(gs01[1, 0])
 end_cost1 = 1*np.sqrt(np.sum( (Fcont[:,:,-1]-np.atleast_2d(y2).T)**2 ,axis=0  ))
 
 end_cost3 = 1*np.sqrt( np.sum((Fcont_pice[ni_pice][:,:,-2]-np.atleast_2d(y2).T)**2   ,axis=0))
@@ -868,7 +871,8 @@ df_end = pd.DataFrame({r'DPF': end_cost1, r'pice': end_cost3})
 
 sns.violinplot(  data=df_end, palette=my_palette2, alpha=0.65,saturation=0.81)#color="0.8")
 
-sns.stripplot( data=df_end,jitter=0.15,alpha=0.5, palette=my_palette,edgecolor='#363636',linewidth=0.25,size=3)
+sns.stripplot( data=df_end,jitter=0.15,alpha=0.5, palette=my_palette,
+              edgecolor='#363636',linewidth=0.25,size=3)
 mean_width = 0.5
 
 for tick, text in zip(ax6.get_xticks(), ax6.get_xticklabels()):
@@ -878,8 +882,11 @@ for tick, text in zip(ax6.get_xticks(), ax6.get_xticklabels()):
     # plot horizontal lines across the column, centered on the tick
     ax6.plot([tick-mean_width/2, tick+mean_width/2], [mean_val, mean_val],
             lw=4, color='silver',solid_capstyle='round',zorder=3)
-sns.despine(trim=True,  top=True, right=True,bottom=True,ax=ax6)    
-plt.ylabel('terminal error\n$(x^*- X_T)^2$', multialignment='center')
+sns.despine(trim=True,  top=True, right=True,bottom=True,ax=ax6)   
+ylabels = [r'terminal$ $', '\n',  r'$\vspace{-25pt}$error$ $', "\n", 
+           r"\fontsize{14pt}{3em}\selectfont{}{$(x^*- X_T)^2$}" ] 
+plt.ylabel(ylabels[0] +ylabels[1]+ylabels[2] +ylabels[3]+ylabels[4],
+           multialignment='center', fontsize=24, linespacing=0.5)
 ax6.spines['bottom'].set_color('#363636')
 ax6.spines['top'].set_color('#363636')
 ax6.xaxis.label.set_color('#363636')
@@ -887,8 +894,8 @@ ax6.tick_params(axis='x', colors='#363636')
 
 ax6.yaxis.label.set_color('#363636')
 ax6.tick_params(axis='y', colors='#363636')       
-plt.tick_params(axis='y', which='major',color='#4f4949')#, labelsize=16) 
-plt.tick_params(axis='x', which='major',color='#4f4949')#, labelsize=16) 
+plt.tick_params(axis='y', which='major',color='#4f4949') 
+plt.tick_params(axis='x', which='major',color='#4f4949', labelsize=20) 
 ax6.xaxis.set_tick_params(width=0)
 
 
@@ -896,9 +903,9 @@ ax6.xaxis.set_tick_params(width=0)
 #ax11.text(.05, .95, connectionstyle.replace(",", ",\n"), transform=ax.transAxes, ha="left", va="top")
 ########################################################
 ax1.axis('on')
-ax2.axis('on')
+#ax2.axis('on')
 plt.tight_layout()
-plt.subplots_adjust(wspace=0.5,hspace=0.5)
+#plt.subplots_adjust(wspace=0.5,hspace=0.5)
 
 
 #################################################
@@ -917,19 +924,22 @@ for li,lab in enumerate(labels2[:2]):
     labels2[li] = 'DPF - M:' +labels2[li] 
 leg52 = ax10.legend(handles2[:3], labels2[:3], title=None,
           handletextpad=0.5, columnspacing=1.2,handlelength=0.8,# bbox_to_anchor=[-0.5, 0.655],
-          loc=1, ncol=2, frameon=True,fontsize = 'small',shadow=None,framealpha =0,edgecolor ='#0a0a0a')
+          loc=1, ncol=2, frameon=True,fontsize = 'small',shadow=None,
+          framealpha =0,edgecolor ='#0a0a0a')
 
 for text in leg52.get_texts():
     text.set_color('#4f4949')
     
-ax10.set_ylabel('control\n$ \\| u(x,t) \\|_2^2$', multialignment='center')
 
+ax10.set_ylabel(r'control$ $'+'\n'+r' \fontsize{14pt}{3em}\selectfont{}{$\log \, \| u(x,t) \|_2^2$}', 
+                multialignment='center',fontsize=24, linespacing=0.75)
 ax10.set_xlabel(r'')
 ax10.tick_params(axis="both",direction="in", bottom=True, left=True,top=True, right=True,color='#4f4949')
 
 #ax.yaxis.set_minor_locator(tck.AutoMinorLocator())
 ax10.xaxis.set_minor_locator(tck.AutoMinorLocator())
-ax10.tick_params(axis="both", which='minor',direction="in", bottom=True, left=True, top=True, right=True,color='#4f4949')
+ax10.tick_params(axis="both", which='minor',direction="in", bottom=True, 
+                 left=True, top=True, right=True,color='#4f4949')
 plt.ylim(10**4,3.5*10**4)
 ax10.set_yticks([ 2*10**4,3*10**4])
 ax10.ticklabel_format(style='sci',axis='y',scilimits=(1,4))
@@ -942,7 +952,7 @@ ax10.tick_params(axis='x', colors='#4f4949')
 
 ax10.yaxis.label.set_color('#363636')
 ax10.tick_params(axis='y', colors='#363636')       
-plt.tick_params(axis='y', which='major',color='#363636')#, labelsize=16) 
+plt.tick_params(axis='y', which='major',color='#363636') 
 plt.tick_params(axis='x', which='major',color='#363636')
 
 
@@ -964,9 +974,10 @@ g = sns.pointplot(x="N",  y="end_error", hue='M',
 # for text in leg51.get_texts():
 #     text.set_color('#4f4949')
 plt.legend([],[], frameon=False)    
-ax11.set_ylabel('terminal error\n$(x^*- X_T)^2$', multialignment='center')
-
-ax11.set_xlabel('particles N')
+#ax11.set_ylabel(r'terminal$\\$error$\\$\fontsize{14pt}{3em}\selectfont{}{$(x^*- X_T)^2$}', multialignment='center', fontsize=22)
+ylabels = [r'terminal$ $', '\n',  r'$\vspace{-25pt}$error$ $', "\n", r"\fontsize{14pt}{3em}\selectfont{}{$(x^*- X_T)^2$}" ] 
+ax11.set_ylabel(ylabels[0] +ylabels[1]+ylabels[2] +ylabels[3]+ylabels[4], multialignment='center', fontsize=24, linespacing=0.5)
+ax11.set_xlabel('particles N', fontsize=26)
 ax11.tick_params(axis="both",direction="in", top=True, left=True,bottom=True, right=True)
 #ax10.tick_params(axis="both", which='major',direction="out", top=False, right=False, bottom=True, left=True,size=3, colors='#4f4949')        
 ax11.set_xticks([1,3,5],['$600$', '$800$', '$1000$'])
