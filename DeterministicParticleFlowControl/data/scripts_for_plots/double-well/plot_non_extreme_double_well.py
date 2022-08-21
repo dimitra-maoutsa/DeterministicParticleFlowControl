@@ -355,12 +355,12 @@ gs = gridspec.GridSpec(nrows=1, ncols=4)
 gs01 = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs[0, 0:2], wspace=0.3)
 ax1 = fig.add_subplot(gs01[0, 0])
 ##### with backgound ######################################################################
-""" uncomment this
+#""" uncomment this
 plt.imshow(Vpot.T, origin='lower',interpolation='nearest',cmap=grey_pal,alpha=0.7, extent=[-0.05, 1.05, -1.5,1.5],zorder=0,vmin=-1, vmax=0.4)
 plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,alpha=0.55, extent=[-0.05, 1.05, -1.5,1.5],zorder=2)#,vmin=-150, vmax=100)
-"""
+#"""
 #### without background ##################################################################
-plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,alpha=0., extent=[-0.05, 1.05, -1.5,1.5],zorder=2)#,vmin=-150, vmax=100)
+#plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,alpha=0., extent=[-0.05, 1.05, -1.5,1.5],zorder=2)#,vmin=-150, vmax=100)
 ##########################################################################################
 ##plot potential line
 pot_ord = 3 ##level in the plot where potential appears
@@ -417,12 +417,12 @@ ax2.tick_params(axis='y', colors='#363636')
 
 ax2 = fig.add_subplot(gs01[0, 1])
 ############### with background ###############################################
-""" uncomment this
+#""" uncomment this
 plt.imshow(Vpot.T, origin='lower',interpolation='nearest',cmap=grey_pal,alpha=0.7, extent=[-0.05, 1.05, -1.5,1.5],zorder=0,vmin=-1, vmax=0.4)
 plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,alpha=0.55, extent=[-0.05, 1.05, -1.5,1.5],zorder=2)#,vmin=-150, vmax=100)
-"""
+#"""
 ############## without background #############################################
-plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,alpha=0., extent=[-0.05, 1.05, -1.5,1.5],zorder=2)#,vmin=-150, vmax=100)
+#plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,alpha=0., extent=[-0.05, 1.05, -1.5,1.5],zorder=2)#,vmin=-150, vmax=100)
 ##plot potential line
 pot_ord = 3 ##level in the plot where potential appears
 plt.plot(dashed[0]-0.95,dashed[1], c='#4f4949',zorder=pot_ord,alpha=0.95)
@@ -488,7 +488,8 @@ ax2.yaxis.label.set_color('#363636')
 ax2.tick_params(axis='y', colors='#363636')
 #################################################################################################################
 ##needs #used_u1[:,ti] ,        used_u2[:,ti] ,        used_u3[:,ti]
-gs02 = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs[0, 2:4], wspace=0.6)
+gs02 = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs[0, 2:4],
+                                        wspace=0.6)
 ax3 = fig.add_subplot(gs02[0, 0])
 #plt.imshow(Vpot.T, origin='lower',interpolation='nearest',cmap=grey_pal,alpha=0.7, extent=[-0.05, 1.05, -1.5,1.5],zorder=0,vmin=-1, vmax=0.4)
 
@@ -513,12 +514,16 @@ my_orange3 = (my_orange2[0], my_orange2[1],my_orange2[2],0.15)
 my_palette2 = sns.color_palette( [my_mag3 ,my_orange3 , '#939393' ]) 
 
 
-controls = np.array([np.nansum(np.power(used_u1[:,:-1],2), axis=1)/(T/dt), np.nansum(np.power(used_u2[:,:-1],2), axis=1)/(T/dt),np.nansum(np.power(used_u3[:,:-1],2), axis=1)/(T/dt)])
+controls = np.array([np.nansum(np.power(used_u1[:,:-1],2), axis=1)/(T/dt),
+                     np.nansum(np.power(used_u2[:,:-1],2), axis=1)/(T/dt),
+                     np.nansum(np.power(used_u3[:,:-1],2), axis=1)/(T/dt)])
 import pandas as pd
-df = pd.DataFrame({'DPF': controls[0, :], 'gDPF': controls[1, :], 'pice': controls[2, :]})
+df = pd.DataFrame({'DPF': controls[0, :], 'gDPF': controls[1, :],
+                   'pice': controls[2, :]})
 
-sns.violinplot( data=df, palette=my_palette2, alpha=0.65,saturation=0.81)#color="0.8")
-sns.stripplot( data=df,jitter=0.15,alpha=0.5, palette=my_palette,edgecolor='#363636',linewidth=0.25,size=3)
+sns.violinplot( data=df, palette=my_palette2, alpha=0.65,saturation=0.81)
+sns.stripplot( data=df,jitter=0.15,alpha=0.5, palette=my_palette,
+              edgecolor='#363636',linewidth=0.25,size=3)
 
 # distance across the "X" or "Y" stipplot column to span, in this case 30%
 mean_width = 0.5
@@ -532,14 +537,14 @@ for tick, text in zip(ax.get_xticks(), ax.get_xticklabels()):
             lw=4, color='silver',solid_capstyle='round',zorder=3)
 sns.despine(trim=True,  top=True, right=True, bottom=True,ax=ax)
 #sns.despine(offset=10, trim=True)
-plt.ylabel(r'Control energy $\| u(x,t) \|^2$',fontsize=20)
+plt.ylabel(r'Control energy $\| u(x,t) \|^2$',fontsize=26)
 ax.spines['bottom'].set_color('#363636')
 ax.spines['top'].set_color('#363636')
 ax.xaxis.label.set_color('#363636')
 ax.tick_params(axis='x', colors='#363636')
 ax.yaxis.label.set_color('#363636')
 ax.tick_params(axis='y', colors='#363636')    
-plt.tick_params(axis='y', which='major', labelsize=26) 
+plt.tick_params(axis='y', which='major')#, labelsize=26) 
 plt.tick_params(axis='x', which='major', labelsize=19) 
 
 ax.xaxis.set_tick_params(width=0)
@@ -552,11 +557,14 @@ end_cost2 = 1*np.sqrt((Fcont2[:,-2]-x2)**2)
 end_cost3 = 1*np.sqrt((Fcont_pice[:,-2]-x2)**2)
 
 
-df_end = pd.DataFrame({r'DPF': end_cost1, r'gDPF': end_cost2, r'pice': end_cost3})
+df_end = pd.DataFrame({r'DPF': end_cost1, r'gDPF': end_cost2,
+                       r'pice': end_cost3})
 
-sns.violinplot(  data=df_end, palette=my_palette2, alpha=0.65,saturation=0.81)#color="0.8")
+sns.violinplot(  data=df_end, palette=my_palette2, alpha=0.65,
+               saturation=0.81)#color="0.8")
 
-sns.stripplot( data=df_end,jitter=0.15,alpha=0.5, palette=my_palette,edgecolor='#363636',linewidth=0.25,size=3)
+sns.stripplot( data=df_end,jitter=0.15,alpha=0.5, palette=my_palette,
+              edgecolor='#363636',linewidth=0.25,size=3)
 mean_width = 0.5
 ax = plt.gca()
 for tick, text in zip(ax.get_xticks(), ax.get_xticklabels()):
@@ -567,7 +575,7 @@ for tick, text in zip(ax.get_xticks(), ax.get_xticklabels()):
     ax.plot([tick-mean_width/2, tick+mean_width/2], [mean_val, mean_val],
             lw=4, color='silver',solid_capstyle='round',zorder=3)
 sns.despine(trim=True,  top=True, right=True,bottom=True,ax=ax)    
-plt.ylabel(r'Terminal error $(x^*- X_T)^2$',fontsize=20)
+plt.ylabel(r'Terminal error $(x^*- X_T)^2$',fontsize=26)
 ax.spines['bottom'].set_color('#363636')
 ax.spines['top'].set_color('#363636')
 ax.xaxis.label.set_color('#363636')
@@ -575,12 +583,12 @@ ax.tick_params(axis='x', colors='#363636')
 ax.yaxis.set_major_locator(plt.MaxNLocator(3))
 ax.yaxis.label.set_color('#363636')
 ax.tick_params(axis='y', colors='#363636')       
-plt.tick_params(axis='y', which='major', labelsize=26) 
+plt.tick_params(axis='y', which='major')#, labelsize=26) 
 plt.tick_params(axis='x', which='major', labelsize=19) 
 ax.xaxis.set_tick_params(width=0)
 
 plt.subplots_adjust(wspace=0.52)
-plt.savefig("Adouble_well_typical_backward_flows-no-background.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
-plt.savefig("Adouble_well_typical_backward_flows-no-background.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
-#plt.savefig("Adouble_well_typical_backward_flows.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
-#plt.savefig("Adouble_well_typical_backward_flows.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+#plt.savefig("Adouble_well_typical_backward_flows-no-background.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+#plt.savefig("Adouble_well_typical_backward_flows-no-background.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+plt.savefig("Adouble_well_typical_backward_flows.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+plt.savefig("Adouble_well_typical_backward_flows.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')

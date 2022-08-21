@@ -318,17 +318,17 @@ gs01 = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs[0, 0:2], wspace=0.
 ax1 = fig.add_subplot(gs01[0, 0])
 #plt.subplot(1,4,1)
 ############### with background ###########################################################
-#""" uncomment this
+""" uncomment this
 plt.imshow(Vpot.T, origin='lower',interpolation='nearest',cmap=grey_pal,
            alpha=0.7, extent=[-0.05, 1.05, -1.5,1.5],zorder=0,vmin=-1, 
            vmax=0.4)
 plt.imshow(Vtime2b.T, origin='lower',interpolation='nearest',cmap=purple_pal,
            alpha=0.55, extent=[-0.05, 1.05, -1.5,1.5],
            zorder=2)#,vmin=-150, vmax=100)
-#"""
+"""
 ############## without background #########################################################
-#plt.imshow(Vtime2b.T, origin='lower', interpolation='nearest', cmap=purple_pal,
-#           alpha=0., extent=[-0.05, 1.05, -1.5, 1.5], zorder=2)
+plt.imshow(Vtime2b.T, origin='lower', interpolation='nearest', cmap=purple_pal,
+           alpha=0., extent=[-0.05, 1.05, -1.5, 1.5], zorder=2)
 
 #,vmin=-150, vmax=100)
 
