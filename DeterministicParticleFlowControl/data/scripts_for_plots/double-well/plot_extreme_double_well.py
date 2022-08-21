@@ -388,17 +388,17 @@ ax2.tick_params(axis='y', colors='#363636')
 ax2 = fig.add_subplot(gs01[0, 1])
 #plt.subplot(1,4,2)
 ############### with background ###############################################
-#""" uncomment this
+""" uncomment this
 plt.imshow(Vpot.T, origin='lower',interpolation='nearest',cmap=grey_pal,
            alpha=0.7, extent=[-0.05, 1.05, -1.5,1.5],
            zorder=0,vmin=-1, vmax=0.4)
 plt.imshow(Vtime2b.T, origin='lower', interpolation='nearest', cmap=purple_pal,
            alpha=0.55, extent=[-0.05, 1.05, -1.5,1.5], zorder=2)
 #,vmin=-150, vmax=100)
-#"""
+"""
 ############## without background #############################################
-#plt.imshow(Vtime2b.T, origin='lower', interpolation='nearest', cmap=purple_pal,
-#           alpha=0., extent=[-0.05, 1.05, -1.5,1.5], zorder=2)
+plt.imshow(Vtime2b.T, origin='lower', interpolation='nearest', cmap=purple_pal,
+           alpha=0., extent=[-0.05, 1.05, -1.5,1.5], zorder=2)
 ##plot potential line
 pot_ord = 3 ##level in the plot where potential appears
 plt.plot(dashed[0]-0.95,dashed[1], c='#4f4949',zorder=pot_ord,alpha=0.95)
@@ -509,14 +509,14 @@ for tick, text in zip(ax.get_xticks(), ax.get_xticklabels()):
             lw=4, color='silver',solid_capstyle='round',zorder=3)
 sns.despine(trim=True,  top=True, right=True, bottom=True,ax=ax)
 #sns.despine(offset=10, trim=True)
-plt.ylabel(r'Control energy $\| u(x,t) \|^2$',fontsize=20)
+plt.ylabel(r'Control energy $\| u(x,t) \|^2$',fontsize=26)
 ax.spines['bottom'].set_color('#363636')
 ax.spines['top'].set_color('#363636')
 ax.xaxis.label.set_color('#363636')
 ax.tick_params(axis='x', colors='#363636')
 ax.yaxis.label.set_color('#363636')
 ax.tick_params(axis='y', colors='#363636')    
-plt.tick_params(axis='y', which='major', labelsize=26) 
+plt.tick_params(axis='y', which='major')#, labelsize=26) 
 plt.tick_params(axis='x', which='major', labelsize=19) 
 ax.xaxis.set_tick_params(width=0)
 
@@ -543,7 +543,7 @@ for tick, text in zip(ax.get_xticks(), ax.get_xticklabels()):
     ax.plot([tick-mean_width/2, tick+mean_width/2], [mean_val, mean_val],
             lw=4, color='silver',solid_capstyle='round',zorder=3)
 sns.despine(trim=True,  top=True, right=True,bottom=True,ax=ax)    
-plt.ylabel(r'Terminal error $(x^*- X_T)^2$',fontsize=20)
+plt.ylabel(r'Terminal error $(x^*- X_T)^2$',fontsize=26)
 ax.spines['bottom'].set_color('#363636')
 ax.spines['top'].set_color('#363636')
 ax.xaxis.label.set_color('#363636')
@@ -551,12 +551,12 @@ ax.tick_params(axis='x', colors='#363636')
 
 ax.yaxis.label.set_color('#363636')
 ax.tick_params(axis='y', colors='#363636')       
-plt.tick_params(axis='y', which='major', labelsize=26) 
+plt.tick_params(axis='y', which='major')#, labelsize=26) 
 plt.tick_params(axis='x', which='major', labelsize=19) 
 ax.xaxis.set_tick_params(width=0)
 plt.subplots_adjust(wspace=0.52)
-#plt.savefig("Adouble_well_extreme_backward_flows-without-background.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
-#plt.savefig("Adouble_well_extreme_backward_flows-without-background.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+plt.savefig("Adouble_well_extreme_backward_flows-without-background.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+plt.savefig("Adouble_well_extreme_backward_flows-without-background.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
 
-plt.savefig("Adouble_well_extreme_backward_flows.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
-plt.savefig("Adouble_well_extreme_backward_flows.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+#plt.savefig("Adouble_well_extreme_backward_flows.png", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
+#plt.savefig("Adouble_well_extreme_backward_flows.pdf", bbox_inches='tight',dpi=300, transparent='False',  facecolor='white')
