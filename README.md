@@ -17,7 +17,7 @@
 
 Repository for the **Deterministic Particle Flow Control framework**
 
-- Link to **extended preprint**: :newspaper: [http://arxiv.org/abs/2112.05735](http://arxiv.org/abs/2112.05735)
+- Link to **extended preprint**: :newspaper: [http://arxiv.org/abs/2112.05735](http://arxiv.org/abs/2112.05735) (to appear in **Phys. Rev. Research**)
 - Link to **poster**: :bar_chart: [poster](https://github.com/dimitra-maoutsa/DeterministicParticleFlowControl/blob/main/Poster_Maoutsa_Deterministic_Particle_Flows_Neurips_3scaled.png)
 - Link to **documendation**: :scroll: [readthedocs](http://deterministicparticleflowcontrol.readthedocs.io/)
 
