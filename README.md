@@ -120,12 +120,21 @@ The method is introduced in this
 [paper](https://arxiv.org/abs/2112.05735). To cite it:
 
 ```
-@article{maoutsa2021deterministic,
-  title={Deterministic particle flows for constraining stochastic nonlinear systems},
-  author={Maoutsa, Dimitra and Opper, Manfred},
-  journal={arXiv preprint arXiv:2112.05735},
-  year={2021}
+@article{maoutsa2022deterministic,
+  title = {Deterministic particle flows for constraining stochastic nonlinear systems},
+  author = {Maoutsa, Dimitra and Opper, Manfred},
+  journal = {Phys. Rev. Research},
+  volume = {4},
+  issue = {4},
+  pages = {043035},
+  numpages = {17},
+  year = {2022},
+  month = {Oct},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevResearch.4.043035},
+  url = {https://link.aps.org/doi/10.1103/PhysRevResearch.4.043035}
 }
+
 ```
 
 
